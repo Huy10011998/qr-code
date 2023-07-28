@@ -34,10 +34,10 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
+mongoose.connect(`mongodb+srv://quochuy10011998:JxWsKWNmfyQz0mfm@cluster0.dodnuvv.mongodb.net/`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
     .then(() => {
         console.log("Successfully connect to MongoDB.");
     })
@@ -48,6 +48,26 @@ mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
+
+// add user
+app.get('/add-profile', (req, res) => {
+    try {
+        User.insertMany([{
+            username: "CUONGHT",
+            userId: "000010",
+            fullName: "Hà Trung Cường",
+            email: "cuonght@cholimexfood.com",
+            department: "Trưởng phòng Công Nghệ Thông Tin",
+            phoneNumber: "0903 888 840",
+            createdAt: "2023-07-21T06:59:24.441Z",
+            modifiedAt: "2023-07-21T06:59:24.441Z",
+            image: "hinh-1.png"
+        }])
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+});
 
 // get list user
 app.get('/profile/:id', (req, res) => {
@@ -93,6 +113,8 @@ app.get('/profile/:id', (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+
 
 app.get('/generate-qr-code', (req, res) => {
     res.render('generate-qr-code', {});
