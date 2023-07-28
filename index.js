@@ -61,7 +61,7 @@ app.get('/add-profile', (req, res) => {
             phoneNumber: "0903 888 840",
             createdAt: "2023-07-21T06:59:24.441Z",
             modifiedAt: "2023-07-21T06:59:24.441Z",
-            image: "hinh-1.png"
+            image: "htc-tpit.png"
         }])
     } catch (err) {
         console.error(err);
