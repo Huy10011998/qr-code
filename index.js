@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
 mongoose.set('strictQuery', false);
 
 const dbConfig = require("./app/config/db.config");
@@ -15,6 +17,7 @@ app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
 app.use(express.json());
+app.use(bodyParser.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
@@ -34,7 +37,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-mongoose.connect(`mongodb+srv://quochuy10011998:JxWsKWNmfyQz0mfm@cluster0.dodnuvv.mongodb.net/`, {
+mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -50,19 +53,34 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
 // add user
-app.get('/add-profile', (req, res) => {
+app.post('/add-profile', (req, res) => {
+    const user = new User({
+        username: req.body.username,
+        userId: req.body.userId,
+        fullName: req.body.fullName,
+        email: req.body.email,
+        department: req.body.department,
+        phoneNumber: req.body.phoneNumber,
+        image: req.body.image,
+    })
+
     try {
-        User.insertMany([{
-            username: "CUONGHT",
-            userId: "000010",
-            fullName: "Hà Trung Cường",
-            email: "cuonght@cholimexfood.com",
-            department: "Trưởng phòng Công Nghệ Thông Tin",
-            phoneNumber: "0903 888 840",
-            createdAt: "2023-07-21T06:59:24.441Z",
-            modifiedAt: "2023-07-21T06:59:24.441Z",
-            image: "htc-tpit.png"
-        }])
+        if (req.body.userId) {
+            User.find({
+                userId: { $in: req.body.userId }
+            }, () => {
+                res.send({ message: "Người dùng đã tồn tại!" });
+            })
+        } else {
+            user.save().then(() => {
+                res.status(200).send(
+                    {
+                        code: 200,
+                        message: "Thêm người dùng thành công!"
+                    }
+                );
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
