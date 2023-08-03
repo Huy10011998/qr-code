@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      href="https://cholimexfood.com.vn/wp-content/uploads/2021/07/cropped-icon-1-32x32.png"
+      sizes="32x32"
+    />
+    <link rel="icon" href="/static/images/logo.png" type="image/x-icon" />
+    <link
+      rel="apple-touch-icon"
+      href="https://cholimexfood.com.vn/wp-content/uploads/2021/07/cropped-icon-1-180x180.png"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cholimex Food</title>
+    <link
+      rel="stylesheet"
+      href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+    />
+    <link href="https://fonts.cdnfonts.com/css/nunito" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  </head>
+
+  <body>
+    <div class="content">
+      <div class="logo"><img src="/static/images/logo.png" /></div>
+      <div class="header">
+        <div class="avatar">
+          <img class="image" src=<%=`/static/images/${image}` %> />
+        </div>
+        <div class="header__content__container">
+          <div class="content__container">
+            <span class="info"> <%= fullName %> </span>
+          </div>
+          <div class="contract__container">
+            <span class="title"> <%= department %> </span>
+            <span class="phone"> <%= phoneNumber %> </span>
+            <span class="email"> <%= email %> </span>
+          </div>
+          <div class="hr"></div>
+          <div class="contract__container">
+            <span class="title-company org"
+              >Công ty cổ phần thực phẩm Cholimex</span
+            >
+            <span class="headquarters">Trụ sở chính</span>
+            <span class="address"
+              >Đường số 7, KCN Vĩnh Lộc, Huyện Bình Chánh, TP.HCM, Việt
+              Nam</span
+            >
+            <div class="flex-content">
+              <span>MST:</span>
+              <span class="pd-left">0304475742</span>
+            </div>
+            <div class="flex-content">
+              <span>Tel:</span>
+              <span class="pd-left">(084-8) 3765 3389 /-90 /-91</span>
+            </div>
+            <div class="flex-content">
+              <span>Fax:</span>
+              <span class="pd-left">(084-8) 3765 3025</span>
+            </div>
+            <a href="https://cholimexfood.com.vn/">www.cholimexfood.com.vn</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <button id="captureEl" class="btn-save" onclick="captureA()">
+          Tải về hình ảnh
+        </button>
+        <button id="downloadEl" class="btn-save">Tải về vcard</button>
+      </div>
+    </div>
+
+    <script src="/static/js/vcard.js"></script>
+    <script src="/static/js/capture.js"></script>
+  </body>
+</html>

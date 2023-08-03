@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+  </head>
+
+  <body>
+    <div id="qrcode"></div>
+    <script>
+      const qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: "http://192.168.100.162:8080/profile/64ba2b69cde3b8218a056531",
+        width: 128,
+        height: 128,
+        colorDark: "#000",
+        colorLight: "#fff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    </script>
+  </body>
+</html>

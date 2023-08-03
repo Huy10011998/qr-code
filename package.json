@@ -2,21 +2,37 @@
   "name": "client",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon --inspect index.js",
+    "start": "node app.js",
+    "dev": "nodemon --inspect app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "node.js",
+    "express",
+    "jwt",
+    "login",
+    "registration",
+    "authentication",
+    "authorization",
+    "mongodb",
+    "mongoose"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "mongoose": "^6.10.1"
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^6.10.1",
+    "path": "^0.12.7",
+    "toastify-js": "^1.12.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
