@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
     cookieSession({
-        name: "cholimex-session",
+        name: "token",
         secret: "COOKIE_SECRET", // should use as secret environment variable
         httpOnly: true
     })

@@ -21,6 +21,7 @@ body {
   align-items: center;
   position: relative;
   margin-top: 50px;
+  padding-bottom: 30px;
   display: flex;
 }
 
@@ -130,6 +131,5 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px 0px;
   gap: 10px;
 }

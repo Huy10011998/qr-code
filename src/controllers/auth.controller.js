@@ -17,10 +17,9 @@ exports.signup = (req, res) => {
     image: req.body.image,
     phoneNumber: req.body.phoneNumber,
   });
-
   user.save((err, user) => {
     if (err) {
-      res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
+      res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!asdasdad" });
       return;
     }
 
@@ -42,7 +41,7 @@ exports.signup = (req, res) => {
               return;
             }
 
-            res.send({ message: "Người dùng đã được đăng ký thành công!" });
+            res.status(200).json({ code: 200, message: "Người dùng đã được đăng ký thành công!" });
           });
         }
       );
@@ -60,7 +59,7 @@ exports.signup = (req, res) => {
             return;
           }
 
-          res.send({ message: "Người dùng đã được đăng ký thành công!" });
+          res.status(200).json({ code: 200, message: "Người dùng đã được đăng ký thành công!" });
         });
       });
     }
@@ -82,7 +81,7 @@ exports.signin = (req, res) => {
       );
 
       if (!passwordIsValid) {
-        return res.status(401).send({ message: "Mật khẩu không hợp lệ!" });
+        return res.status(401).send({ message: "Sai tài khoản hoặc mật khẩu!" });
       }
 
       let token = jwt.sign({ userId: user.userId }, config.secret, {
@@ -123,7 +122,10 @@ exports.signin = (req, res) => {
 exports.signout = async (req, res) => {
   try {
     req.session = null;
-    return res.status(200).send({ message: "Bạn đã đăng xuất!" });
+    return res.status(200).json({
+      code: 200,
+      message: "Bạn đã đăng xuất!"
+    });
   } catch (err) {
     this.next(err);
   }

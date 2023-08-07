@@ -11,7 +11,7 @@ checkRoleUserId = (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(404).send({ message: "Không tìm thấy người dùng!" });
+      return res.status(404).send({ message: "Sai tài khoản hoặc mật khẩu!" });
     }
 
     Role.find(
@@ -38,10 +38,8 @@ checkRoleUserId = (req, res, next) => {
   });
 };
 
-
-
 const verifySignIn = {
-  checkRoleUserId
+  checkRoleUserId,
 };
 
 module.exports = verifySignIn;

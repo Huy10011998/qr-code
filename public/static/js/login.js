@@ -3,31 +3,6 @@
 
   $("#btn-login").prop("disabled", true);
 
-  // event enter
-  $('#password').on("keydown", function (event) {
-    if (event.which === 13) {
-      event.preventDefault();
-      login();
-      $('#userId').focus();
-    }
-  });
-
-  function checkInputs() {
-    if ($('#password').val().length > 0 && $('#userId').val().length > 0) {
-      $("#btn-login").prop("disabled", false);
-    } else {
-      $("#btn-login").prop("disabled", true);
-    }
-  }
-
-  $('#userId').on("input", function () {
-    checkInputs();
-  });
-
-  $('#password').on("input", function () {
-    checkInputs();
-  });
-
   const BG_TOAST = {
     SUCCESS: 0,
     WARNING: 1,
@@ -50,6 +25,34 @@
     }).showToast();
   }
 
+  // event enter
+  function checkInputs(event) {
+    if ($('#password').val().length > 0 && $('#userId').val().length > 0) {
+      $("#btn-login").prop("disabled", false);
+    } else {
+      $("#btn-login").prop("disabled", true);
+    }
+  }
+
+  $('#userId').on("input", function () {
+    checkInputs();
+  });
+
+  $('#password').on("input", function () {
+    checkInputs();
+  });
+
+  $('#password').on("keydown", function (event) {
+    if ($('#password').val().length > 0 && $('#userId').val().length > 0) {
+      $("#btn-login").prop("disabled", false);
+      if (event.which === 13) {
+        event.preventDefault();
+        login();
+        $('#userId').focus();
+      }
+    }
+  });
+
   // call api login
   function login() {
     const userId = $('#userId');
@@ -67,6 +70,8 @@
       beforeSend: function () { },
       success: function (response) {
         if (+response.code === 200) {
+          localStorage.setItem("fullName", response.data.fullName);
+          localStorage.setItem("role", response.data.roles[0]);
           window.location.href = '/dashboard';
         }
       },

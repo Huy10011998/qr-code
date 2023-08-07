@@ -21,47 +21,50 @@
     <link href="https://fonts.cdnfonts.com/css/nunito" rel="stylesheet" />
     <link rel="stylesheet" href="/static/css/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
   </head>
 
   <body>
     <div class="content">
-      <div class="logo"><img src="/static/images/logo.png" /></div>
-      <div class="header">
-        <div class="avatar">
-          <img class="image" src=<%=`/static/images/${image}` %> />
-        </div>
-        <div class="header__content__container">
-          <div class="content__container">
-            <span class="info"> <%= fullName %> </span>
+      <div id="capture">
+        <div class="logo"><img src="/static/images/logo.png" /></div>
+        <div class="header">
+          <div class="avatar">
+            <img class="image" src=<%=`/static/images/${image}` %> />
           </div>
-          <div class="contract__container">
-            <span class="title"> <%= department %> </span>
-            <span class="phone"> <%= phoneNumber %> </span>
-            <span class="email"> <%= email %> </span>
-          </div>
-          <div class="hr"></div>
-          <div class="contract__container">
-            <span class="title-company org"
-              >Công ty cổ phần thực phẩm Cholimex</span
-            >
-            <span class="headquarters">Trụ sở chính</span>
-            <span class="address"
-              >Đường số 7, KCN Vĩnh Lộc, Huyện Bình Chánh, TP.HCM, Việt
-              Nam</span
-            >
-            <div class="flex-content">
-              <span>MST:</span>
-              <span class="pd-left">0304475742</span>
+          <div class="header__content__container">
+            <div class="content__container">
+              <span class="info"> <%= fullName %> </span>
             </div>
-            <div class="flex-content">
-              <span>Tel:</span>
-              <span class="pd-left">(084-8) 3765 3389 /-90 /-91</span>
+            <div class="contract__container">
+              <span class="title"> <%= department %> </span>
+              <span class="phone"> <%= phoneNumber %> </span>
+              <span class="email"> <%= email %> </span>
             </div>
-            <div class="flex-content">
-              <span>Fax:</span>
-              <span class="pd-left">(084-8) 3765 3025</span>
+            <div class="hr"></div>
+            <div class="contract__container">
+              <span class="title-company org"
+                >Công ty cổ phần thực phẩm Cholimex</span
+              >
+              <span class="headquarters">Trụ sở chính</span>
+              <span class="address"
+                >Đường số 7, KCN Vĩnh Lộc, Huyện Bình Chánh, TP.HCM, Việt
+                Nam</span
+              >
+              <div class="flex-content">
+                <span>MST:</span>
+                <span class="pd-left">0304475742</span>
+              </div>
+              <div class="flex-content">
+                <span>Tel:</span>
+                <span class="pd-left">(084-8) 3765 3389 /-90 /-91</span>
+              </div>
+              <div class="flex-content">
+                <span>Fax:</span>
+                <span class="pd-left">(084-8) 3765 3025</span>
+              </div>
+              <a href="https://cholimexfood.com.vn/">www.cholimexfood.com.vn</a>
             </div>
-            <a href="https://cholimexfood.com.vn/">www.cholimexfood.com.vn</a>
           </div>
         </div>
       </div>

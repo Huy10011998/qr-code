@@ -36,7 +36,7 @@ checkRolesExisted = (req, res, next) => {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
         res.status(400).send({
-          message: `Lỗi! Vai trò ${req.body.roles[i]} không tồn tại!`
+          message: `Lỗi! Vai trò không tồn tại!`
         });
         return;
       }
