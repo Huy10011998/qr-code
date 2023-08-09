@@ -142,7 +142,6 @@ select {
   z-index: 1;
   width: 190px;
   box-shadow: 0px 3px 6px #00000033;
-  border: 1px solid #d6d6d6;
   background: #fff;
   border-radius: 8px;
   display: none;
@@ -572,14 +571,12 @@ table {
 }
 
 .pagination {
-  display: inline-block;
+  display: flex;
+  justify-content: end;
   padding-left: 0;
-  margin: 20px 0;
+  padding: 20px 0;
+  margin: 0;
   border-radius: 4px;
-}
-
-.pagination {
-  margin: 0px !important;
 }
 
 .pagination > li {
@@ -654,7 +651,7 @@ table {
 }
 
 .header__inner .dropdown li:hover,
-.active {
+.active-hover {
   background-color: #ff6347;
   color: #fff;
 }

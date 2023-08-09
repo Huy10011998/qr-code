@@ -27,14 +27,14 @@
 
   // event enter
   function checkInputs(event) {
-    if ($('#password').val().length > 0 && $('#userId').val().length > 0) {
+    if ($('#password').val().length > 0 && $('#username').val().length > 0) {
       $("#btn-login").prop("disabled", false);
     } else {
       $("#btn-login").prop("disabled", true);
     }
   }
 
-  $('#userId').on("input", function () {
+  $('#username').on("input", function () {
     checkInputs();
   });
 
@@ -43,19 +43,19 @@
   });
 
   $('#password').on("keydown", function (event) {
-    if ($('#password').val().length > 0 && $('#userId').val().length > 0) {
+    if ($('#password').val().length > 0 && $('#username').val().length > 0) {
       $("#btn-login").prop("disabled", false);
       if (event.which === 13) {
         event.preventDefault();
         login();
-        $('#userId').focus();
+        $('#username').focus();
       }
     }
   });
 
   // call api login
   function login() {
-    const userId = $('#userId');
+    const username = $('#username');
     const password = $('#password');
 
     $.ajax({
@@ -63,7 +63,7 @@
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
-        userId: userId.val(),
+        username: username.val(),
         password: password.val()
       }),
       dataType: 'json',
@@ -80,7 +80,7 @@
         customToastify(xhr.responseJSON.message, { background: BG_TOAST[2] });
       },
       complete: function (xhr) {
-        userId.val("");
+        username.val("");
         password.val("");
       },
     });
@@ -88,7 +88,7 @@
 
   $("#btn-login").on("click", function () {
     login();
-    $('#userId').focus();
+    $('#username').focus();
   });
 
 })(jQuery);

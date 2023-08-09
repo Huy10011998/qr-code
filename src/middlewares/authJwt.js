@@ -14,13 +14,13 @@ verifyToken = (req, res, next) => {
     if (err) {
       return res.status(401).send({ message: "Không được phép truy cập" });
     };
-    req.userId = decoded.userId;
+    req.username = decoded.username;
     next();
   });
 };
 
 isAdmin = (req, res, next) => {
-  User.findOne({ userId: req.userId }).then((user) => {
+  User.findOne({ username: req.username }).then((user) => {
     Role.find(
       {
         _id: { $in: user.roles },

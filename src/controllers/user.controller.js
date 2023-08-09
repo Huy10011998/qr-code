@@ -13,7 +13,7 @@ exports.generateQrCode = (req, res) => {
 exports.getUser = (req, res) => {
   const id = req.params.id;
   try {
-    User.findOne({ _id: id })
+    User.findOne({ username: id })
       .then((user) => {
         if (!user) {
           return res.status(404).send({ message: "Không tìm thấy người dùng." });

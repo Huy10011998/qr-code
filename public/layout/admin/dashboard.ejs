@@ -35,6 +35,13 @@
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/toastify-js"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"
+      integrity="sha512-frFP3ZxLshB4CErXkPVEXnd5ingvYYtYhE5qllGdZmcOlRKNEPbufyupfdSTNmoF5ICaQNO6SenXzOZvoGkiIA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </head>
   <body>
     <div class="refills">
@@ -117,7 +124,7 @@
                 </li>
               </ul>
               <div
-                class="dropdownover {{ toggle ? '-active' : '' }}"
+                class="dropdownover {{ toggle ? '-active-hover' : '' }}"
                 ng-click="toggle = !toggle"
               ></div>
             </div>
@@ -427,7 +434,7 @@
                           style="
                             font-size: 14px;
                             font-weight: 500;
-                            text-align: center;
+                            text-align: left;
                           "
                           scope="col"
                         >
@@ -437,7 +444,7 @@
                           style="
                             font-size: 14px;
                             font-weight: 500;
-                            text-align: end;
+                            text-align: left;
                           "
                           scope="col"
                         >
@@ -447,7 +454,7 @@
                           style="
                             font-size: 14px;
                             font-weight: 500;
-                            text-align: end;
+                            text-align: left;
                           "
                           scope="col"
                         >
@@ -457,7 +464,7 @@
                           style="
                             font-size: 14px;
                             font-weight: 500;
-                            text-align: end;
+                            text-align: left;
                           "
                           scope="col"
                         >
@@ -467,7 +474,7 @@
                           style="
                             font-size: 14px;
                             font-weight: 500;
-                            text-align: end;
+                            text-align: left;
                           "
                           scope="col"
                         >
@@ -480,116 +487,7 @@
                       id="table-data"
                       class="table-body"
                       style="display: table-row-group"
-                    >
-                      <tr>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: start;
-                          "
-                        >
-                          1
-                        </td>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: start;
-                          "
-                        >
-                          004794
-                        </td>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: start;
-                          "
-                        >
-                          SANGNT
-                        </td>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: start;
-                          "
-                        >
-                          Nguyễn Thanh Sang
-                        </td>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: start;
-                          "
-                        >
-                          0999 999 999
-                        </td>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: start;
-                            max-width: 120px;
-                            word-wrap: break-word;
-                          "
-                        >
-                          sangnt@cholimexfood.com.vn
-                        </td>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: center;
-                          "
-                        >
-                          Trưởng bộ phận Công Nghệ Thông Tin
-                        </td>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: end;
-                          "
-                        >
-                          hinh-1.png
-                        </td>
-
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: end;
-                          "
-                        >
-                          16:04:00 - 29/04/2022
-                        </td>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: end;
-                          "
-                        >
-                          16:04:00 - 29/04/2022
-                        </td>
-                        <td
-                          style="
-                            font-size: 12px;
-                            font-weight: 400;
-                            text-align: end;
-                          "
-                        >
-                          <img
-                            width="80px"
-                            height="80px"
-                            src="data:image/png;base64,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"
-                          />
-                        </td>
-                      </tr>
-                    </tbody>
+                    ></tbody>
                   </table>
                 </div>
               </div>
@@ -604,9 +502,11 @@
                   display: none;
                 "
               ></div>
+
               <div id="loading" style="display: none">
                 <img src="/static/images/icons/loading.svg" alt="loading" />
               </div>
+
               <div
                 class="paginate"
                 style="
@@ -626,15 +526,11 @@
                   <div
                     id="fromPage"
                     style="font-size: 14px; font-weight: 500; color: #000"
-                  >
-                    1-
-                  </div>
+                  ></div>
                   <div
                     id="limitPage"
                     style="font-size: 14px; font-weight: 500; color: #000"
-                  >
-                    11 of
-                  </div>
+                  ></div>
                   <div
                     id="totalPage"
                     style="
@@ -643,9 +539,7 @@
                       color: #000;
                       padding-left: 5px;
                     "
-                  >
-                    11
-                  </div>
+                  ></div>
                 </div>
                 <div
                   style="
@@ -681,76 +575,12 @@
                       cursor: pointer;
                     "
                   >
-                    <option value="30">30</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
+                    <option value="30">10</option>
+                    <option value="50">30</option>
+                    <option value="100">50</option>
                   </select>
                   <nav aria-label="Page navigation">
-                    <ul class="pagination" id="pagination">
-                      <li class="page-item first disabled">
-                        <a href="#" class="page-link"
-                          ><svg
-                            style="width: 18px; height: 18px"
-                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l"
-                            focusable="false"
-                            aria-hidden="true"
-                            viewBox="0 0 24 24"
-                            data-testid="FirstPageIcon"
-                          >
-                            <path
-                              d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"
-                            ></path></svg
-                        ></a>
-                      </li>
-                      <li class="page-item prev disabled">
-                        <a href="#" class="page-link"
-                          ><svg
-                            style="width: 18px; height: 18px"
-                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l"
-                            focusable="false"
-                            aria-hidden="true"
-                            viewBox="0 0 24 24"
-                            data-testid="NavigateBeforeIcon"
-                          >
-                            <path
-                              d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"
-                            ></path></svg
-                        ></a>
-                      </li>
-                      <li class="page-item active">
-                        <a href="#" class="page-link">1</a>
-                      </li>
-                      <li class="page-item next disabled">
-                        <a href="#" class="page-link"
-                          ><svg
-                            style="width: 18px; height: 18px"
-                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l"
-                            focusable="false"
-                            aria-hidden="true"
-                            viewBox="0 0 24 24"
-                            data-testid="NavigateNextIcon"
-                          >
-                            <path
-                              d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
-                            ></path></svg
-                        ></a>
-                      </li>
-                      <li class="page-item last disabled">
-                        <a href="#" class="page-link"
-                          ><svg
-                            style="width: 18px; height: 18px"
-                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l"
-                            focusable="false"
-                            aria-hidden="true"
-                            viewBox="0 0 24 24"
-                            data-testid="LastPageIcon"
-                          >
-                            <path
-                              d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"
-                            ></path></svg
-                        ></a>
-                      </li>
-                    </ul>
+                    <ul id="pagination" class="pagination-sm"></ul>
                   </nav>
                 </div>
               </div>

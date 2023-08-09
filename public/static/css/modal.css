@@ -80,7 +80,7 @@
 
 .container-btn-logout,
 .container-btn-create {
-  padding: 10px;
+  padding: 10px 25px;
   background-color: #f8f9fa;
   box-shadow: 0 -1px 1px 0 #e9ecef;
   border-radius: 0 0 8px 8px;
@@ -134,7 +134,7 @@
 }
 
 .form-label {
-  color: #959aa5;
+  color: #495057;
   font-weight: 500;
 }
 

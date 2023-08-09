@@ -8,7 +8,6 @@ exports.login = (req, res) => {
 }
 
 exports.dashboard = (req, res) => {
-
   try {
     res.render('./admin/dashboard', {});
   } catch (err) {
@@ -16,3 +15,4 @@ exports.dashboard = (req, res) => {
     res.status(500).send('Server error');
   }
 }
+
