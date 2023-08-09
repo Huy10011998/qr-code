@@ -1,8 +1,6 @@
 (function ($) {
   "use strict";
 
-  // $("#btn-login").prop("disabled", true);
-
   const BG_TOAST = {
     SUCCESS: 0,
     WARNING: 1,
@@ -25,10 +23,10 @@
     }).showToast();
   }
 
-  //logout
+  // logout
   function logout() {
     $.ajax({
-      url: 'http://localhost:8080/api/auth/signout',
+      url: 'http://localhost:8080/api/auth/logout',
       method: "POST",
       contentType: 'application/json',
       data: {},
@@ -56,14 +54,14 @@
     logout();
   });
 
-  //get LocalStorage
+  // get LocalStorage
   const fullName = localStorage.getItem("fullName");
   const subName = localStorage.getItem("role");
 
   $("#username").text(fullName)
   $(".subName").text(subName);
 
-  //hide/ show sidebar
+  // hide/show sidebar
   const container = $(".refills__container");
   const sidebar = $(".sidebar");
   const sidebarItem = $(".sidebar__item > li");
@@ -111,7 +109,15 @@
     $("#myModal-Create").css("display", "none");
   });
 
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
   function createQrCode() {
+    const token = getCookie("token");
+
     const username = $("#username__");
     const name = $("#fullName");
     const password = $("#password");
@@ -123,7 +129,7 @@
     const roles = $("#roles");
 
     $.ajax({
-      url: 'http://localhost:8080/api/auth/signup',
+      url: 'http://localhost:8080/api/auth/createQrCode',
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
@@ -138,13 +144,14 @@
         roles: [roles.val()]
       }),
       dataType: 'json',
-      beforeSend: function () {
+      beforeSend: function (xhr, settings) {
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
       },
       success: function (response) {
         if (+response.code === 200) {
           $("#myModal-Create").css("display", "none");
           customToastify("Tạo mã QR thành công!", { background: BG_TOAST[0] });
-          window.location.reload(true);
+          // window.location.reload(true);
         }
       },
       error: function (xhr, status, error) {
@@ -166,6 +173,31 @@
 
   $("#btn-create-accept").on("click", function () {
     createQrCode();
-  })
+  });
+
+  // check disabled btn create
+  function checkInputs() {
+    var inputs = [
+      $('#username__'),
+      $('#fullName'),
+      $('#password'),
+      $('#department'),
+      $('#userId'),
+      $('#email'),
+      $('#image'),
+      $('#phoneNumber'),
+      $('#roles')
+    ];
+
+    var allInputsFilled = inputs.every(function (input) {
+      return input.val().length > 0;
+    });
+
+    $("#btn-create-accept").prop("disabled", !allInputsFilled);
+  }
+
+  $('#username__, #fullName, #password, #department, #userId, #email, #image, #phoneNumber, #roles').on('input', function () {
+    checkInputs();
+  });
 
 })(jQuery);

@@ -1,4 +1,4 @@
-const { verifySignUp, verifySignIn } = require("../../middlewares");
+const { verifyCreateQrCode, verifyLogin, authJwt } = require("../../middlewares");
 const controller = require("../../controllers/auth.controller");
 
 module.exports = function (app) {
@@ -10,9 +10,9 @@ module.exports = function (app) {
     next();
   });
 
-  app.post("/api/auth/signup", verifySignUp.checkDuplicateUsernameOrUserId, verifySignUp.checkRolesExisted, controller.signup);
+  app.post("/api/auth/createQrCode", authJwt.verifyToken, authJwt.isAdmin, verifyCreateQrCode.checkDuplicateUsernameOrUserId, verifyCreateQrCode.checkRolesExisted, controller.createQrCode);
 
-  app.post("/api/auth/signin", verifySignIn.checkRoleUserId, controller.signin);
+  app.post("/api/auth/login", verifyLogin.checkRoleUserId, controller.login);
 
-  app.post("/api/auth/signout", controller.signout);
+  app.post("/api/auth/logout", controller.logout);
 };

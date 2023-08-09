@@ -1,4 +1,4 @@
-const db = require("../models/auth.model.js");
+const db = require("../models/auth.model.js/index.js");
 const ROLES = db.ROLES;
 const User = db.user;
 
@@ -46,9 +46,9 @@ checkRolesExisted = (req, res, next) => {
   next();
 };
 
-const verifySignUp = {
+const verifyCreateQrCode = {
   checkDuplicateUsernameOrUserId,
   checkRolesExisted
 };
 
-module.exports = verifySignUp;
+module.exports = verifyCreateQrCode;

@@ -1,4 +1,4 @@
-const db = require("../models/auth.model.js");
+const db = require("../models/auth.model.js/index.js");
 const Role = db.role;
 const User = db.user;
 
@@ -38,8 +38,8 @@ checkRoleUserId = (req, res, next) => {
   });
 };
 
-const verifySignIn = {
+const verifyLogin = {
   checkRoleUserId,
 };
 
-module.exports = verifySignIn;
+module.exports = verifyLogin;

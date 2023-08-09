@@ -6,7 +6,7 @@ const Role = db.role;
 let jwt = require("jsonwebtoken");
 let bcrypt = require("bcryptjs");
 
-exports.signup = (req, res) => {
+exports.createQrCode = (req, res) => {
   const user = new User({
     username: req.body.username,
     password: bcrypt.hashSync(req.body.password, 8),
@@ -66,7 +66,7 @@ exports.signup = (req, res) => {
   });
 };
 
-exports.signin = (req, res) => {
+exports.login = (req, res) => {
   User.findOne({ userId: req.body.userId, })
     .populate("roles", "-__v")
     .exec((err, user) => {
@@ -85,7 +85,7 @@ exports.signin = (req, res) => {
       }
 
       let token = jwt.sign({ userId: user.userId }, config.secret, {
-        expiresIn: 86400, // 24 hours
+        expiresIn: 2592000 // 30 day
       });
 
       let authorities = [];
@@ -119,7 +119,7 @@ exports.signin = (req, res) => {
     });
 };
 
-exports.signout = async (req, res) => {
+exports.logout = async (req, res) => {
   try {
     req.session = null;
     return res.status(200).json({
