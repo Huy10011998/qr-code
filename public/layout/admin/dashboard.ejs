@@ -42,6 +42,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
   </head>
   <body>
     <div class="refills">
@@ -51,11 +52,13 @@
             <img
               style="width: 120px; height: 64px"
               src="/static/images/logo.png"
+              alt="img-logo"
             />
             <button class="btn-menu" tabindex="0" type="button">
               <img
                 src="/static/images/icons/menu.png"
                 style="width: 32px; height: 32px"
+                alt="img-menu"
               />
               <span class="MuiTouchRipple-root css-w0pj6f"></span>
             </button>
@@ -67,6 +70,7 @@
                 ng-if="!state.ui.cookiesInfo.avatar"
                 class="header__accountIcon"
                 src="/static/images/icons/man.png"
+                alt="img-profile"
               />
               <div class="header__accountUser"></div>
               <ul class="dropdown" id="dropdown">
@@ -154,8 +158,9 @@
                 <div class="">Đăng xuất</div>
                 <img
                   id="btn-logout-back"
-                  style="width: 24px; height: 24px; cursor: pointer"
+                  style="width: 32px; height: 32px; cursor: pointer"
                   src="/static/images/icons/close.png"
+                  alt="img-back"
                 />
               </div>
               <div class="content-logout">
@@ -203,8 +208,9 @@
                 <div class="">Tạo mã Qr Code</div>
                 <img
                   id="btn-create-back"
-                  style="width: 24px; height: 24px; cursor: pointer"
+                  style="width: 32px; height: 32px; cursor: pointer"
                   src="/static/images/icons/close.png"
+                  alt="img-close"
                 />
               </div>
               <div class="content-create">
@@ -307,6 +313,176 @@
             </div>
           </div>
         </div>
+
+        <!-- Modal Delete Qr Code -->
+        <div id="myModal-Delete" class="modal-logout" style="display: none">
+          <div class="container-bg-box-modal-logout">
+            <div class="bg-box-modal-logout">
+              <div class="title-logout">
+                <div class="title-delete"></div>
+                <img
+                  id="img-delete-qrcode"
+                  style="width: 32px; height: 32px; cursor: pointer"
+                  src="/static/images/icons/close.png"
+                  alt="img-close"
+                />
+              </div>
+              <div class="content-logout">
+                <div class="content-delete"></div>
+              </div>
+              <div class="container-btn-logout">
+                <div class="btn-logout-flex">
+                  <button id="btn-confirm-delete" class="btn-logout-accept">
+                    Xác nhận
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Update Qr Code -->
+        <div id="myModal-Update" class="modal-create" style="display: none">
+          <div class="container-bg-box-modal-create">
+            <div class="bg-box-modal-create">
+              <div class="title-create">
+                <div class="">Cập nhật mã Qr Code</div>
+                <img
+                  id="btn-update-back"
+                  style="width: 32px; height: 32px; cursor: pointer"
+                  src="/static/images/icons/close.png"
+                  alt="img-close"
+                />
+              </div>
+              <div class="content-create">
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label class="form-label" for="inputPassword"
+                      >Tên tài khoản <span class="required">* </span>
+                    </label>
+                    <div class="input__form">
+                      <input
+                        id="username__update"
+                        type="text"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="inputPassword"
+                      >Mật khẩu <span class="required">* </span>
+                    </label>
+                    <div class="input__form">
+                      <input
+                        id="password-update"
+                        type="password"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="inputPassword"
+                      >Họ tên <span class="required">* </span>
+                    </label>
+                    <div class="input__form">
+                      <input
+                        id="fullName-update"
+                        type="text"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="inputPassword"
+                      >Chức vụ <span class="required">* </span>
+                    </label>
+                    <div class="input__form">
+                      <input
+                        id="department-update"
+                        type="text"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label class="form-label" for="inputPassword"
+                      >Email <span class="required">* </span>
+                    </label>
+                    <div class="input__form">
+                      <input
+                        id="email-update"
+                        type="text"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="inputPassword"
+                      >Hình ảnh <span class="required">* </span>
+                    </label>
+                    <div class="input__form">
+                      <input
+                        id="image-update"
+                        type="text"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="inputPassword"
+                      >Số điện thoại <span class="required">* </span>
+                    </label>
+                    <div class="input__form">
+                      <input
+                        id="phoneNumber-update"
+                        type="text"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="inputPassword"
+                      >Role <span class="required">* </span>
+                    </label>
+                    <div class="input__form">
+                      <input
+                        id="roles-update"
+                        type="text"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" style="padding: 0px 25px 10px 25px">
+                <label class="form-label" for="inputPassword"
+                  >Mã nhân viên <span class="required">* </span>
+                </label>
+                <div class="input__form">
+                  <input
+                    id="userId-update"
+                    type="text"
+                    class="form-control"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="container-btn-create">
+                <div class="btn-create-flex">
+                  <button
+                    id="btn-update-accept"
+                    class="btn-create-accept"
+                    disabled
+                  >
+                    Xác nhận
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </header>
 
       <div class="refills__container">
@@ -323,6 +499,7 @@
                       margin-left: 10px;
                     "
                     src="/static/images/icons/list.png"
+                    alt="img-list"
                   />
                   <div
                     style="
@@ -344,8 +521,63 @@
           <div class="content-table">
             <div class="container-filter">
               <div class="container__filter">
-                <div class="left__filter">
-                  <div class="left___filter">
+                <div class="container__left">
+                  <div class="container-filter-search">
+                    <img
+                      src="/static/images/icons/upload-file.png"
+                      style="width: 24px; height: 24px"
+                      alt="img-upload"
+                    />
+                    <form
+                      action="/"
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="form-updateFile"
+                    >
+                      <input
+                        id="inputFilterValue"
+                        class="filter-search"
+                        title="Chọn tệp tin Excel"
+                        name="csv"
+                        type="file"
+                      />
+                      <div class="btn-create">
+                        <button
+                          type="submit"
+                          class="button -primary"
+                          style="
+                            height: 44.85px;
+                            min-width: 100px;
+                            border-radius: 8px;
+                            font-weight: 500;
+                            background: #005dd0;
+                            border: 1px solid #005dd0;
+                          "
+                        >
+                          Tải lên file excel
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="right__filter">
+                  <div class="right___filter">
+                    <div class="btn-create">
+                      <button
+                        id="myBtn-download"
+                        class="button -primary"
+                        style="
+                          height: 44.85px;
+                          min-width: 100px;
+                          border-radius: 8px;
+                          font-weight: 500;
+                          background: #005dd0;
+                          border: 1px solid #005dd0;
+                        "
+                      >
+                        Tải về file excel
+                      </button>
+                    </div>
                     <div class="btn-create">
                       <button
                         id="myBtn-create"
@@ -367,7 +599,7 @@
             <div class="bg__table">
               <div class="container-table" style="margin-top: 20px">
                 <div class="table-responsive">
-                  <table class="table custom-table">
+                  <table id="table" class="table custom-table">
                     <thead>
                       <tr>
                         <th
@@ -504,7 +736,7 @@
               ></div>
 
               <div id="loading" style="display: none">
-                <img src="/static/images/icons/loading.svg" alt="loading" />
+                <img src="/static/images/icons/loading.svg" alt="img-loading" />
               </div>
 
               <div

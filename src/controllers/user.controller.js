@@ -1,4 +1,5 @@
 const db = require("../models/auth.model.js");
+const { formatPhoneNumber } = require("../services/helper/helper.service");
 const User = db.user;
 
 exports.generateQrCode = (req, res) => {
@@ -26,7 +27,7 @@ exports.getUser = (req, res) => {
           department: user.department,
           email: user.email,
           image: user.image,
-          phoneNumber: user.phoneNumber,
+          phoneNumber: formatPhoneNumber(user.phoneNumber),
         });
       });
   } catch (err) {

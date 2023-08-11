@@ -3,7 +3,11 @@
   let loading = $("#loading");
   let tableEl = $(".table-body");
   let paginate = $(".paginate");
-
+  let modalDelete = $("#myModal-Delete");
+  let contentDelete = $(".content-delete");
+  let titleDelete = $(".title-delete");
+  let modalUpdate = $("#myModal-Update");
+  let body = $("body");
 
   listQrCode();
 
@@ -29,7 +33,7 @@
   function customToastify(message, style) {
     Toastify({
       text: message,
-      duration: 3000,
+      duration: 1500,
       newWindow: true,
       close: true,
       gravity: "top",
@@ -143,7 +147,6 @@
     const image = $("#image");
     const phoneNumber = $("#phoneNumber");
     const roles = $("#roles");
-
     $.ajax({
       url: 'http://localhost:8080/api/auth/createQrCode',
       method: "POST",
@@ -166,6 +169,7 @@
       success: function (response) {
         if (+response.code === 200) {
           $("#myModal-Create").css("display", "none");
+          $("body").css("overflow", "auto");
           customToastify("Tạo mã QR thành công!", { background: BG_TOAST[0] });
           listQrCode();
         }
@@ -218,7 +222,7 @@
 
   // gen qr code
   function genQrCode(id) {
-    const baseURL = `http://192.168.1.3:8080/profile/${id}`;
+    const baseURL = `http://192.168.100.179:8080/profile/${id}`;
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
@@ -239,7 +243,7 @@
       textData.style.display = "none";
       $.each(data, function (i, result) {
         html += `      
-        <tr>
+        <tr id="${result.username}">
           <td style="font-size: 12px; font-weight: 400; text-align: center;">${i + 1}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.userId}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.username}</td>
@@ -251,7 +255,13 @@
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">
-            <img src=${genQrCode(result?.username)} />
+            <img id="qrCode" src=${genQrCode(result?.username)} />
+          </td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">
+            <img class="img-update-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/fix.png" />
+          </td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">
+            <img class="img-delete-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/delete.png" />
           </td>
         </tr>`;
       });
@@ -267,7 +277,117 @@
     $(tableEl).html(html);
   }
 
-  //gen count page
+  // delete qr code
+  $("#img-delete-qrcode").on("click", function () {
+    modalDelete.css("display", "none");
+    body.css("overflow", "auto");
+  });
+
+  tableEl.on("click", ".img-delete-qrcode", function () {
+    const username = $(this).closest("tr").attr("id");
+    titleDelete.html("Xoá mã Qr Code");
+    contentDelete.html(`Bạn chắc chắn muốn xoá mã Qr Code của tài khoản: ${username}`);
+    modalDelete.css("display", "block");
+    body.css("overflow", "hidden");
+
+    $("#btn-confirm-delete").on("click", function () {
+      deleteQrCode(username);
+    });
+  });
+
+  function deleteQrCode(username) {
+    const token = getCookie("token");
+
+    $.ajax({
+      url: 'http://localhost:8080/api/auth/deleteQrCode',
+      type: 'DELETE',
+      dataType: 'json',
+      headers: {
+        "token": token,
+        "Content-Type": "application/json"
+      },
+      "data": JSON.stringify({
+        "username": username,
+      }),
+      success: function (response) {
+        if (response.code === 200) {
+          modalDelete.css("display", "none");
+          listQrCode();
+          body.css("overflow", "auto");
+          customToastify("Xoá mã QR thành công!", { background: BG_TOAST[0] });
+        }
+        else {
+          modalDelete.css("display", "none");
+          body.css("overflow", "auto");
+          customToastify("Xoá mã QR không thành công!", { background: BG_TOAST[2] });
+        }
+      },
+      error: function (xhr) {
+        customToastify("Hệ thống đang bận! Vui lòng thử lại sau!", { background: BG_TOAST[2] });
+      },
+      complete: function (xhr) { },
+    });
+  }
+
+  // get qr code + update
+  $("#btn-update-back").on("click", function () {
+    modalUpdate.css("display", "none");
+    body.css("overflow", "auto");
+  });
+
+  tableEl.on("click", ".img-update-qrcode", function () {
+    const username_ = $(this).closest("tr").attr("id");
+    getQrCode(username_);
+  });
+
+  function getQrCode(username_) {
+    const token = getCookie("token");
+
+    const usernameUpdate = $("#username__update");
+    const nameUpdate = $("#fullName-update");
+    const passwordUpdate = $("#password-update");
+    const departmentUpdate = $("#department-update");
+    const userIdUpdate = $("#userId-update");
+    const emailUpdate = $("#email-update");
+    const imageUpdate = $("#image-update");
+    const phoneNumberUpdate = $("#phoneNumber-update");
+    const rolesUpdate = $("#roles-update");
+
+    $.ajax({
+      url: 'http://localhost:8080/api/auth/getQrCode',
+      method: "POST",
+      contentType: 'application/json',
+      data: JSON.stringify({
+        username: username_,
+      }),
+      dataType: 'json',
+      beforeSend: function (xhr, settings) {
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+      },
+      success: function (response) {
+        if (+response.code === 200) {
+          const data = response.data;
+          modalUpdate.css("display", "block");
+          body.css("overflow", "hidden");
+          usernameUpdate.val(data.username);
+          nameUpdate.val(data.fullName);
+          passwordUpdate.val(data.password);
+          departmentUpdate.val(data.department);
+          userIdUpdate.val(data.userId);
+          emailUpdate.val(data.email);
+          imageUpdate.val(data.image);
+          phoneNumberUpdate.val(data.phoneNumber);
+          rolesUpdate.val(data.roles);
+        }
+      },
+      error: function (xhr, status, error) {
+        customToastify(xhr.responseJSON.message, { background: BG_TOAST[2] });
+      },
+      complete: function (xhr) { },
+    });
+  }
+
+  // gen count page
   function generateCountPage(from, limit, total) {
     const fromPage = document.getElementById("fromPage");
     fromPage.innerHTML = from + "-";
@@ -333,4 +453,38 @@
     })
   }
 
+  // donwload file excel
+  function exportToExcel() {
+    const table = document.getElementById('table');
+    const ws = XLSX.utils.table_to_sheet(table);
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+    function s2ab(s) {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xFF;
+      }
+      return buf;
+    }
+
+    const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'Danh sách mã Qr Code.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  $("#myBtn-download").on("click", function () {
+    exportToExcel();
+  });
 })(jQuery);

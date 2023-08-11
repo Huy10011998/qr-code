@@ -2,11 +2,88 @@ const config = require("../../config/auth.config");
 const db = require("../models/auth.model.js");
 const User = db.user;
 const Role = db.role;
+const path = require('path');
+const multer = require('multer');
+const csvtojson = require('csvtojson');
 
 let jwt = require("jsonwebtoken");
 let bcrypt = require("bcryptjs");
 
-exports.listQrCode = async (req, res) => {
+const storage = multer.diskStorage({
+  destination: './public/uploads',
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+exports.uploadFile = upload.single('csvFile'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const csvFilePath = path.join('./public/uploads', req.file.filename);
+
+    const jsonArray = await csvtojson().fromFile(csvFilePath);
+
+    res.json(jsonArray);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+exports.getQrCode = async (req, res) => {
+  const username = req.body.username;
+  try {
+    User.findOne({ username: username })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).send({ message: "Không tìm thấy người dùng." });
+        }
+        res.status(200).json({
+          code: 200,
+          data: {
+            id: user._id,
+            username: user.username,
+            fullName: user.fullName,
+            userId: user.userId,
+            password: user.password,
+            department: user.department,
+            email: user.email,
+            image: user.image,
+            roles: user.roles[0],
+            phoneNumber: user.phoneNumber,
+          }
+        });
+      });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+}
+
+exports.deleteQrCode = async (req, res) => {
+  try {
+    const username = req.body.username;
+
+    const user = await User.findOne({ username: username });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Người dùng không tồn tại.' });
+    }
+
+    await User.findOneAndDelete({ username: username });
+
+    res.status(200).json({ code: 200, message: 'Người dùng đã được xóa thành công.' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+exports.listQrCode = (req, res) => {
   try {
     const { limit, page } = req.body;
 
@@ -33,7 +110,7 @@ exports.listQrCode = async (req, res) => {
         });
       });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -98,7 +175,7 @@ exports.createQrCode = (req, res) => {
       }
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -159,7 +236,7 @@ exports.login = (req, res) => {
         );
       });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -171,7 +248,7 @@ exports.logout = async (req, res) => {
       message: "Bạn đã đăng xuất!"
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({ message: err.message });
   }
 };
 

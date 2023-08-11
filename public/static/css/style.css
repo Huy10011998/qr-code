@@ -7,6 +7,23 @@ body {
 .content {
   height: 100vh;
   padding: 0;
+  position: relative;
+}
+
+.vn-eng {
+  position: absolute;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  padding-top: 20px;
+}
+
+.imgage-vn-eng {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
 }
 
 .logo {

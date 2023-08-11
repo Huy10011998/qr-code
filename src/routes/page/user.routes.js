@@ -10,6 +10,4 @@ module.exports = function (app) {
   });
 
   app.get('/profile/:id', userController.getUser);
-
-  app.get('/generate-qr-code', userController.generateQrCode);
 };

@@ -19,6 +19,42 @@ verifyToken = (req, res, next) => {
   });
 };
 
+checkRoleUserName = (req, res, next) => {
+  // username
+  User.findOne({ username: req.body.username }).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
+      return;
+    }
+
+    if (!user) {
+      return res.status(404).send({ message: "Không tìm thấy người dùng!" });
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles },
+      },
+      (err, roles) => {
+        if (err) {
+          res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
+          return;
+        }
+
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "admin") {
+            next();
+            return;
+          }
+        }
+
+        res.status(400).json({ message: "Lỗi! Không có quyền truy cập!" });
+        return;
+      }
+    );
+  });
+};
+
 isAdmin = (req, res, next) => {
   User.findOne({ username: req.username }).then((user) => {
     Role.find(
@@ -83,5 +119,6 @@ const authJwt = {
   verifyToken,
   isAdmin,
   isModerator,
+  checkRoleUserName
 };
 module.exports = authJwt;

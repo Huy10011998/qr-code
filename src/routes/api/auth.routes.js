@@ -10,11 +10,18 @@ module.exports = function (app) {
     next();
   });
 
+  app.post("/api/auth/uploadFile", authJwt.verifyToken, authJwt.isAdmin, controller.uploadFile);
+
   app.post("/api/auth/createQrCode", authJwt.verifyToken, authJwt.isAdmin, verifyCreateQrCode.checkDuplicateUsernameOrUserId, verifyCreateQrCode.checkRolesExisted, controller.createQrCode);
 
-  app.post("/api/auth/login", controller.login);
+  app.post("/api/auth/getQrCode", authJwt.verifyToken, authJwt.isAdmin, controller.getQrCode);
+
+  app.post("/api/auth/listQrCode", authJwt.verifyToken, authJwt.isAdmin, controller.listQrCode);
+
+  app.delete("/api/auth/deleteQrCode", authJwt.verifyToken, authJwt.isAdmin, controller.deleteQrCode);
+
+  app.post("/api/auth/login", authJwt.checkRoleUserName, controller.login);
 
   app.post("/api/auth/logout", controller.logout);
 
-  app.post("/api/auth/listQrCode", authJwt.verifyToken, authJwt.isAdmin, controller.listQrCode)
 };
