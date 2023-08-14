@@ -471,11 +471,7 @@
               </div>
               <div class="container-btn-create">
                 <div class="btn-create-flex">
-                  <button
-                    id="btn-update-accept"
-                    class="btn-create-accept"
-                    disabled
-                  >
+                  <button id="btn-update-accept" class="btn-create-accept">
                     Xác nhận
                   </button>
                 </div>
@@ -486,9 +482,12 @@
       </header>
 
       <div class="refills__container">
-        <div class="sidebar">
+        <div class="sidebar sidebar-collapse">
           <div class="sidebar__container -fixed">
-            <div class="sidebar__list sidebar__list-active">
+            <div
+              class="sidebar__list sidebar__list-active"
+              style="background: transparent"
+            >
               <ul id="btn_lookup_transaction" class="sidebar__item">
                 <li>
                   <img
@@ -507,6 +506,7 @@
                       font-size: 14px;
                       font-weight: 400;
                       line-height: 1.5;
+                      display: none;
                     "
                     href="/portal/transaction"
                   >

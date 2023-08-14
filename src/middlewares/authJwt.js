@@ -28,30 +28,8 @@ checkRoleUserName = (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(404).send({ message: "Không tìm thấy người dùng!" });
+      return res.status(404).send({ message: "Sai tài khoản hoặc mật khẩu!" });
     }
-
-    Role.find(
-      {
-        _id: { $in: user.roles },
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
-          return;
-        }
-
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "admin") {
-            next();
-            return;
-          }
-        }
-
-        res.status(400).json({ message: "Lỗi! Không có quyền truy cập!" });
-        return;
-      }
-    );
   });
 };
 

@@ -10,6 +10,8 @@ module.exports = function (app) {
     next();
   });
 
+  app.put("/api/auth/updateQrCode/:id", authJwt.verifyToken, authJwt.isAdmin, controller.updateQrCode);
+
   app.post("/api/auth/uploadFile", authJwt.verifyToken, authJwt.isAdmin, controller.uploadFile);
 
   app.post("/api/auth/createQrCode", authJwt.verifyToken, authJwt.isAdmin, verifyCreateQrCode.checkDuplicateUsernameOrUserId, verifyCreateQrCode.checkRolesExisted, controller.createQrCode);
@@ -20,7 +22,7 @@ module.exports = function (app) {
 
   app.delete("/api/auth/deleteQrCode", authJwt.verifyToken, authJwt.isAdmin, controller.deleteQrCode);
 
-  app.post("/api/auth/login", authJwt.checkRoleUserName, controller.login);
+  app.post("/api/auth/login", controller.login);
 
   app.post("/api/auth/logout", controller.logout);
 

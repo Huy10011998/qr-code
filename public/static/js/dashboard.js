@@ -8,6 +8,7 @@
   let titleDelete = $(".title-delete");
   let modalUpdate = $("#myModal-Update");
   let body = $("body");
+  let isPageClicked = false;
 
   listQrCode();
 
@@ -290,8 +291,9 @@
     modalDelete.css("display", "block");
     body.css("overflow", "hidden");
 
-    $("#btn-confirm-delete").on("click", function () {
+    $("#btn-confirm-delete").off("click").on("click", function () {
       deleteQrCode(username);
+      $("#btn-confirm-delete").off("click"); // Tắt sự kiện click sau khi gọi API
     });
   });
 
@@ -338,6 +340,11 @@
   tableEl.on("click", ".img-update-qrcode", function () {
     const username_ = $(this).closest("tr").attr("id");
     getQrCode(username_);
+
+    $("#btn-update-accept").off("click").on("click", function () {
+      updateQrCode(username_);
+      $("#btn-update-accept").off("click"); // Tắt sự kiện click sau khi gọi API
+    });
   });
 
   function getQrCode(username_) {
@@ -387,6 +394,53 @@
     });
   }
 
+  function updateQrCode(username_) {
+    const token = getCookie("token");
+
+    const usernameUpdate = $("#username__update");
+    const nameUpdate = $("#fullName-update");
+    const passwordUpdate = $("#password-update");
+    const departmentUpdate = $("#department-update");
+    const userIdUpdate = $("#userId-update");
+    const emailUpdate = $("#email-update");
+    const imageUpdate = $("#image-update");
+    const phoneNumberUpdate = $("#phoneNumber-update");
+    const rolesUpdate = $("#roles-update");
+
+    $.ajax({
+      url: `http://localhost:8080/api/auth/updateQrCode/${username_}`,
+      method: "PUT",
+      contentType: 'application/json',
+      data: JSON.stringify({
+        username: usernameUpdate.val(),
+        fullName: nameUpdate.val(),
+        password: passwordUpdate.val(),
+        department: departmentUpdate.val(),
+        userId: userIdUpdate.val(),
+        email: emailUpdate.val(),
+        image: imageUpdate.val(),
+        phoneNumber: phoneNumberUpdate.val(),
+        roles: [rolesUpdate.val()]
+      }),
+      dataType: 'json',
+      beforeSend: function (xhr, settings) {
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+      },
+      success: function (response) {
+        if (+response.code === 200) {
+          modalUpdate.css("display", "none");
+          body.css("overflow", "auto");
+          listQrCode();
+          customToastify("Cập nhật mã QR thành công!", { background: BG_TOAST[0] });
+        }
+      },
+      error: function (xhr, status, error) {
+        // customToastify(xhr.responseJSON.message, { background: BG_TOAST[2] });
+      },
+      complete: function (xhr) { },
+    });
+  }
+
   // gen count page
   function generateCountPage(from, limit, total) {
     const fromPage = document.getElementById("fromPage");
@@ -427,12 +481,24 @@
           $('#pagination').twbsPagination({
             totalPages,
             visiblePages: 7,
-            first: '<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="FirstPageIcon"><path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path></svg>',
-            prev: '<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateBeforeIcon"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>',
-            next: '<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateNextIcon"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg>',
-            last: '<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LastPageIcon"><path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path></svg>',
-            onPageClick: function (_, page) {
-              listQrCode(page, limit);
+            first: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="FirstPageIcon">
+            <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
+          </svg>`,
+            prev: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateBeforeIcon">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+          </svg>`,
+            next: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateNextIcon">
+            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+          </svg>`,
+            last: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LastPageIcon">
+            <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
+          </svg>`,
+            onPageClick: (_, page) => {
+              if (isPageClicked) {
+                listQrCode(page, limit);
+              } else {
+                isPageClicked = true;
+              }
             }
           });
         }
@@ -455,33 +521,69 @@
 
   // donwload file excel
   function exportToExcel() {
+    // const table = document.getElementById('table');
+    // const ws = XLSX.utils.table_to_sheet(table);
+
+    // const wb = XLSX.utils.book_new();
+    // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    // const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+    // function s2ab(s) {
+    //   const buf = new ArrayBuffer(s.length);
+    //   const view = new Uint8Array(buf);
+    //   for (let i = 0; i < s.length; i++) {
+    //     view[i] = s.charCodeAt(i) & 0xFF;
+    //   }
+    //   return buf;
+    // }
+
+    // const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+    // const url = URL.createObjectURL(blob);
+
+    // const a = document.createElement('a');
+    // a.style.display = 'none';
+    // a.href = url;
+    // a.download = 'Danh sách mã Qr Code.xlsx';
+    // document.body.appendChild(a);
+    // a.click();
+    // document.body.removeChild(a);
+    // Lấy các dữ liệu từ bảng HTML
     const table = document.getElementById('table');
+    const rows = table.getElementsByTagName('tr');
+
+    // Tạo một workbook mới
+    const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.table_to_sheet(table);
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // Lặp qua từng dòng của bảng HTML để thêm hình ảnh vào workbook
+    Array.from(rows).forEach((row, rowIndex) => {
+      const cells = row.getElementsByTagName('td');
+      console.log("====cells", cells);
 
-    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+      // Kiểm tra xem cells[10] có giá trị hay không
+      if (cells[10]) {
+        const imgElement = cells[10].querySelector('img'); // Lấy phần tử <img> trong <td>
 
-    function s2ab(s) {
-      const buf = new ArrayBuffer(s.length);
-      const view = new Uint8Array(buf);
-      for (let i = 0; i < s.length; i++) {
-        view[i] = s.charCodeAt(i) & 0xFF;
+        if (imgElement) {
+          const src = imgElement.getAttribute('src');
+          console.log("====imageURL", src);
+
+          // Tiếp tục xử lý hình ảnh và workbook
+          // Tạo một hình ảnh từ URL và thêm nó vào workbook
+          // const image = new Image();
+          // image.src = src;
+
+          // XLSX.utils.sheet_add_image(ws, `D${rowIndex + 1}`, image, { /* options */ });
+        }
       }
-      return buf;
-    }
+    });
 
-    const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
-    const url = URL.createObjectURL(blob);
+    // Thêm sheet vào workbook
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
 
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = 'Danh sách mã Qr Code.xlsx';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    // Xuất file Excel
+    XLSX.writeFile(wb, 'data.xlsx');
   }
 
   $("#myBtn-download").on("click", function () {

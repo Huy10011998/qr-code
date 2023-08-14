@@ -193,6 +193,7 @@ select {
   width: 100%;
   max-width: 269px;
   position: fixed;
+  width: calc(65px);
   height: 100%;
 }
 

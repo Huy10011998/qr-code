@@ -16,8 +16,12 @@ const UserSchema = new Schema({
       ref: "Role"
     }
   ],
-  createdAt: { type: Date, default: Date.now },
-  modifiedAt: { type: Date, default: Date.now },
+  createdAt: { type: Date },
+  modifiedAt: { type: Date },
+  languages: {
+    en: String,
+    vi: String
+  }
 });
 
 const User = mongoose.model('User', UserSchema)

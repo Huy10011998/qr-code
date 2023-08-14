@@ -6,8 +6,8 @@ const path = require('path');
 const multer = require('multer');
 const csvtojson = require('csvtojson');
 
-let jwt = require("jsonwebtoken");
-let bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const storage = multer.diskStorage({
   destination: './public/uploads',
@@ -35,6 +35,37 @@ exports.uploadFile = upload.single('csvFile'), async (req, res) => {
   }
 };
 
+exports.updateQrCode = async (req, res) => {
+  const id = req.params.id;
+  const { fullName, username, password, department, email, image, phoneNumber, roles, userId } = req.body;
+
+  try {
+    const user = await User.findOne({ username: id });
+
+    if (!user) {
+      return res.status(404).json({ error: 'Người dùng không tồn tại!' });
+    }
+
+    user.fullName = fullName;
+    user.username = username;
+    user.password = bcrypt.hashSync(password, 8);
+    user.department = department;
+    user.email = email;
+    user.image = image;
+    user.phoneNumber = phoneNumber;
+    user.roles = roles;
+    user.userId = userId;
+    user.modifiedAt = new Date();
+
+    await user.save();
+
+    return res.status(200).json({ code: 200, message: 'Cập nhật mã Qr Code thành công!', user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+}
+
 exports.getQrCode = async (req, res) => {
   const username = req.body.username;
   try {
@@ -43,6 +74,7 @@ exports.getQrCode = async (req, res) => {
         if (!user) {
           return res.status(404).send({ message: "Không tìm thấy người dùng." });
         }
+
         res.status(200).json({
           code: 200,
           data: {
@@ -125,6 +157,8 @@ exports.createQrCode = (req, res) => {
       email: req.body.email,
       image: req.body.image,
       phoneNumber: req.body.phoneNumber,
+      createdAt: new Date(),
+      modifiedAt: new Date()
     });
 
     user.save((err, user) => {
@@ -181,7 +215,7 @@ exports.createQrCode = (req, res) => {
 
 exports.login = (req, res) => {
   try {
-    User.findOne({ username: req.body.username, })
+    User.findOne({ username: req.body.username })
       .populate("roles", "-__v")
       .exec((err, user) => {
         if (err) {
@@ -193,18 +227,11 @@ exports.login = (req, res) => {
           return res.status(404).send({ message: "Sai tài khoản hoặc mật khẩu!" });
         }
 
-        let passwordIsValid = bcrypt.compareSync(
-          req.body.password,
-          user.password
-        );
+        let passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
         if (!passwordIsValid) {
           return res.status(401).send({ message: "Sai tài khoản hoặc mật khẩu!" });
         }
-
-        let token = jwt.sign({ username: user.username }, config.secret, {
-          expiresIn: 2592000 // 30 day
-        });
 
         let authorities = [];
 
@@ -212,28 +239,34 @@ exports.login = (req, res) => {
           authorities.push(user.roles[i].name.toUpperCase());
         }
 
+        if (!authorities.includes("ADMIN")) {
+          return res.status(403).send({ message: "Quyền truy cập bị từ chối!" });
+        }
+
+        let token = jwt.sign({ username: user.username }, config.secret, {
+          expiresIn: 2592000 // 30 days
+        });
+
         req.session.token = token;
 
-        res.status(200).json(
-          {
-            code: 200,
-            token: token,
-            data: {
-              id: user._id,
-              username: user.username,
-              fullName: user.fullName,
-              userId: req.body.userId,
-              department: user.department,
-              email: user.email,
-              phoneNumber: user.phoneNumber,
-              image: user.image,
-              roles: authorities,
-            },
-            createdAt: user.createdAt,
-            modifiedAt: user.modifiedAt,
-            message: "Đăng nhập tài khoản thành công!"
+        res.status(200).json({
+          code: 200,
+          token: token,
+          data: {
+            id: user._id,
+            username: user.username,
+            fullName: user.fullName,
+            userId: req.body.userId,
+            department: user.department,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            image: user.image,
+            roles: authorities,
           },
-        );
+          createdAt: user.createdAt,
+          modifiedAt: user.modifiedAt,
+          message: "Đăng nhập tài khoản thành công!"
+        });
       });
   } catch (err) {
     res.status(500).json({ message: err.message });

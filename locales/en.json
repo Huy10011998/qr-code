@@ -1,1 +1,4 @@
-{}
+{
+  "greeting": "Hello",
+  "farewell": "Goodbye"
+}
