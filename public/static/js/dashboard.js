@@ -148,6 +148,9 @@
     const image = $("#image");
     const phoneNumber = $("#phoneNumber");
     const roles = $("#roles");
+    const nameEng = $("#fullName_en");
+    const departmentEng = $("#department_en");
+
     $.ajax({
       url: 'http://localhost:8080/api/auth/createQrCode',
       method: "POST",
@@ -161,7 +164,9 @@
         email: email.val(),
         image: image.val(),
         phoneNumber: phoneNumber.val(),
-        roles: [roles.val()]
+        roles: [roles.val()],
+        fullName_en: nameEng.val(),
+        department_en: departmentEng.val()
       }),
       dataType: 'json',
       beforeSend: function (xhr, settings) {
@@ -188,6 +193,8 @@
         image.val("");
         phoneNumber.val("");
         roles.val("");
+        nameEng.val();
+        departmentEng.val();
       },
     });
   }
@@ -207,7 +214,9 @@
       $('#email'),
       $('#image'),
       $('#phoneNumber'),
-      $('#roles')
+      $('#roles'),
+      $('#fullName_en'),
+      $('#department_en')
     ];
 
     var allInputsFilled = inputs.every(function (input) {
@@ -217,13 +226,13 @@
     $("#btn-create-accept").prop("disabled", !allInputsFilled);
   }
 
-  $('#username__, #fullName, #password, #department, #userId, #email, #image, #phoneNumber, #roles').on('input', function () {
+  $('#username__, #fullName, #fullName_en,#password, #department,#department_en, #userId, #email, #image, #phoneNumber, #roles').on('input', function () {
     checkInputs();
   });
 
   // gen qr code
   function genQrCode(id) {
-    const baseURL = `http://192.168.100.179:8080/profile/${id}`;
+    const baseURL = `http://192.168.100.150:8080/profile/${id}`;
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
@@ -249,9 +258,11 @@
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.userId}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.username}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.fullName}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.fullName_en}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.phoneNumber}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.email}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department_en}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.image}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
@@ -359,6 +370,8 @@
     const imageUpdate = $("#image-update");
     const phoneNumberUpdate = $("#phoneNumber-update");
     const rolesUpdate = $("#roles-update");
+    const departmentEngUpdate = $("#department-update-en");
+    const nameEngUpdate = $("#fullName-update-en");
 
     $.ajax({
       url: 'http://localhost:8080/api/auth/getQrCode',
@@ -385,6 +398,8 @@
           imageUpdate.val(data.image);
           phoneNumberUpdate.val(data.phoneNumber);
           rolesUpdate.val(data.roles);
+          departmentEngUpdate.val(data.department_en)
+          nameEngUpdate.val(data.fullName_en)
         }
       },
       error: function (xhr, status, error) {
@@ -406,6 +421,8 @@
     const imageUpdate = $("#image-update");
     const phoneNumberUpdate = $("#phoneNumber-update");
     const rolesUpdate = $("#roles-update");
+    const departmentEngUpdate = $("#department-update-en");
+    const nameEngUpdate = $("#fullName-update-en");
 
     $.ajax({
       url: `http://localhost:8080/api/auth/updateQrCode/${username_}`,
@@ -420,7 +437,9 @@
         email: emailUpdate.val(),
         image: imageUpdate.val(),
         phoneNumber: phoneNumberUpdate.val(),
-        roles: [rolesUpdate.val()]
+        roles: [rolesUpdate.val()],
+        fullName_en: nameEngUpdate.val(),
+        department_en: departmentEngUpdate.val()
       }),
       dataType: 'json',
       beforeSend: function (xhr, settings) {
@@ -435,7 +454,7 @@
         }
       },
       error: function (xhr, status, error) {
-        // customToastify(xhr.responseJSON.message, { background: BG_TOAST[2] });
+        customToastify(xhr.responseJSON.message, { background: BG_TOAST[2] });
       },
       complete: function (xhr) { },
     });
@@ -521,34 +540,6 @@
 
   // donwload file excel
   function exportToExcel() {
-    // const table = document.getElementById('table');
-    // const ws = XLSX.utils.table_to_sheet(table);
-
-    // const wb = XLSX.utils.book_new();
-    // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    // const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
-
-    // function s2ab(s) {
-    //   const buf = new ArrayBuffer(s.length);
-    //   const view = new Uint8Array(buf);
-    //   for (let i = 0; i < s.length; i++) {
-    //     view[i] = s.charCodeAt(i) & 0xFF;
-    //   }
-    //   return buf;
-    // }
-
-    // const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
-    // const url = URL.createObjectURL(blob);
-
-    // const a = document.createElement('a');
-    // a.style.display = 'none';
-    // a.href = url;
-    // a.download = 'Danh sách mã Qr Code.xlsx';
-    // document.body.appendChild(a);
-    // a.click();
-    // document.body.removeChild(a);
-    // Lấy các dữ liệu từ bảng HTML
     const table = document.getElementById('table');
     const rows = table.getElementsByTagName('tr');
 

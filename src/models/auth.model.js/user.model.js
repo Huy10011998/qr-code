@@ -4,8 +4,10 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   username: { type: String, required: true },
   fullName: { type: String, required: true },
+  fullName_en: { type: String, required: true },
   password: { type: String, required: true },
   department: { type: String, required: true },
+  department_en: { type: String, required: true },
   userId: { type: String, required: true },
   email: { type: String, required: true },
   image: { type: String, required: true },
@@ -18,10 +20,6 @@ const UserSchema = new Schema({
   ],
   createdAt: { type: Date },
   modifiedAt: { type: Date },
-  languages: {
-    en: String,
-    vi: String
-  }
 });
 
 const User = mongoose.model('User', UserSchema)

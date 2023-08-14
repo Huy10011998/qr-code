@@ -37,7 +37,7 @@ exports.uploadFile = upload.single('csvFile'), async (req, res) => {
 
 exports.updateQrCode = async (req, res) => {
   const id = req.params.id;
-  const { fullName, username, password, department, email, image, phoneNumber, roles, userId } = req.body;
+  const { fullName, username, password, department, email, image, phoneNumber, roles, userId, department_en, fullName_en } = req.body;
 
   try {
     const user = await User.findOne({ username: id });
@@ -55,7 +55,9 @@ exports.updateQrCode = async (req, res) => {
     user.phoneNumber = phoneNumber;
     user.roles = roles;
     user.userId = userId;
-    user.modifiedAt = new Date();
+    user.fullName_en = fullName_en,
+      user.department_en = department_en,
+      user.modifiedAt = new Date();
 
     await user.save();
 
@@ -81,9 +83,11 @@ exports.getQrCode = async (req, res) => {
             id: user._id,
             username: user.username,
             fullName: user.fullName,
+            fullName_en: user.fullName_en,
             userId: user.userId,
             password: user.password,
             department: user.department,
+            department_en: user.department_en,
             email: user.email,
             image: user.image,
             roles: user.roles[0],
@@ -158,7 +162,9 @@ exports.createQrCode = (req, res) => {
       image: req.body.image,
       phoneNumber: req.body.phoneNumber,
       createdAt: new Date(),
-      modifiedAt: new Date()
+      modifiedAt: new Date(),
+      fullName_en: req.body.fullName_en,
+      department_en: req.body.department_en
     });
 
     user.save((err, user) => {

@@ -8,14 +8,16 @@ exports.getUser = (req, res) => {
     User.findOne({ username: id })
       .then((user) => {
         if (!user) {
-          return res.status(404).send({ message: "Không tìm thấy người dùng." }); z
+          return res.status(404).send({ message: "Không tìm thấy người dùng." });
         }
-        res.render('./user/index', {
+        res.render('./user/profile', {
           id: user._id,
           username: user.username,
           fullName: user.fullName,
+          fullName_en: user.fullName_en,
           userId: user.userId,
           department: user.department,
+          department_en: user.department_en,
           email: user.email,
           image: user.image,
           phoneNumber: formatPhoneNumber(user.phoneNumber),
