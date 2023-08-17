@@ -9,18 +9,22 @@
     address: $(".address").text(),
     taxCodeLabel: $(".tax").text(),
     code: $(".code").text(),
-    img: $("image-vn-eng").attr("src")
+    btn_img: $("#captureEl").text(),
+    btn_vcard: $("#downloadEl").text(),
   };
 
   function resetCompanyData() {
-    $(".info").text(originalCompanyData.fullNameEng),
-      $(".title").text(originalCompanyData.departmentEng),
-      $(".title-company").text(originalCompanyData.title);
+    $(".info").text(originalCompanyData.fullNameEng);
+    $(".title").text(originalCompanyData.departmentEng);
+    $(".title-company").text(originalCompanyData.title);
     $(".headquarters").text(originalCompanyData.headquarters);
     $(".address").text(originalCompanyData.address);
     $(".tax").text(originalCompanyData.taxCodeLabel);
     $(".code").text(originalCompanyData.code);
     $(".image-vn-eng").attr("src", "/static/images/icons/united-states.png");
+    $("#logo").attr("src", "/static/images/logo_vn.png");
+    $("#captureEl").text(originalCompanyData.btn_img);
+    $("#downloadEl").text(originalCompanyData.btn_vcard);
   }
 
   function changeLangEnCompany() {
@@ -33,6 +37,9 @@
       taxCodeLabel: "Tax Code:",
       code: "0304475742",
       img: "/static/images/icons/vietnam.png",
+      btn_img: "Download Images",
+      btn_vcard: "Download vcard",
+      logo: "/static/images/logo_en.png"
     };
 
     $(".info").text(companyData.fullNameEng),
@@ -43,6 +50,9 @@
     $(".tax").text(companyData.taxCodeLabel);
     $(".code").text(companyData.code);
     $(".image-vn-eng").attr("src", companyData.img);
+    $("#captureEl").text(companyData.btn_img);
+    $("#downloadEl").text(companyData.btn_vcard);
+    $('#logo').attr("src", companyData.logo)
   }
 
   $("#en").on("click", function () {

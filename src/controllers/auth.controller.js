@@ -69,9 +69,9 @@ exports.updateQrCode = async (req, res) => {
 }
 
 exports.getQrCode = async (req, res) => {
-  const username = req.body.username;
+  const userId = req.body.userId;
   try {
-    User.findOne({ username: username })
+    User.findOne({ userId: userId })
       .then((user) => {
         if (!user) {
           return res.status(404).send({ message: "Không tìm thấy người dùng." });
@@ -103,15 +103,15 @@ exports.getQrCode = async (req, res) => {
 
 exports.deleteQrCode = async (req, res) => {
   try {
-    const username = req.body.username;
+    const userId = req.body.userId;
 
-    const user = await User.findOne({ username: username });
+    const user = await User.findOne({ userId: userId });
 
     if (!user) {
       return res.status(404).json({ message: 'Người dùng không tồn tại.' });
     }
 
-    await User.findOneAndDelete({ username: username });
+    await User.findOneAndDelete({ userId: userId });
 
     res.status(200).json({ code: 200, message: 'Người dùng đã được xóa thành công.' });
   } catch (err) {
@@ -132,6 +132,31 @@ exports.listQrCode = (req, res) => {
       .exec((err, user) => {
         User.countDocuments((err, count) => {
           if (err) return next(err);
+          // Role.find({ name: "admin" }, (err, adminRole) => {
+          //   if (err) {
+          //     res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
+          //     return;
+          //   }
+
+          //   const adminRoleIds = adminRole.map(role => role._id);
+
+          //   const filteredUsers = user.filter(user => {
+          //     const hasAdminRole = user.roles.some(role => role.toString() === adminRoleIds[0].toString());
+          //     return !hasAdminRole;
+          //   });
+
+          //   res.status(200).json({
+          //     code: 200,
+          //     data: {
+          //       totalPages: Math.ceil(count / perPage),
+          //       totalItems: count,
+          //       currentPage: page,
+          //       limit: perPage,
+          //       data: filteredUsers,
+          //     },
+          //     message: "Lấy danh sách Qr Code thành công!",
+          //   });
+          // });
           res.status(200).json({
             code: 200,
             data: {
@@ -150,7 +175,7 @@ exports.listQrCode = (req, res) => {
   }
 };
 
-exports.createQrCode = (req, res) => {
+const createQrCode = (req, res) => {
   try {
     const user = new User({
       username: req.body.username,
@@ -219,9 +244,11 @@ exports.createQrCode = (req, res) => {
   }
 };
 
+exports.createQrCode = createQrCode;
+
 exports.login = (req, res) => {
   try {
-    User.findOne({ username: req.body.username })
+    User.findOne({ userId: req.body.userId })
       .populate("roles", "-__v")
       .exec((err, user) => {
         if (err) {
@@ -249,7 +276,7 @@ exports.login = (req, res) => {
           return res.status(403).send({ message: "Quyền truy cập bị từ chối!" });
         }
 
-        let token = jwt.sign({ username: user.username }, config.secret, {
+        let token = jwt.sign({ userId: user.userId }, config.secret, {
           expiresIn: 2592000 // 30 days
         });
 
@@ -290,5 +317,4 @@ exports.logout = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 

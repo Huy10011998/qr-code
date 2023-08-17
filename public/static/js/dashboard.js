@@ -12,6 +12,15 @@
 
   listQrCode();
 
+  const validateEmail = (email) => {
+    if (typeof email === 'string' && email.endsWith("@cholimexfood.com.vn")) {
+      return email;
+    } else {
+      const validate = email + "@cholimexfood.com.vn";
+      return validate;
+    }
+  };
+
   const getFullTime = (date) => {
     return moment(date).format('HH:mm:ss - DD/MM/YYYY');
   }
@@ -161,7 +170,7 @@
         password: password.val(),
         department: department.val(),
         userId: userId.val(),
-        email: email.val(),
+        email: validateEmail(email.val()),
         image: image.val(),
         phoneNumber: phoneNumber.val(),
         roles: [roles.val()],
@@ -193,8 +202,8 @@
         image.val("");
         phoneNumber.val("");
         roles.val("");
-        nameEng.val();
-        departmentEng.val();
+        nameEng.val("");
+        departmentEng.val("");
       },
     });
   }
@@ -204,7 +213,7 @@
   });
 
   // check disabled btn create
-  function checkInputs() {
+  function checkInputsCreate() {
     var inputs = [
       $('#username__'),
       $('#fullName'),
@@ -227,7 +236,34 @@
   }
 
   $('#username__, #fullName, #fullName_en,#password, #department,#department_en, #userId, #email, #image, #phoneNumber, #roles').on('input', function () {
-    checkInputs();
+    checkInputsCreate();
+  });
+
+  // check disabled btn update
+  function checkInputsUpdate() {
+    var inputs = [
+      $('#username__update'),
+      $('#password-update'),
+      $('#fullName-update'),
+      $('#fullName-update-en'),
+      $('#email-update'),
+      $('#department-update'),
+      $('#department-update-en'),
+      $('#image-update'),
+      $('#phoneNumber-update'),
+      $('#roles-update'),
+      $('#userId-update')
+    ];
+
+    var allInputsFilled = inputs.every(function (input) {
+      return input.val().length > 0;
+    });
+
+    $("#btn-update-accept").prop("disabled", !allInputsFilled);
+  }
+
+  $('#username__update, #password-update, #fullName-update,#fullName-update-en, #email-update,#department-update, #department-update-en, #image-update, #phoneNumber-update, #roles-update, #userId-update').on('input', function () {
+    checkInputsUpdate();
   });
 
   // gen qr code
@@ -253,7 +289,7 @@
       textData.style.display = "none";
       $.each(data, function (i, result) {
         html += `      
-        <tr id="${result.username}">
+        <tr id="${result.userId}">
           <td style="font-size: 12px; font-weight: 400; text-align: center;">${i + 1}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.userId}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.username}</td>
@@ -267,7 +303,7 @@
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">
-            <img id="qrCode" src=${genQrCode(result?.username)} />
+            <img id="qrCode" src=${genQrCode(result?._id)} />
           </td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">
             <img class="img-update-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/fix.png" />
@@ -296,19 +332,19 @@
   });
 
   tableEl.on("click", ".img-delete-qrcode", function () {
-    const username = $(this).closest("tr").attr("id");
+    const userId = $(this).closest("tr").attr("id");
     titleDelete.html("Xoá mã Qr Code");
-    contentDelete.html(`Bạn chắc chắn muốn xoá mã Qr Code của tài khoản: ${username}`);
+    contentDelete.html(`Bạn chắc chắn muốn xoá mã Qr Code của tài khoản: ${userId}`);
     modalDelete.css("display", "block");
     body.css("overflow", "hidden");
 
     $("#btn-confirm-delete").off("click").on("click", function () {
-      deleteQrCode(username);
+      deleteQrCode(userId);
       $("#btn-confirm-delete").off("click"); // Tắt sự kiện click sau khi gọi API
     });
   });
 
-  function deleteQrCode(username) {
+  function deleteQrCode(userId) {
     const token = getCookie("token");
 
     $.ajax({
@@ -320,7 +356,7 @@
         "Content-Type": "application/json"
       },
       "data": JSON.stringify({
-        "username": username,
+        "userId": userId,
       }),
       success: function (response) {
         if (response.code === 200) {
@@ -346,19 +382,20 @@
   $("#btn-update-back").on("click", function () {
     modalUpdate.css("display", "none");
     body.css("overflow", "auto");
+    $("#btn-update-accept").prop("disabled", "true");
   });
 
   tableEl.on("click", ".img-update-qrcode", function () {
-    const username_ = $(this).closest("tr").attr("id");
-    getQrCode(username_);
+    const userId_ = $(this).closest("tr").attr("id");
+    getQrCode(userId_);
 
     $("#btn-update-accept").off("click").on("click", function () {
-      updateQrCode(username_);
+      updateQrCode(userId_);
       $("#btn-update-accept").off("click"); // Tắt sự kiện click sau khi gọi API
     });
   });
 
-  function getQrCode(username_) {
+  function getQrCode(userId_) {
     const token = getCookie("token");
 
     const usernameUpdate = $("#username__update");
@@ -378,7 +415,7 @@
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
-        username: username_,
+        userId: userId_,
       }),
       dataType: 'json',
       beforeSend: function (xhr, settings) {
@@ -409,7 +446,7 @@
     });
   }
 
-  function updateQrCode(username_) {
+  function updateQrCode(userId_) {
     const token = getCookie("token");
 
     const usernameUpdate = $("#username__update");
@@ -425,7 +462,7 @@
     const nameEngUpdate = $("#fullName-update-en");
 
     $.ajax({
-      url: `http://localhost:8080/api/auth/updateQrCode/${username_}`,
+      url: `http://localhost:8080/api/auth/updateQrCode/${userId_}`,
       method: "PUT",
       contentType: 'application/json',
       data: JSON.stringify({
@@ -542,39 +579,138 @@
   function exportToExcel() {
     const table = document.getElementById('table');
     const rows = table.getElementsByTagName('tr');
+    const totalRows = rows.length;
 
-    // Tạo một workbook mới
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.table_to_sheet(table);
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet("My Sheet");
+    sheet.properties.defaultRowHeight = 80;
 
-    // Lặp qua từng dòng của bảng HTML để thêm hình ảnh vào workbook
+    sheet.columns = [
+      {
+        header: "STT",
+        key: "stt",
+      },
+      {
+        header: "Mã nhân viên",
+        key: "userId",
+      },
+      {
+        header: "Tài khoản",
+        key: "username",
+      },
+      {
+        header: "Họ tên",
+        key: "fullName_vi",
+      },
+      {
+        header: "Họ tên (Eng)",
+        key: "fullName_en",
+      },
+      {
+        header: "Số điện thoại",
+        key: "numberPhone",
+      },
+      {
+        header: "Email",
+        key: "email",
+      },
+      {
+        header: "Phòng ban",
+        key: "department",
+      },
+      {
+        header: "Phòng ban (Eng)",
+        key: "department_en",
+      },
+      {
+        header: "Hình ảnh",
+        key: "picture",
+      },
+      {
+        header: "Ngày tạo",
+        key: "created",
+      },
+      {
+        header: "Ngày cập nhật",
+        key: "updated",
+      },
+      {
+        header: "Qr code",
+        key: "qrCode",
+      },
+    ];
+
     Array.from(rows).forEach((row, rowIndex) => {
-      const cells = row.getElementsByTagName('td');
-      console.log("====cells", cells);
+      if (rowIndex > 0) {
+        const cells = row.getElementsByTagName('td');
+        if (cells.length > 0) {
+          sheet.addRow({
+            stt: cells[0].innerHTML,
+            userId: cells[1].innerHTML,
+            username: cells[2].innerHTML,
+            fullName_vi: cells[3].innerHTML,
+            fullName_en: cells[4].innerHTML,
+            numberPhone: cells[5].innerHTML,
+            email: cells[6].innerHTML,
+            department: cells[7].innerHTML,
+            department_en: cells[8].innerHTML,
+            picture: cells[9].innerHTML,
+            created: cells[10].innerHTML,
+            updated: cells[11].innerHTML,
+          });
 
-      // Kiểm tra xem cells[10] có giá trị hay không
-      if (cells[10]) {
-        const imgElement = cells[10].querySelector('img'); // Lấy phần tử <img> trong <td>
-
-        if (imgElement) {
+          const imgElement = cells[12].querySelector('img');
           const src = imgElement.getAttribute('src');
-          console.log("====imageURL", src);
-
-          // Tiếp tục xử lý hình ảnh và workbook
-          // Tạo một hình ảnh từ URL và thêm nó vào workbook
-          // const image = new Image();
-          // image.src = src;
-
-          // XLSX.utils.sheet_add_image(ws, `D${rowIndex + 1}`, image, { /* options */ });
+          const qrCode = workbook.addImage({
+            base64: src,
+            extension: `${cells[2].innerHTML}.png`,
+          });
+          sheet.addImage(qrCode, {
+            tl: { col: 12, row: rowIndex },
+            ext: { width: 80, height: 80 },
+          });
         }
       }
     });
 
-    // Thêm sheet vào workbook
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    for (let i = 2; i <= totalRows; i++) {
+      sheet.getRow(i).height = 50;
+    }
 
-    // Xuất file Excel
-    XLSX.writeFile(wb, 'data.xlsx');
+    sheet.getRow(totalRows).alignment = { vertical: 'middle', horizontal: 'center' };
+    sheet.getRow(totalRows).font = { bold: true };
+    sheet.getRow(totalRows - 1).alignment = { vertical: 'middle', horizontal: 'center' };
+
+    sheet.columns.forEach((column) => {
+      const maxLength = column.values.reduce((acc, value) => {
+        const length = value ? value.toString().length : 0;
+        return Math.max(acc, length);
+      }, column.header.length);
+      column.width = maxLength < 10 ? 10 : maxLength + 2;
+    });
+
+    sheet.columns.forEach((column) => {
+      column.alignment = { vertical: 'middle', horizontal: 'center' };
+      column.font = { name: 'Calibri', size: 12 };
+      column.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    });
+
+    sheet.getRow(1).font = {
+      name: "Calibri (Body)",
+      family: 4,
+      size: 16,
+      bold: true,
+    };
+
+    workbook.xlsx.writeBuffer().then(function (data) {
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'qrCode.xlsx';
+      anchor.click();
+      window.URL.revokeObjectURL(url);
+    });
   }
 
   $("#myBtn-download").on("click", function () {

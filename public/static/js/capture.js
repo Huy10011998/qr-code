@@ -1,4 +1,3 @@
-// (B) USING SCREEN CAPTURE API
 async function captureB() {
   // (A) GET MEDIA STREAM
   const stream = await navigator.mediaDevices.getDisplayMedia({

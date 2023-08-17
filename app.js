@@ -3,6 +3,9 @@ const cors = require("cors");
 const cookieSession = require("cookie-session");
 const bodyParser = require('body-parser');
 const path = require('path');
+const multer = require('multer');
+const exceljs = require('exceljs');
+const fs = require('fs');
 
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
@@ -40,6 +43,7 @@ app.set('views', path.join(__dirname, 'public/layout'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const db = require("./src/models/auth.model.js");
+const User = db.user
 const Role = db.role;
 
 db.mongoose
@@ -55,6 +59,58 @@ db.mongoose
         console.error("Connection to MongoDB error", err);
         process.exit();
     });
+
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './public/uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+app.post('/uploadfile', upload.single('uploadfile'), (req, res) => {
+    const filePath = req.file.path;
+    importExcelDataToMongoDB(filePath)
+        .then(() => {
+            res.status(200).send('Data inserted into MongoDB successfully.');
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error inserting data into MongoDB.');
+        });
+});
+
+// Hàm chuyển đổi dữ liệu từ tệp Excel sang JSON và nhập vào MongoDB
+async function importExcelDataToMongoDB(filePath) {
+    const workbook = new exceljs.Workbook();
+    await workbook.xlsx.readFile(filePath);
+
+    const worksheet = workbook.getWorksheet(1);
+
+    const headerRow = worksheet.getRow(1);
+    const columnKeys = headerRow.values;
+
+    const jsonData = [];
+
+    worksheet.eachRow((row, rowNumber) => {
+        if (rowNumber > 1) {
+            const rowData = {};
+            row.eachCell((cell, cellNumber) => {
+                const columnKey = columnKeys[cellNumber];
+                rowData[columnKey] = cell.value;
+            });
+            jsonData.push(rowData);
+        }
+    });
+
+    await User.insertMany(jsonData);
+
+    // Xóa tệp tải lên sau khi hoàn thành
+    await fs.unlinkSync(filePath);
+}
 
 // routes
 require("./src/routes/api/auth.routes")(app);

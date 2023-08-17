@@ -1,6 +1,10 @@
 exports.login = (req, res) => {
   try {
-    res.render('./admin/login', {});
+    if (req.session.token) {
+      res.redirect("/dashboard");
+    } else {
+      res.render('./admin/login', {});
+    }
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

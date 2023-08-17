@@ -18,7 +18,7 @@ const UserSchema = new Schema({
       ref: "Role"
     }
   ],
-  createdAt: { type: Date },
+  createdAt: { type: Date, default: Date.now },
   modifiedAt: { type: Date },
 });
 

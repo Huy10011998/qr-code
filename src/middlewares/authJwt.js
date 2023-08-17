@@ -14,27 +14,13 @@ verifyToken = (req, res, next) => {
     if (err) {
       return res.status(401).send({ message: "Không được phép truy cập" });
     };
-    req.username = decoded.username;
+    req.userId = decoded.userId;
     next();
   });
 };
 
-checkRoleUserName = (req, res, next) => {
-  // username
-  User.findOne({ username: req.body.username }).exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
-      return;
-    }
-
-    if (!user) {
-      return res.status(404).send({ message: "Sai tài khoản hoặc mật khẩu!" });
-    }
-  });
-};
-
 isAdmin = (req, res, next) => {
-  User.findOne({ username: req.username }).then((user) => {
+  User.findOne({ userId: req.userId }).then((user) => {
     Role.find(
       {
         _id: { $in: user.roles },
@@ -52,7 +38,7 @@ isAdmin = (req, res, next) => {
           }
         }
 
-        res.status(403);
+        res.status(403).send({ message: "Yêu cầu vai trò người điều hành!" });
         return;
       }
     );
@@ -97,6 +83,5 @@ const authJwt = {
   verifyToken,
   isAdmin,
   isModerator,
-  checkRoleUserName
 };
 module.exports = authJwt;

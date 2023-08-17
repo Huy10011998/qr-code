@@ -2,9 +2,9 @@ const db = require("../models/auth.model.js/index.js");
 const ROLES = db.ROLES;
 const User = db.user;
 
-checkDuplicateUsernameOrUserId = (req, res, next) => {
-  // username
-  User.findOne({ username: req.body.username }).exec((err, user) => {
+checkDuplicateUserIdOrUserId = (req, res, next) => {
+  // userId
+  User.findOne({ userId: req.body.userId }).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
       return;
@@ -47,7 +47,7 @@ checkRolesExisted = (req, res, next) => {
 };
 
 const verifyCreateQrCode = {
-  checkDuplicateUsernameOrUserId,
+  checkDuplicateUserIdOrUserId,
   checkRolesExisted
 };
 
