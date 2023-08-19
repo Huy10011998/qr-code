@@ -2,45 +2,15 @@ const config = require("../../config/auth.config");
 const db = require("../models/auth.model.js");
 const User = db.user;
 const Role = db.role;
-const path = require('path');
-const multer = require('multer');
-const csvtojson = require('csvtojson');
-
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
-const storage = multer.diskStorage({
-  destination: './public/uploads',
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  }
-});
-
-const upload = multer({ storage: storage });
-
-exports.uploadFile = upload.single('csvFile'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
-
-    const csvFilePath = path.join('./public/uploads', req.file.filename);
-
-    const jsonArray = await csvtojson().fromFile(csvFilePath);
-
-    res.json(jsonArray);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-};
 
 exports.updateQrCode = async (req, res) => {
   const id = req.params.id;
   const { fullName, username, password, department, email, image, phoneNumber, roles, userId, department_en, fullName_en } = req.body;
 
   try {
-    const user = await User.findOne({ username: id });
+    const user = await User.findOne({ userId: id });
 
     if (!user) {
       return res.status(404).json({ error: 'Người dùng không tồn tại!' });
@@ -48,18 +18,68 @@ exports.updateQrCode = async (req, res) => {
 
     user.fullName = fullName;
     user.username = username;
-    user.password = bcrypt.hashSync(password, 8);
     user.department = department;
     user.email = email;
     user.image = image;
     user.phoneNumber = phoneNumber;
-    user.roles = roles;
     user.userId = userId;
     user.fullName_en = fullName_en,
       user.department_en = department_en,
       user.modifiedAt = new Date();
 
-    await user.save();
+    user.save((err, user) => {
+      if (password != user.password) {
+        user.password = bcrypt.hashSync(password, 8);
+      }
+
+      if (err) {
+        res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
+        return;
+      }
+
+      if (roles) {
+        Role.find(
+          {
+            name: { $in: roles },
+          },
+          (err, roles) => {
+
+            console.log("===roles", roles);
+
+            if (err) {
+              res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
+              return;
+            }
+
+            user.roles = roles.map((role) => role._id);
+
+            console.log("===user.roles", user.roles);
+
+            user.save((err) => {
+              if (err) {
+                res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
+                return;
+              }
+            });
+          }
+        );
+      } else {
+        Role.findOne({ name: "user" }, (err, role) => {
+          if (err) {
+            res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
+            return;
+          }
+
+          user.roles = [role._id];
+          user.save((err) => {
+            if (err) {
+              res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
+              return;
+            }
+          });
+        });
+      }
+    });
 
     return res.status(200).json({ code: 200, message: 'Cập nhật mã Qr Code thành công!', user });
   } catch (error) {
@@ -71,30 +91,41 @@ exports.updateQrCode = async (req, res) => {
 exports.getQrCode = async (req, res) => {
   const userId = req.body.userId;
   try {
-    User.findOne({ userId: userId })
-      .then((user) => {
-        if (!user) {
-          return res.status(404).send({ message: "Không tìm thấy người dùng." });
-        }
+    User.findOne({ userId: userId }).populate("roles", "-__v").exec((err, user) => {
 
-        res.status(200).json({
-          code: 200,
-          data: {
-            id: user._id,
-            username: user.username,
-            fullName: user.fullName,
-            fullName_en: user.fullName_en,
-            userId: user.userId,
-            password: user.password,
-            department: user.department,
-            department_en: user.department_en,
-            email: user.email,
-            image: user.image,
-            roles: user.roles[0],
-            phoneNumber: user.phoneNumber,
-          }
-        });
+      if (err) {
+        res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
+        return;
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "Không tìm thấy người dùng." });
+      }
+
+      let authorities = [];
+
+      for (let i = 0; i < user.roles.length; i++) {
+        authorities.push(user.roles[i].name);
+      }
+
+      res.status(200).json({
+        code: 200,
+        data: {
+          id: user._id,
+          username: user.username,
+          fullName: user.fullName,
+          fullName_en: user.fullName_en,
+          userId: user.userId,
+          password: user.password,
+          department: user.department,
+          department_en: user.department_en,
+          email: user.email,
+          image: user.image,
+          roles: authorities,
+          phoneNumber: user.phoneNumber,
+        }
       });
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

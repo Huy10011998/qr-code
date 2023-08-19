@@ -6,6 +6,9 @@ const path = require('path');
 const multer = require('multer');
 const exceljs = require('exceljs');
 const fs = require('fs');
+const bcrypt = require("bcryptjs");
+
+const { authJwt } = require("./src/middlewares");
 
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
@@ -34,7 +37,12 @@ app.use(
     })
 );
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+    bodyParser.urlencoded({
+        extended: true,
+    })
+);
+
 app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
@@ -60,7 +68,6 @@ db.mongoose
         process.exit();
     });
 
-
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './public/uploads');
@@ -71,11 +78,11 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-app.post('/uploadfile', upload.single('uploadfile'), (req, res) => {
+app.post('/uploadfile', authJwt.verifyToken, authJwt.isAdmin, upload.single('uploadfile'), (req, res) => {
     const filePath = req.file.path;
     importExcelDataToMongoDB(filePath)
         .then(() => {
-            res.status(200).send('Data inserted into MongoDB successfully.');
+            res.redirect("/dashboard")
         })
         .catch((error) => {
             console.error(error);
@@ -83,32 +90,72 @@ app.post('/uploadfile', upload.single('uploadfile'), (req, res) => {
         });
 });
 
-// Hàm chuyển đổi dữ liệu từ tệp Excel sang JSON và nhập vào MongoDB
+// Function to convert data from Excel file to JSON and import to MongoDB
 async function importExcelDataToMongoDB(filePath) {
     const workbook = new exceljs.Workbook();
     await workbook.xlsx.readFile(filePath);
 
     const worksheet = workbook.getWorksheet(1);
 
-    const headerRow = worksheet.getRow(1);
-    const columnKeys = headerRow.values;
-
-    const jsonData = [];
-
     worksheet.eachRow((row, rowNumber) => {
         if (rowNumber > 1) {
             const rowData = {};
             row.eachCell((cell, cellNumber) => {
-                const columnKey = columnKeys[cellNumber];
-                rowData[columnKey] = cell.value;
+                switch (cellNumber) {
+                    case 2: {
+                        rowData["userId"] = cell.value;
+                        break;
+                    }
+                    case 3: {
+                        rowData["username"] = cell.value;
+                        break;
+                    }
+                    case 4: {
+                        rowData["fullName"] = cell.value;
+                        break;
+                    }
+                    case 5: {
+                        rowData["fullName_en"] = cell.value;
+                        break;
+                    }
+                    case 6: {
+                        rowData["phoneNumber"] = cell.value;
+                        break;
+                    }
+                    case 7: {
+                        rowData["email"] = cell.value;
+                        break;
+                    }
+                    case 8: {
+                        rowData["department"] = cell.value;
+                        break;
+                    }
+                    case 9: {
+                        rowData["department_en"] = cell.value;
+                        break;
+                    }
+                    case 10: {
+                        rowData["image"] = cell.value;
+                        break;
+                    }
+                    default:
+                        break;
+                }
             });
-            jsonData.push(rowData);
+            rowData["password"] = bcrypt.hashSync("1", 8);
+            rowData["roles"] = "64c8ac29ed7c1ebd4726d28a";
+            console.log('rowData', rowData);
+
+            User.findOne({ userId: rowData["userId"] }).then(async (user) => {
+                if (!user) {
+                    const user = new User(rowData);
+                    user.save();
+                }
+            });
         }
     });
 
-    await User.insertMany(jsonData);
-
-    // Xóa tệp tải lên sau khi hoàn thành
+    // Delete the uploaded file once done
     await fs.unlinkSync(filePath);
 }
 

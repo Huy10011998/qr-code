@@ -106,7 +106,7 @@
         const text = $(item).find('div');
         text.css('display', 'block');
         if (window.location.pathname !== `http://localhost:8080/dashboard` && window.location.pathname !== "http://localhost:8080/dashboard/") {
-          sidebarList.css('background', "#ff6347");
+          sidebarList.css('background', "#f50002");
         } else {
           sidebarList.css('background', "transparent");
         }
@@ -120,7 +120,7 @@
         if (window.location.pathname !== "http://localhost:8080/dashboard`" && window.location.pathname !== "http://localhost:8080/dashboard/") {
           sidebarList.css('background', "transparent");
         } else {
-          sidebarList.css('background', "#ff6347");
+          sidebarList.css('background', "#f50002");
         }
         sidebarList.css('background', "transparent");
         fixed.css("width", "calc(65px)");
@@ -237,6 +237,20 @@
 
   $('#username__, #fullName, #fullName_en,#password, #department,#department_en, #userId, #email, #image, #phoneNumber, #roles').on('input', function () {
     checkInputsCreate();
+  });
+
+  //check disabled btn import
+  function checkInputImport() {
+    const input = $("#inputImport");
+    const file = input[0].files[0];
+
+    const inputFilled = file !== undefined && file.name.length > 0;
+
+    $("#btn-create-import").prop("disabled", !inputFilled);
+  }
+
+  $('#inputImport').on('change', function () {
+    checkInputImport();
   });
 
   // check disabled btn update

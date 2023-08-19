@@ -47,7 +47,9 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <script src="https://unpkg.com/exceljs/dist/exceljs.min.js"></script>
   </head>
+
   <body>
     <div class="refills">
       <header class="header -refills">
@@ -55,7 +57,7 @@
         <div class="header__inner">
           <div class="sidebar__title">
             <img
-              style="width: 111.11px; max-height: 90px"
+              style="width: 111.11px; max-height: 90px; z-index: 9999"
               src="/static/images/logo.png"
               alt="img-logo"
             />
@@ -592,7 +594,7 @@
                       class="form-updateFile"
                     >
                       <input
-                        id="inputFilterValue"
+                        id="inputImport"
                         class="filter-search"
                         title="Chọn tệp tin Excel"
                         name="uploadfile"
@@ -601,6 +603,7 @@
                       />
                       <div class="btn-create">
                         <button
+                          id="btn-create-import"
                           type="submit"
                           class="button -primary"
                           style="
@@ -611,6 +614,7 @@
                             background: #005dd0;
                             border: 1px solid #005dd0;
                           "
+                          disabled
                         >
                           Tải lên file excel
                         </button>

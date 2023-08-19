@@ -12,8 +12,6 @@ module.exports = function (app) {
 
   app.put("/api/auth/updateQrCode/:id", authJwt.verifyToken, authJwt.isAdmin, controller.updateQrCode);
 
-  app.post("/api/auth/uploadfile", authJwt.verifyToken, authJwt.isAdmin, controller.uploadFile);
-
   app.post("/api/auth/createQrCode", authJwt.verifyToken, authJwt.isAdmin, verifyCreateQrCode.checkDuplicateUserIdOrUserId, verifyCreateQrCode.checkRolesExisted, controller.createQrCode);
 
   app.post("/api/auth/getQrCode", authJwt.verifyToken, authJwt.isAdmin, controller.getQrCode);
