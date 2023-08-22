@@ -59,7 +59,7 @@
     const password = $('#password');
 
     $.ajax({
-      url: 'http://localhost:8888/api/auth/login',
+      url: 'http://192.168.100.15:8888/api/auth/login',
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
