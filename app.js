@@ -165,7 +165,7 @@ require("./src/routes/page/user.routes")(app);
 require("./src/routes/page/admin.routes")(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8888;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
