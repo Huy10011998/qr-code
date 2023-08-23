@@ -143,7 +143,7 @@ async function importExcelDataToMongoDB(filePath) {
                 }
             });
             rowData["password"] = bcrypt.hashSync("1", 8);
-            rowData["roles"] = "64c8ac29ed7c1ebd4726d28a";
+            rowData["roles"] = "user";
             console.log('rowData', rowData);
 
             User.findOne({ userId: rowData["userId"] }).then(async (user) => {
