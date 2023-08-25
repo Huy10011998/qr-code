@@ -56,7 +56,7 @@
   // logout
   function logout() {
     $.ajax({
-      url: 'http://192.168.100.15:8888/api/auth/logout',
+      url: 'http://118.69.76.220:8888/api/auth/logout',
       method: "POST",
       contentType: 'application/json',
       data: {},
@@ -105,7 +105,7 @@
       sidebarItem.each(function (_, item) {
         const text = $(item).find('div');
         text.css('display', 'block');
-        if (window.location.pathname !== `http://192.168.100.15:8888/dashboard` && window.location.pathname !== "http://192.168.100.15:8888/dashboard/") {
+        if (window.location.pathname !== `http://118.69.76.220:8888/dashboard` && window.location.pathname !== "http://118.69.76.220:8888/dashboard/") {
           sidebarList.css('background', "#f50002");
         } else {
           sidebarList.css('background', "transparent");
@@ -117,7 +117,7 @@
       sidebarItem.each(function (_, item) {
         const text = $(item).find('div');
         text.css('display', 'none');
-        if (window.location.pathname !== "http://192.168.100.15:8888/dashboard`" && window.location.pathname !== "http://192.168.100.15:8888/dashboard/") {
+        if (window.location.pathname !== "http://118.69.76.220:8888/dashboard`" && window.location.pathname !== "http://118.69.76.220:8888/dashboard/") {
           sidebarList.css('background', "transparent");
         } else {
           sidebarList.css('background', "#f50002");
@@ -161,7 +161,7 @@
     const departmentEng = $("#department_en");
 
     $.ajax({
-      url: 'http://192.168.100.15:8888/api/auth/createQrCode',
+      url: 'http://118.69.76.220:8888/api/auth/createQrCode',
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
@@ -282,7 +282,7 @@
 
   // gen qr code
   function genQrCode(id) {
-    const baseURL = `http://192.168.100.15:8888/profile/${id}`;
+    const baseURL = `http://118.69.76.220:8888/profile/${id}`;
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
@@ -362,7 +362,7 @@
     const token = getCookie("token");
 
     $.ajax({
-      url: 'http://192.168.100.15:8888/api/auth/deleteQrCode',
+      url: 'http://118.69.76.220:8888/api/auth/deleteQrCode',
       type: 'DELETE',
       dataType: 'json',
       headers: {
@@ -425,7 +425,7 @@
     const nameEngUpdate = $("#fullName-update-en");
 
     $.ajax({
-      url: 'http://192.168.100.15:8888/api/auth/getQrCode',
+      url: 'http://118.69.76.220:8888/api/auth/getQrCode',
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
@@ -476,7 +476,7 @@
     const nameEngUpdate = $("#fullName-update-en");
 
     $.ajax({
-      url: `http://192.168.100.15:8888/api/auth/updateQrCode/${userId_}`,
+      url: `http://118.69.76.220:8888/api/auth/updateQrCode/${userId_}`,
       method: "PUT",
       contentType: 'application/json',
       data: JSON.stringify({
@@ -526,7 +526,7 @@
     const token = getCookie("token");
 
     $.ajax({
-      "url": 'http://192.168.100.15:8888/api/auth/listQrCode',
+      "url": 'http://118.69.76.220:8888/api/auth/listQrCode',
       "method": "POST",
       "headers": {
         "token": token,
