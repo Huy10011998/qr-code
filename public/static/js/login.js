@@ -59,7 +59,7 @@
     const password = $('#password');
 
     $.ajax({
-      url: 'http://118.69.76.220:8888/api/auth/login',
+      url: 'http://hrcert.cholimexfood.com.vn:8888/api/auth/login',
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
