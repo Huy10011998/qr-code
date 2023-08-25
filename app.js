@@ -18,7 +18,7 @@ const dbConfig = require("./config/db.config");
 const app = express();
 
 let corsOptions = {
-    origin: "http://hrcert.cholimexfood.com.vn:8888"
+    origin: "http://hrcert.cholimexfood.com.vn"
 };
 
 app.use(cors(corsOptions));
