@@ -7,11 +7,14 @@ const multer = require('multer');
 const exceljs = require('exceljs');
 const fs = require('fs');
 const bcrypt = require("bcryptjs");
+const moment = require('moment-timezone');
 
 const { authJwt } = require("./src/middlewares");
 
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
+
+moment.tz.setDefault('Asia/Ho_Chi_Minh');
 
 const dbConfig = require("./config/db.config");
 

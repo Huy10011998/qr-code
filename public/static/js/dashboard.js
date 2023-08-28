@@ -105,7 +105,7 @@
       sidebarItem.each(function (_, item) {
         const text = $(item).find('div');
         text.css('display', 'block');
-        if (window.location.pathname !== `http://hrcert.cholimexfood.com.vn:8888/dashboard` && window.location.pathname !== "http://hrcert.cholimexfood.com.vn:8888/dashboard/") {
+        if (window.location.pathname !== `http://hrcert.cholimexfood.com.vn:8888` && window.location.pathname !== "http://hrcert.cholimexfood.com.vn:8888/") {
           sidebarList.css('background', "#f50002");
         } else {
           sidebarList.css('background', "transparent");
@@ -117,7 +117,7 @@
       sidebarItem.each(function (_, item) {
         const text = $(item).find('div');
         text.css('display', 'none');
-        if (window.location.pathname !== "http://hrcert.cholimexfood.com.vn:8888/dashboard`" && window.location.pathname !== "http://hrcert.cholimexfood.com.vn:8888/dashboard/") {
+        if (window.location.pathname !== "http://hrcert.cholimexfood.com.vn:8888" && window.location.pathname !== "http://hrcert.cholimexfood.com.vn:8888/") {
           sidebarList.css('background', "transparent");
         } else {
           sidebarList.css('background', "#f50002");

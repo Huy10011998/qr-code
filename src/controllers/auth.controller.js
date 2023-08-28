@@ -51,8 +51,6 @@ exports.updateQrCode = async (req, res) => {
 
             user.roles = roles.map((role) => role._id);
 
-            console.log("===user.roles", user.roles);
-
             user.save((err) => {
               if (err) {
                 res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
