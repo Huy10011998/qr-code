@@ -44,8 +44,6 @@ exports.updateQrCode = async (req, res) => {
           },
           (err, roles) => {
 
-            console.log("===roles", roles);
-
             if (err) {
               res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
               return;
@@ -217,6 +215,8 @@ const createQrCode = (req, res) => {
       email: req.body.email,
       image: req.body.image,
       phoneNumber: req.body.phoneNumber,
+      createdAt: new Date(),
+      modifiedAt: new Date(),
       fullName_en: req.body.fullName_en,
       department_en: req.body.department_en
     });
