@@ -62,7 +62,8 @@ body {
 
 .header__content__container {
   display: flex;
-  background: #e7ebf1;
+  /* background: #e7ebf1; */
+  background: #f1f0e8;
   border-radius: 4px;
   justify-content: center;
   flex-direction: column;
@@ -71,7 +72,7 @@ body {
 
 .content__container {
   justify-content: center;
-  padding-top: 70px;
+  padding-top: 60px;
   display: flex;
 }
 
@@ -84,7 +85,7 @@ body {
 
 .contract__container {
   flex-direction: column;
-  padding: 10px;
+  padding: 15px;
   display: flex;
 }
 
