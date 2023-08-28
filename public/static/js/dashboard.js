@@ -22,7 +22,8 @@
   };
 
   const getFullTime = (date) => {
-    return moment(date).format('DD/MM/YYYY');
+    const myDate = new Date(date);
+    return moment(myDate).format('HH:mm:ss - DD/MM/YYYY');
   }
 
   const formatTotalPage = (number) => {
