@@ -217,8 +217,6 @@ const createQrCode = (req, res) => {
       email: req.body.email,
       image: req.body.image,
       phoneNumber: req.body.phoneNumber,
-      createdAt: new Date(),
-      modifiedAt: new Date(),
       fullName_en: req.body.fullName_en,
       department_en: req.body.department_en
     });
