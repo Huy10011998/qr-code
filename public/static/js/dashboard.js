@@ -25,16 +25,19 @@
     return moment(date).format('HH:mm:ss - DD/MM/YYYY');
   }
 
-  const getDateAndTime = (dateString) => {
+  const getLocalDateTime = (dateString) => {
     const date = new Date(dateString);
-    const year = date.getUTCFullYear().toString();
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-    const day = date.getUTCDate().toString().padStart(2, '0');
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    };
+    const localDateTime = date.toLocaleString(undefined, options);
 
-    return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
+    return localDateTime;
   };
 
   const formatTotalPage = (number) => {
@@ -326,8 +329,8 @@
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department_en}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.image}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${getDateAndTime(result?.createdAt)}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${getDateAndTime(result?.modifiedAt)}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${getLocalDateTime(result?.createdAt)}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${getLocalDateTime(result?.modifiedAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">
             <img id="qrCode" src=${genQrCode(result?._id)} />
           </td>
