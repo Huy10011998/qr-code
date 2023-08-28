@@ -661,20 +661,20 @@
         if (cells.length > 0) {
           sheet.addRow({
             stt: cells[0].innerHTML,
-            userId: cells[1].innerHTML,
-            username: cells[2].innerHTML,
-            fullName_vi: cells[3].innerHTML,
-            fullName_en: cells[4].innerHTML,
-            numberPhone: cells[5].innerHTML,
-            email: cells[6].innerHTML,
-            department: cells[7].innerHTML,
-            department_en: cells[8].innerHTML,
-            picture: cells[9].innerHTML,
-            created: cells[10].innerHTML,
-            updated: cells[11].innerHTML,
+            userId: cells[2].innerHTML,
+            username: cells[3].innerHTML,
+            fullName_vi: cells[4].innerHTML,
+            fullName_en: cells[5].innerHTML,
+            numberPhone: cells[6].innerHTML,
+            email: cells[7].innerHTML,
+            department: cells[8].innerHTML,
+            department_en: cells[9].innerHTML,
+            picture: cells[10].innerHTML,
+            created: cells[11].innerHTML,
+            updated: cells[12].innerHTML,
           });
 
-          const imgElement = cells[12].querySelector('img');
+          const imgElement = cells[13].querySelector('img');
           const src = imgElement.getAttribute('src');
           const qrCode = workbook.addImage({
             base64: src,
