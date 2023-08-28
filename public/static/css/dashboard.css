@@ -255,7 +255,7 @@ select {
   margin-top: 86px;
   min-height: calc(100vh - 128px);
   padding: 20px;
-  background-color: #f1f4f6;
+  background-color: #f1f0e8;
 }
 
 .container-filter {
@@ -486,7 +486,7 @@ table {
 }
 
 .custom-table tbody tr:nth-child(odd) {
-  background-color: rgb(244, 244, 244);
+  background-color: #f1f0e8;
 }
 
 .custom-table tbody tr {
