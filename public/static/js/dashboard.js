@@ -25,21 +25,6 @@
     return moment(date).format('HH:mm:ss - DD/MM/YYYY');
   }
 
-  const getLocalDateTime = (dateString) => {
-    const date = new Date(dateString);
-    const options = {
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    };
-    const localDateTime = date.toLocaleString(undefined, options);
-
-    return localDateTime;
-  };
-
   const formatTotalPage = (number) => {
     const config = { maximumFractionDigits: 9 }
     const formated = new Intl.NumberFormat('number', config).format(number);
@@ -329,8 +314,8 @@
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department_en}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.image}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${getLocalDateTime(result?.createdAt)}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${getLocalDateTime(result?.modifiedAt)}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">
             <img id="qrCode" src=${genQrCode(result?._id)} />
           </td>
