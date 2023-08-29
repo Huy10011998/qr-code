@@ -2,6 +2,7 @@ const Config = require('../../config/app.conf.json');
 
 exports.login = (req, res) => {
   try {
+    console.log("===token", req.session.token);
     if (req.session.token) {
       res.redirect("/dashboard", {
         host: Config.host
