@@ -6,11 +6,10 @@ exports.login = (req, res) => {
       res.redirect("/dashboard", {
         host: Config.host
       });
-    } else {
-      res.render('./admin/login', {
-        host: Config.host
-      });
     }
+    res.render('./admin/login', {
+      host: Config.host
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
