@@ -1,0 +1,11 @@
+/.next
+/client/.next
+/node_modules
+/log
+/build
+
+.idea
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
