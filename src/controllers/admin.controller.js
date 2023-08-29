@@ -1,9 +1,15 @@
+const Config = require('../../config/app.conf.json');
+
 exports.login = (req, res) => {
   try {
     if (req.session.token) {
-      res.redirect("/dashboard");
+      res.redirect("/dashboard", {
+        host: Config.host
+      });
     } else {
-      res.render('./admin/login', {});
+      res.render('./admin/login', {
+        host: Config.host
+      });
     }
   } catch (err) {
     console.error(err);
@@ -13,7 +19,9 @@ exports.login = (req, res) => {
 
 exports.dashboard = (req, res) => {
   try {
-    res.render('./admin/dashboard', {});
+    res.render('./admin/dashboard', {
+      host: Config.host
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

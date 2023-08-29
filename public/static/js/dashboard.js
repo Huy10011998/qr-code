@@ -56,7 +56,7 @@
   // logout
   function logout() {
     $.ajax({
-      url: 'hrcert.cholimexfood.com.vn:8888/api/auth/logout',
+      url: `${host}/api/auth/logout`,
       method: "POST",
       contentType: 'application/json',
       data: {},
@@ -105,7 +105,7 @@
       sidebarItem.each(function (_, item) {
         const text = $(item).find('div');
         text.css('display', 'block');
-        if (window.location.pathname !== `http://hrcert.cholimexfood.com.vn:8888` && window.location.pathname !== "http://hrcert.cholimexfood.com.vn:8888/") {
+        if (window.location.pathname !== `${host}` && window.location.pathname !== `${host}/`) {
           sidebarList.css('background', "#f50002");
         } else {
           sidebarList.css('background', "transparent");
@@ -117,7 +117,7 @@
       sidebarItem.each(function (_, item) {
         const text = $(item).find('div');
         text.css('display', 'none');
-        if (window.location.pathname !== "http://hrcert.cholimexfood.com.vn:8888" && window.location.pathname !== "http://hrcert.cholimexfood.com.vn:8888/") {
+        if (window.location.pathname !== `${host}` && window.location.pathname !== `${host}/`) {
           sidebarList.css('background', "transparent");
         } else {
           sidebarList.css('background', "#f50002");
@@ -161,7 +161,7 @@
     const departmentEng = $("#department_en");
 
     $.ajax({
-      url: 'http://hrcert.cholimexfood.com.vn:8888/api/auth/createQrCode',
+      url: `${host}/api/auth/createQrCode`,
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
@@ -282,7 +282,7 @@
 
   // gen qr code
   function genQrCode(id) {
-    const baseURL = `http://hrcert.cholimexfood.com.vn:8888/profile/${id}`;
+    const baseURL = `${host}/profile/${id}`;
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
@@ -363,7 +363,7 @@
     const token = getCookie("token");
 
     $.ajax({
-      url: 'http://hrcert.cholimexfood.com.vn:8888/api/auth/deleteQrCode',
+      url: `${host}/api/auth/deleteQrCode`,
       type: 'DELETE',
       dataType: 'json',
       headers: {
@@ -426,7 +426,7 @@
     const nameEngUpdate = $("#fullName-update-en");
 
     $.ajax({
-      url: 'http://hrcert.cholimexfood.com.vn:8888/api/auth/getQrCode',
+      url: `${host}/api/auth/getQrCode`,
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
@@ -477,7 +477,7 @@
     const nameEngUpdate = $("#fullName-update-en");
 
     $.ajax({
-      url: `http://hrcert.cholimexfood.com.vn:8888/api/auth/updateQrCode/${userId_}`,
+      url: `${host}/api/auth/updateQrCode/${userId_}`,
       method: "PUT",
       contentType: 'application/json',
       data: JSON.stringify({
@@ -527,7 +527,7 @@
     const token = getCookie("token");
 
     $.ajax({
-      "url": 'http://hrcert.cholimexfood.com.vn:8888/api/auth/listQrCode',
+      "url": `${host}/api/auth/listQrCode`,
       "method": "POST",
       "headers": {
         "token": token,

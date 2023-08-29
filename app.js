@@ -4,207 +4,221 @@ const cookieSession = require("cookie-session");
 const bodyParser = require('body-parser');
 const path = require('path');
 const multer = require('multer');
-const exceljs = require('exceljs');
+const excelJs = require('exceljs');
 const fs = require('fs');
 const bcrypt = require("bcryptjs");
 const moment = require('moment-timezone');
+const host = require('./config/app.conf.json');
 
 const { authJwt } = require("./src/middlewares");
 
 const mongoose = require('mongoose');
-mongoose.set('strictQuery', false);
 
-moment.tz.setDefault('Asia/Ho_Chi_Minh');
 
-const dbConfig = require("./config/db.config");
+(async () => {
+    try {
 
-const app = express();
+        mongoose.set('strictQuery', false);
 
-let corsOptions = {
-    origin: "http://hrcert.cholimexfood.com.vn:8888"
-};
+        moment.tz.setDefault('Asia/Ho_Chi_Minh');
 
-app.use(cors(corsOptions));
+        const dbConfig = require("./config/db.config");
 
-// parse requests of content-type - application/json
-app.use(express.json());
+        const app = express();
 
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
+        let corsOptions = {
+            origin: `${host}`
+        };
 
-app.use(
-    cookieSession({
-        name: "token",
-        secret: "COOKIE_SECRET", // should use as secret environment variable
-        httpOnly: false
-    })
-);
+        app.use(cors(corsOptions));
 
-app.use(
-    bodyParser.urlencoded({
-        extended: true,
-    })
-);
+        // parse requests of content-type - application/json
+        app.use(express.json());
 
-app.use(bodyParser.json());
+        // parse requests of content-type - application/x-www-form-urlencoded
+        app.use(express.urlencoded({ extended: true }));
 
-app.set('view engine', 'ejs');
-app.use('/static', express.static(__dirname + '/public/static'));
-app.set('views', path.join(__dirname, 'public/layout'));
-app.use(express.static(path.join(__dirname, 'public')));
+        app.use(
+            cookieSession({
+                name: "token",
+                secret: "COOKIE_SECRET", // should use as secret environment variable
+                httpOnly: false
+            })
+        );
 
-const db = require("./src/models/auth.model.js");
-const User = db.user
-const Role = db.role;
+        app.use(
+            bodyParser.urlencoded({
+                extended: true,
+            })
+        );
 
-db.mongoose
-    .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    .then(() => {
-        console.log("Successfully connect to MongoDB.");
-        initial();
-    })
-    .catch(err => {
-        console.error("Connection to MongoDB error", err);
-        process.exit();
-    });
+        app.use(bodyParser.json());
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './public/uploads');
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    }
-});
+        app.set('view engine', 'ejs');
+        app.use('/static', express.static(__dirname + '/public/static'));
+        app.set('views', path.join(__dirname, 'public/layout'));
+        app.use(express.static(path.join(__dirname, 'public')));
 
-const upload = multer({ storage: storage });
-app.post('/uploadfile', authJwt.verifyToken, authJwt.isAdmin, upload.single('uploadfile'), (req, res) => {
-    const filePath = req.file.path;
-    importExcelDataToMongoDB(filePath)
-        .then(() => {
-            res.redirect("/dashboard")
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).send('Error inserting data into MongoDB.');
+        const db = require("./src/models/auth.model.js");
+        const User = db.user
+        const Role = db.role;
+
+        db.mongoose
+            .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            })
+            .then(() => {
+                console.log("Successfully connect to MongoDB.");
+                initial();
+            })
+            .catch(err => {
+                console.error("Connection to MongoDB error", err);
+                process.exit();
+            });
+
+        const storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                cb(null, './public/uploads');
+            },
+            filename: (req, file, cb) => {
+                cb(null, file.originalname);
+            }
         });
-});
 
-// Function to convert data from Excel file to JSON and import to MongoDB
-async function importExcelDataToMongoDB(filePath) {
-    const workbook = new exceljs.Workbook();
-    await workbook.xlsx.readFile(filePath);
+        const upload = multer({ storage: storage });
+        app.post('/uploadfile', authJwt.verifyToken, authJwt.isAdmin, upload.single('uploadfile'), (req, res) => {
+            const filePath = req.file.path;
+            importExcelDataToMongoDB(filePath)
+                .then(() => {
+                    res.redirect("/dashboard")
+                })
+                .catch((error) => {
+                    console.error(error);
+                    res.status(500).send('Error inserting data into MongoDB.');
+                });
+        });
 
-    const worksheet = workbook.getWorksheet(1);
+        // Function to convert data from Excel file to JSON and import to MongoDB
+        async function importExcelDataToMongoDB(filePath) {
+            const workbook = new excelJs.Workbook();
+            await workbook.xlsx.readFile(filePath);
 
-    worksheet.eachRow((row, rowNumber) => {
-        if (rowNumber > 1) {
-            const rowData = {};
-            row.eachCell((cell, cellNumber) => {
-                switch (cellNumber) {
-                    case 2: {
-                        rowData["userId"] = cell.value;
-                        break;
-                    }
-                    case 3: {
-                        rowData["username"] = cell.value;
-                        break;
-                    }
-                    case 4: {
-                        rowData["fullName"] = cell.value;
-                        break;
-                    }
-                    case 5: {
-                        rowData["fullName_en"] = cell.value;
-                        break;
-                    }
-                    case 6: {
-                        rowData["phoneNumber"] = cell.value;
-                        break;
-                    }
-                    case 7: {
-                        rowData["email"] = cell.value;
-                        break;
-                    }
-                    case 8: {
-                        rowData["department"] = cell.value;
-                        break;
-                    }
-                    case 9: {
-                        rowData["department_en"] = cell.value;
-                        break;
-                    }
-                    case 10: {
-                        rowData["image"] = cell.value;
-                        break;
-                    }
-                    default:
-                        break;
+            const worksheet = workbook.getWorksheet(1);
+
+            worksheet.eachRow((row, rowNumber) => {
+                if (rowNumber > 1) {
+                    const rowData = {};
+                    row.eachCell((cell, cellNumber) => {
+                        switch (cellNumber) {
+                            case 2: {
+                                rowData["userId"] = cell.value;
+                                break;
+                            }
+                            case 3: {
+                                rowData["username"] = cell.value;
+                                break;
+                            }
+                            case 4: {
+                                rowData["fullName"] = cell.value;
+                                break;
+                            }
+                            case 5: {
+                                rowData["fullName_en"] = cell.value;
+                                break;
+                            }
+                            case 6: {
+                                rowData["phoneNumber"] = cell.value;
+                                break;
+                            }
+                            case 7: {
+                                rowData["email"] = cell.value;
+                                break;
+                            }
+                            case 8: {
+                                rowData["department"] = cell.value;
+                                break;
+                            }
+                            case 9: {
+                                rowData["department_en"] = cell.value;
+                                break;
+                            }
+                            case 10: {
+                                rowData["image"] = cell.value;
+                                break;
+                            }
+                            default:
+                                break;
+                        }
+                    });
+                    rowData["password"] = bcrypt.hashSync("1", 8);
+                    rowData["roles"] = "64c8ac29ed7c1ebd4726d28a";
+                    console.log('rowData', rowData);
+
+                    User.findOne({ userId: rowData["userId"] }).then(async (user) => {
+                        if (!user) {
+                            const user = new User(rowData);
+                            user.save();
+                        }
+                    });
                 }
             });
-            rowData["password"] = bcrypt.hashSync("1", 8);
-            rowData["roles"] = "64c8ac29ed7c1ebd4726d28a";
-            console.log('rowData', rowData);
 
-            User.findOne({ userId: rowData["userId"] }).then(async (user) => {
-                if (!user) {
-                    const user = new User(rowData);
-                    user.save();
+            // Delete the uploaded file once done
+            await fs.unlinkSync(filePath);
+        }
+
+        // routes
+        require("./src/routes/api/auth.routes")(app);
+        require("./src/routes/page/user.routes")(app);
+        require("./src/routes/page/admin.routes")(app);
+
+        // set port, listen for requests
+        const PORT = process.env.PORT || 8888;
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}.`);
+        });
+
+        function initial() {
+            Role.estimatedDocumentCount((err, count) => {
+                if (!err && count === 0) {
+                    new Role({
+                        name: "user"
+                    }).save(err => {
+                        if (err) {
+                            console.log("error", err);
+                        }
+
+                        console.log("added 'user' to roles collection");
+                    });
+
+                    new Role({
+                        name: "moderator"
+                    }).save(err => {
+                        if (err) {
+                            console.log("error", err);
+                        }
+
+                        console.log("added 'moderator' to roles collection");
+                    });
+
+                    new Role({
+                        name: "admin"
+                    }).save(err => {
+                        if (err) {
+                            console.log("error", err);
+                        }
+
+                        console.log("added 'admin' to roles collection");
+                    });
                 }
             });
         }
-    });
 
-    // Delete the uploaded file once done
-    await fs.unlinkSync(filePath);
-}
 
-// routes
-require("./src/routes/api/auth.routes")(app);
-require("./src/routes/page/user.routes")(app);
-require("./src/routes/page/admin.routes")(app);
+    } catch (ex) {
+        console.error(ex.stack)
+        process.exit(1)
+    }
+})();
 
-// set port, listen for requests
-const PORT = process.env.PORT || 8888;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-});
-
-function initial() {
-    Role.estimatedDocumentCount((err, count) => {
-        if (!err && count === 0) {
-            new Role({
-                name: "user"
-            }).save(err => {
-                if (err) {
-                    console.log("error", err);
-                }
-
-                console.log("added 'user' to roles collection");
-            });
-
-            new Role({
-                name: "moderator"
-            }).save(err => {
-                if (err) {
-                    console.log("error", err);
-                }
-
-                console.log("added 'moderator' to roles collection");
-            });
-
-            new Role({
-                name: "admin"
-            }).save(err => {
-                if (err) {
-                    console.log("error", err);
-                }
-
-                console.log("added 'admin' to roles collection");
-            });
-        }
-    });
-}

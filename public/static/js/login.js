@@ -1,6 +1,5 @@
 (function ($) {
   "use strict";
-
   $("#btn-login").prop("disabled", true);
 
   const BG_TOAST = {
@@ -59,7 +58,7 @@
     const password = $('#password');
 
     $.ajax({
-      url: 'http://hrcert.cholimexfood.com.vn:8888/api/auth/login',
+      url: `${host}/api/auth/login`,
       method: "POST",
       contentType: 'application/json',
       data: JSON.stringify({
