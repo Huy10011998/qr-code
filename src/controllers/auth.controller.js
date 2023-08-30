@@ -150,7 +150,7 @@ exports.listQrCode = (req, res) => {
   try {
     const { limit, page } = req.body;
 
-    let perPage = limit || 10;
+    let perPage = limit || 30;
     User
       .find()
       .sort({ createdAt: -1 })

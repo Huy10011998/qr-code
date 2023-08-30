@@ -523,71 +523,74 @@
   }
 
   // get list qr code
-  function listQrCode(page = 1, limit = 10) {
+  function listQrCode(page = 1, limit = 30) {
     const token = getCookie("token");
 
-    $.ajax({
-      "url": `${host}/api/auth/listQrCode`,
-      "method": "POST",
-      "headers": {
-        "token": token,
-        "Content-Type": "application/json",
-      },
-      "data": JSON.stringify({
-        "page": page,
-        "limit": limit,
-      }),
-      beforeSend: function () {
-        loading.css('display', "flex");
-        tableEl.css('display', "none");
-        paginate.css("display", "none");
-      },
-      success: function (response) {
-        if (response.code === 200) {
-          const data = response.data.data;
-          const totalPages = response.data?.totalPages || 0;
-          const totalItems = response.data?.totalItems || 0;
-          generateTable(data);
-          generateCountPage(page, data.length, totalItems);
-          $('#pagination').twbsPagination({
-            totalPages,
-            visiblePages: 7,
-            first: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="FirstPageIcon">
-            <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
-          </svg>`,
-            prev: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateBeforeIcon">
-            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-          </svg>`,
-            next: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateNextIcon">
-            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-          </svg>`,
-            last: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LastPageIcon">
-            <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
-          </svg>`,
-            onPageClick: (_, page) => {
-              if (isPageClicked) {
-                listQrCode(page, limit);
-              } else {
-                isPageClicked = true;
-              }
-            }
-          });
-        }
-      },
-      error: function (xhr) {
-        customToastify(text = "Hệ thống đang bận! Vui lòng thử lại sau!", { background: BG_TOAST[2] });
-      },
-      complete: function (xhr) {
-        if (xhr.responseJSON.data.totalItems > 0) {
-          loading.css('display', "none");
-          tableEl.css('display', "table-row-group");
-          paginate.css("display", "flex");
-        }
-        else {
+    function fetchQrCodes(page, limit) {
+      $.ajax({
+        url: `${host}/api/auth/listQrCode`,
+        method: "POST",
+        headers: {
+          token: token,
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({
+          page: page,
+          limit: limit,
+        }),
+        beforeSend: function () {
+          loading.css("display", "flex");
+          tableEl.css("display", "none");
           paginate.css("display", "none");
-        }
-      },
-    })
+        },
+        success: function (response) {
+          if (response.code === 200) {
+            const data = response.data.data;
+            const totalPages = response.data?.totalPages || 0;
+            const totalItems = response.data?.totalItems || 0;
+            generateTable(data);
+            generateCountPage(page, data.length, totalItems);
+            $('#pagination').twbsPagination('destroy');
+            $('#pagination').twbsPagination({
+              totalPages,
+              visiblePages: 5,
+              startPage: page,
+              first: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="FirstPageIcon">
+                <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
+              </svg>`,
+              prev: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateBeforeIcon">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+              </svg>`,
+              next: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateNextIcon">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+              </svg>`,
+              last: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LastPageIcon">
+                <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
+              </svg>`,
+              onPageClick: function (_, newPage) {
+                if (newPage !== page) {
+                  fetchQrCodes(newPage, limit);
+                }
+              },
+            });
+          }
+        },
+        error: function (xhr) {
+          customToastify("Hệ thống đang bận! Vui lòng thử lại sau!", { background: BG_TOAST[2] });
+        },
+        complete: function (xhr) {
+          if (xhr.responseJSON.data.totalItems > 0) {
+            loading.css("display", "none");
+            tableEl.css("display", "table-row-group");
+            paginate.css("display", "flex");
+          } else {
+            paginate.css("display", "none");
+          }
+        },
+      });
+    }
+
+    fetchQrCodes(page, limit);
   }
 
   // donwload file excel
