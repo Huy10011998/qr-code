@@ -523,7 +523,7 @@
   }
 
   // get list qr code
-  function listQrCode(page = 1, limit = 30) {
+  function listQrCode(page = 1, limit = 20) {
     const token = getCookie("token");
 
     function fetchQrCodes(page, limit) {
