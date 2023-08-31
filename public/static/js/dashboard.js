@@ -320,11 +320,14 @@
           <td style="font-size: 12px; font-weight: 400; text-align: left">
             <img id="qrCode" src=${genQrCode(result?._id)} />
           </td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">
+          <td  style="text-align: left">
             <img class="img-update-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/fix.png" />
           </td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">
+          <td style="text-align: left">
             <img class="img-delete-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/delete.png" />
+          </td>
+          <td>
+            <input style="width:20px; height:20px;" id="checkBox" type="checkbox">
           </td>
         </tr>`;
       });
@@ -658,38 +661,90 @@
       },
     ];
 
+    let exportAll = false;
+
+    let checkedCount = 0;
+
     Array.from(rows).forEach((row, rowIndex) => {
       if (rowIndex > 0) {
         const cells = row.getElementsByTagName('td');
         if (cells.length > 0) {
-          sheet.addRow({
-            stt: cells[0].innerHTML,
-            userId: cells[2].innerHTML,
-            username: cells[3].innerHTML,
-            fullName_vi: cells[4].innerHTML,
-            fullName_en: cells[5].innerHTML,
-            numberPhone: cells[6].innerHTML,
-            email: cells[7].innerHTML,
-            department: cells[8].innerHTML,
-            department_en: cells[9].innerHTML,
-            picture: cells[10].innerHTML,
-            created: cells[11].innerHTML,
-            updated: cells[12].innerHTML,
-          });
+          const checkbox = cells[16].querySelector('input[type="checkbox"]');
+          if (!checkbox) {
+            return;
+          }
 
-          const imgElement = cells[13].querySelector('img');
-          const src = imgElement.getAttribute('src');
-          const qrCode = workbook.addImage({
-            base64: src,
-            extension: `${cells[2].innerHTML}.png`,
-          });
-          sheet.addImage(qrCode, {
-            tl: { col: 12, row: rowIndex },
-            ext: { width: 80, height: 80 },
-          });
+          if (checkbox.checked) {
+            checkedCount++;
+
+            sheet.addRow({
+              stt: cells[0].innerHTML,
+              userId: cells[2].innerHTML,
+              username: cells[3].innerHTML,
+              fullName_vi: cells[4].innerHTML,
+              fullName_en: cells[5].innerHTML,
+              numberPhone: cells[6].innerHTML,
+              email: cells[7].innerHTML,
+              department: cells[8].innerHTML,
+              department_en: cells[9].innerHTML,
+              picture: cells[10].innerHTML,
+              created: cells[11].innerHTML,
+              updated: cells[12].innerHTML,
+            });
+
+            const imgElement = cells[13].querySelector('img');
+            const src = imgElement.getAttribute('src');
+            const qrCode = workbook.addImage({
+              base64: src,
+              extension: `${cells[2].innerHTML}.png`,
+            });
+            sheet.addImage(qrCode, {
+              tl: { col: 12, row: rowIndex },
+              ext: { width: 80, height: 80 },
+            });
+          }
         }
       }
     });
+
+    if (checkedCount === 0) {
+      exportAll = true;
+    }
+
+    if (exportAll) {
+      Array.from(rows).forEach((row, rowIndex) => {
+        if (rowIndex > 0) {
+          const cells = row.getElementsByTagName('td');
+          if (cells.length > 0) {
+            sheet.addRow({
+              stt: cells[0].innerHTML,
+              userId: cells[2].innerHTML,
+              username: cells[3].innerHTML,
+              fullName_vi: cells[4].innerHTML,
+              fullName_en: cells[5].innerHTML,
+              numberPhone: cells[6].innerHTML,
+              email: cells[7].innerHTML,
+              department: cells[8].innerHTML,
+              department_en: cells[9].innerHTML,
+              picture: cells[10].innerHTML,
+              created: cells[11].innerHTML,
+              updated: cells[12].innerHTML,
+            });
+
+            const imgElement = cells[13].querySelector('img');
+            const src = imgElement.getAttribute('src');
+            const qrCode = workbook.addImage({
+              base64: src,
+              extension: `${cells[2].innerHTML}.png`,
+            });
+            sheet.addImage(qrCode, {
+              tl: { col: 12, row: rowIndex },
+              ext: { width: 80, height: 80 },
+            });
+          }
+        }
+      });
+    }
 
     for (let i = 2; i <= totalRows; i++) {
       sheet.getRow(i).height = 50;
@@ -734,4 +789,19 @@
   $("#myBtn-download").on("click", function () {
     exportToExcel();
   });
+
+  // event click checkbox
+  function toggleRow(checkbox) {
+    const row = checkbox.parentNode.parentNode;
+    if (checkbox.checked) {
+      row.classList.add('selected');
+    } else {
+      row.classList.remove('selected');
+    }
+  }
+
+  tableEl.on("click", "#checkBox", function () {
+    toggleRow(this);
+  });
+
 })(jQuery);

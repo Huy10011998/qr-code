@@ -481,7 +481,7 @@ table {
 .table > tfoot > tr > th,
 .table > thead > tr > td,
 .table > thead > tr > th {
-  padding: 3px !important;
+  padding: 5px !important;
   vertical-align: middle !important;
 }
 
@@ -696,4 +696,12 @@ button:enabled {
   color: #fff;
   border: transparent;
   cursor: pointer;
+}
+
+input[type="checkbox"] {
+  margin: 8px 0 0 !important;
+}
+
+.selected {
+  background-image: linear-gradient(to right, #aed6f1, #ffc3a0);
 }
