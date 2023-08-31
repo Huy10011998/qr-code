@@ -616,16 +616,8 @@
         key: "userId",
       },
       {
-        header: "Tài khoản",
-        key: "username",
-      },
-      {
         header: "Họ tên",
         key: "fullName_vi",
-      },
-      {
-        header: "Họ tên (Eng)",
-        key: "fullName_en",
       },
       {
         header: "Số điện thoại",
@@ -640,30 +632,14 @@
         key: "department",
       },
       {
-        header: "Phòng ban (Eng)",
-        key: "department_en",
-      },
-      {
-        header: "Hình ảnh",
-        key: "picture",
-      },
-      {
-        header: "Ngày tạo",
-        key: "created",
-      },
-      {
-        header: "Ngày cập nhật",
-        key: "updated",
-      },
-      {
         header: "Qr code",
         key: "qrCode",
       },
     ];
 
     let exportAll = false;
-
     let checkedCount = 0;
+    let exportedRowCount = 0;
 
     Array.from(rows).forEach((row, rowIndex) => {
       if (rowIndex > 0) {
@@ -677,20 +653,17 @@
           if (checkbox.checked) {
             checkedCount++;
 
+            exportedRowCount++;
+            console.log("===", exportedRowCount);
+
             sheet.addRow({
               stt: cells[0].innerHTML,
               userId: cells[2].innerHTML,
-              username: cells[3].innerHTML,
               fullName_vi: cells[4].innerHTML,
-              fullName_en: cells[5].innerHTML,
               numberPhone: cells[6].innerHTML,
               email: cells[7].innerHTML,
               department: cells[8].innerHTML,
-              department_en: cells[9].innerHTML,
-              picture: cells[10].innerHTML,
-              created: cells[11].innerHTML,
-              updated: cells[12].innerHTML,
-            });
+            }).commit();
 
             const imgElement = cells[13].querySelector('img');
             const src = imgElement.getAttribute('src');
@@ -698,8 +671,9 @@
               base64: src,
               extension: `${cells[2].innerHTML}.png`,
             });
+
             sheet.addImage(qrCode, {
-              tl: { col: 12, row: rowIndex },
+              tl: { col: 6, row: exportedRowCount },
               ext: { width: 80, height: 80 },
             });
           }
@@ -719,17 +693,11 @@
             sheet.addRow({
               stt: cells[0].innerHTML,
               userId: cells[2].innerHTML,
-              username: cells[3].innerHTML,
               fullName_vi: cells[4].innerHTML,
-              fullName_en: cells[5].innerHTML,
               numberPhone: cells[6].innerHTML,
               email: cells[7].innerHTML,
               department: cells[8].innerHTML,
-              department_en: cells[9].innerHTML,
-              picture: cells[10].innerHTML,
-              created: cells[11].innerHTML,
-              updated: cells[12].innerHTML,
-            });
+            }).commit();
 
             const imgElement = cells[13].querySelector('img');
             const src = imgElement.getAttribute('src');
@@ -738,7 +706,7 @@
               extension: `${cells[2].innerHTML}.png`,
             });
             sheet.addImage(qrCode, {
-              tl: { col: 12, row: rowIndex },
+              tl: { col: 6, row: rowIndex },
               ext: { width: 80, height: 80 },
             });
           }
@@ -774,6 +742,12 @@
       size: 16,
       bold: true,
     };
+
+    sheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
+      row.eachCell({ includeEmpty: true }, function (cell, colNumber) {
+        cell.alignment = { wrapText: true };
+      });
+    });
 
     workbook.xlsx.writeBuffer().then(function (data) {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
