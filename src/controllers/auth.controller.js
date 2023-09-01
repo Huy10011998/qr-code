@@ -159,31 +159,6 @@ exports.listQrCode = (req, res) => {
       .exec((err, user) => {
         User.countDocuments((err, count) => {
           if (err) return next(err);
-          // Role.find({ name: "admin" }, (err, adminRole) => {
-          //   if (err) {
-          //     res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
-          //     return;
-          //   }
-
-          //   const adminRoleIds = adminRole.map(role => role._id);
-
-          //   const filteredUsers = user.filter(user => {
-          //     const hasAdminRole = user.roles.some(role => role.toString() === adminRoleIds[0].toString());
-          //     return !hasAdminRole;
-          //   });
-
-          //   res.status(200).json({
-          //     code: 200,
-          //     data: {
-          //       totalPages: Math.ceil(count / perPage),
-          //       totalItems: count,
-          //       currentPage: page,
-          //       limit: perPage,
-          //       data: filteredUsers,
-          //     },
-          //     message: "Lấy danh sách Qr Code thành công!",
-          //   });
-          // });
           res.status(200).json({
             code: 200,
             data: {

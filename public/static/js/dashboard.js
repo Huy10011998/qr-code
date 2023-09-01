@@ -762,6 +762,10 @@
 
   $("#myBtn-download").on("click", function () {
     exportToExcel();
+
+    setTimeout(() => {
+      location.reload();
+    }, 3000)
   });
 
   // event click checkbox
