@@ -8,9 +8,20 @@
   let titleDelete = $(".title-delete");
   let modalUpdate = $("#myModal-Update");
   let body = $("body");
-  let isPageClicked = false;
+  let btnSearch = $("#myBtn-search");
+  let filterSort = $("#filterDropdownSort");
+  let filterDropdownCreated = $("#filterDropdownCreated")
+  let filterDropdownFollow = $('#filterDropdownFollow');
+  let inputFilterValue = $("#inputFilterValue");
+  let orderBy = 'DESC';
+  let valueDropdown = '';
+  let limit = 15;
+  let page = 1;
+  let field = [];
+  let value = [];
+  let index;
 
-  listQrCode();
+  listQrCode(page, limit, field, value, orderBy);
 
   const validateEmail = (email) => {
     if (typeof email === 'string' && email.endsWith("@cholimexfood.com.vn")) {
@@ -52,6 +63,60 @@
       style: style,
     }).showToast();
   }
+
+  //change value filterSort
+  filterSort.on('change', function () {
+    orderBy = ($(this).find(":selected").val());
+    console.log("===", orderBy);
+  });
+
+  //Check value filter drop-down
+  filterDropdownFollow.on('change', function (e) {
+    valueDropdown = ($(this).find(":selected").val());
+    field.pop();
+    field.push(valueDropdown);
+    index = field.indexOf(valueDropdown);
+    console.log("===index", index);
+    console.log("===", valueDropdown);
+  });
+
+  //btn search
+  btnSearch.on("click", function () {
+    value[index] = inputFilterValue.val()
+    listQrCode(page, limit, field, value, orderBy);
+  });
+
+  //check disable btn search
+  $("#filterSort, #filterDropdownCreated").change(checkButtonStatus1);
+
+  $("#filterDropdownFollow, #inputFilterValue").on("input", checkButtonStatus2);
+
+  function checkButtonStatus1() {
+    var sortValue = $("#filterSort").val();
+    var createdValue = $("#filterDropdownCreated").val();
+
+    if (sortValue !== "" && createdValue !== "") {
+      $("#myBtn-search").prop("disabled", false);
+    } else {
+      $("#myBtn-search").prop("disabled", true);
+    }
+  }
+
+  function checkButtonStatus2() {
+    var selectValue = $("#filterDropdownFollow").val();
+    var inputValue = $("#inputFilterValue").val();
+
+    if (selectValue.trim() !== "" && inputValue.trim() !== "") {
+      $("#myBtn-search").prop("disabled", false);
+    } else {
+      $("#myBtn-search").prop("disabled", true);
+    }
+  }
+
+  //btn reset
+  $("#myBtn-reset").on('click', function () {
+    listQrCode(page, limit, orderBy);
+  });
 
   // logout
   function logout() {
@@ -186,7 +251,7 @@
           $("#myModal-Create").css("display", "none");
           $("body").css("overflow", "auto");
           customToastify("Tạo mã QR thành công!", { background: BG_TOAST[0] });
-          listQrCode();
+          listQrCode(page, limit, field, value, orderBy);
         }
       },
       error: function (xhr, status, error) {
@@ -379,7 +444,7 @@
       success: function (response) {
         if (response.code === 200) {
           modalDelete.css("display", "none");
-          listQrCode();
+          listQrCode(page, limit, field, value, orderBy);
           body.css("overflow", "auto");
           customToastify("Xoá mã QR thành công!", { background: BG_TOAST[0] });
         }
@@ -504,7 +569,7 @@
         if (+response.code === 200) {
           modalUpdate.css("display", "none");
           body.css("overflow", "auto");
-          listQrCode();
+          listQrCode(page, limit, field, value, orderBy);
           customToastify("Cập nhật mã QR thành công!", { background: BG_TOAST[0] });
         }
       },
@@ -526,10 +591,10 @@
   }
 
   // get list qr code
-  function listQrCode(page = 1, limit = 15) {
+  function listQrCode(page, limit, field, value, orderBy) {
     const token = getCookie("token");
 
-    function fetchQrCodes(page, limit) {
+    function fetchQrCodes(page, limit, field, value, orderBy) {
       $.ajax({
         url: `${host}/api/auth/listQrCode`,
         method: "POST",
@@ -540,6 +605,9 @@
         data: JSON.stringify({
           page: page,
           limit: limit,
+          field: field,
+          value: value,
+          orderBy: orderBy,
         }),
         beforeSend: function () {
           loading.css("display", "flex");
@@ -572,7 +640,7 @@
               </svg>`,
               onPageClick: function (_, newPage) {
                 if (newPage !== page) {
-                  fetchQrCodes(newPage, limit);
+                  fetchQrCodes(newPage, limit, field, value, orderBy);
                 }
               },
             });
@@ -593,7 +661,7 @@
       });
     }
 
-    fetchQrCodes(page, limit);
+    fetchQrCodes(page, limit, field, value, orderBy);
   }
 
   // donwload file excel
@@ -654,7 +722,6 @@
             checkedCount++;
 
             exportedRowCount++;
-            console.log("===", exportedRowCount);
 
             sheet.addRow({
               stt: cells[0].innerHTML,

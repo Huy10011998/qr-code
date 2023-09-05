@@ -662,7 +662,7 @@
                         style="margin-right: 10px; height: 100%"
                       >
                         <option value="">Tìm theo</option>
-                        <option value="username">Tên tài khoản</option>
+                        <option value="userId">Mã nhân viên</option>
                         <option value="fullName">Họ tên</option>
                       </select>
                     </div>
@@ -687,7 +687,6 @@
                       </svg>
                       <input
                         id="inputFilterValue"
-                        onkeyup="disableSearch(value)"
                         class="filter-search inputCustom -primary"
                         placeholder="Nhập để tìm kiếm"
                       />
@@ -731,9 +730,27 @@
                           padding: 0px;
                           border-radius: 8px;
                           font-weight: 500;
+                          background: #005dd0;
+                          border: 1px solid #005dd0;
                         "
+                        disabled
                       >
                         Tìm kiếm
+                      </button>
+                    </div>
+                    <div class="btn-search">
+                      <button
+                        id="myBtn-reset"
+                        class="button -primary"
+                        style="
+                          height: 44.85px;
+                          width: 124px;
+                          padding: 0px;
+                          border-radius: 8px;
+                          font-weight: 500;
+                        "
+                      >
+                        Đặt lại
                       </button>
                     </div>
                   </div>
@@ -788,8 +805,6 @@
                           min-width: 100px;
                           border-radius: 8px;
                           font-weight: 500;
-                          background: #005dd0;
-                          border: 1px solid #005dd0;
                         "
                       >
                         Tải về file excel

@@ -148,12 +148,34 @@ exports.deleteQrCode = async (req, res) => {
 
 exports.listQrCode = (req, res) => {
   try {
-    const { limit, page } = req.body;
+    const { page, limit, field, value, orderBy } = req.body;
 
     let perPage = limit || 15;
-    User
-      .find()
-      .sort({ createdAt: -1 })
+    let sortOption = {};
+
+    if (orderBy === "ASC") {
+      sortOption = { createdAt: 1 };
+    } else if (orderBy === "DESC") {
+      sortOption = { createdAt: -1 };
+    }
+
+    const query = User.find();
+
+    if (field && value && field.length === value.length) {
+      for (let i = 0; i < field.length; i++) {
+        const currentField = field[i];
+        const currentValue = value[i];
+
+        if (currentField === "fullName") {
+          query.where({ fullName: { $regex: currentValue, $options: "i" } });
+        } else if (currentField === "userId") {
+          query.where({ userId: { $regex: currentValue, $options: "i" } });
+        }
+      }
+    }
+
+    query
+      .sort(sortOption)
       .skip((perPage * page) - perPage)
       .limit(perPage)
       .exec((err, user) => {
@@ -168,7 +190,7 @@ exports.listQrCode = (req, res) => {
               limit: perPage,
               data: user,
             },
-            message: "Lấy danh sách Qr Code thành công!"
+            message: "Lấy danh sách Qr Code thành công!",
           });
         });
       });
