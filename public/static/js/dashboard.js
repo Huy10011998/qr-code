@@ -384,7 +384,6 @@
         html += `      
         <tr id="${result.userId}">
           <td style="font-size: 12px; font-weight: 400; text-align: center;">${i + 1}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?._id}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.userId}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.username}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.fullName}</td>
