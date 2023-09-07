@@ -728,28 +728,20 @@
 
     let exportAll = false;
     let checkedCount = 0;
-    let exportedRowCount = 0;
     let imageRowIndex = 1;
     const imagePadding = 10;
-
-    sheet.columns.forEach((column) => {
-      column.alignment = { vertical: 'middle', horizontal: 'center' };
-      column.width = 10; // Đặt độ rộng cố định cho các cột chứa hình ảnh
-    });
 
     Array.from(rows).forEach((row, rowIndex) => {
       if (rowIndex > 0) {
         const cells = row.getElementsByTagName('td');
         if (cells.length > 0) {
-          const checkbox = cells[16].querySelector('input[type="checkbox"]');
+          const checkbox = cells[17].querySelector('input[type="checkbox"]');
           if (!checkbox) {
             return;
           }
 
           if (checkbox.checked) {
             checkedCount++;
-
-            exportedRowCount++;
 
             sheet.addRow({
               stt: cells[0].innerHTML,
@@ -760,17 +752,41 @@
               department: cells[8].innerHTML,
             }).commit();
 
-            const imgElement = cells[13].querySelector('img');
-            const src = imgElement.getAttribute('src');
-            const qrCode = workbook.addImage({
-              base64: src,
-              extension: `${cells[2].innerHTML}.png`,
+            const imgElementCardVisit = cells[13].querySelector('img');
+            const imgElementCardEmployee = cells[14].querySelector('img');
+
+            const srcVisit = imgElementCardVisit.getAttribute('src');
+            const srcEmployee = imgElementCardEmployee.getAttribute('src');
+
+            const qrCodeVisit = workbook.addImage({
+              base64: srcVisit,
+              extension: `${cells[2].innerHTML}_visit.png`,
             });
 
-            sheet.addImage(qrCode, {
-              tl: { col: 6, row: exportedRowCount },
+            const qrCodeEmployee = workbook.addImage({
+              base64: srcEmployee,
+              extension: `${cells[2].innerHTML}_employee.png`,
+            });
+
+            sheet.addImage(qrCodeVisit, {
+              tl: { col: 6, row: imageRowIndex },
               ext: { width: 80, height: 80 },
             });
+
+            sheet.addImage(qrCodeEmployee, {
+              tl: { col: 7, row: imageRowIndex },
+              ext: { width: 80, height: 80 },
+            });
+
+            const imageTopLeftVisit = { col: 6, row: imageRowIndex };
+            const imageTopLeftEmployee = { col: 7, row: imageRowIndex };
+
+            imageTopLeftVisit.row += (imageRowIndex - 1) * imagePadding;
+            imageTopLeftEmployee.row += (imageRowIndex - 1) * imagePadding;
+
+            imageRowIndex++;
+
+            sheet.getRow(imageRowIndex).alignment = { vertical: 'middle', horizontal: 'center' };
           }
         }
       }
