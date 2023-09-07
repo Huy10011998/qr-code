@@ -4,7 +4,7 @@
   const qrCode = $('#qrCode');
   // gen qr code
   function genQrCode(id) {
-    const baseURL = `${host}/employee/${id}`;
+    const baseURL = `${host}/profile/${id}`;
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
