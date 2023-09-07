@@ -385,10 +385,13 @@
         <tr id="${result.userId}">
           <td style="font-size: 12px; font-weight: 400; text-align: center;">${i + 1}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.userId}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.username}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.fullName}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.fullName_en}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.phoneNumber}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.email}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department_en}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.image}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
