@@ -167,8 +167,10 @@ exports.listQrCode = (req, res) => {
         const currentValue = value[i];
 
         if (currentField === "fullName") {
-          query.where({ fullName: { $regex: currentValue, $options: "i" } });
-        } else if (currentField === "userId") {
+          query.where({ fullName: { $regex: currentValue, $options: "i" } })
+            .collation({ locale: "vi", strength: 1 });
+        }
+        else if (currentField === "userId") {
           query.where({ userId: { $regex: currentValue, $options: "i" } });
         }
       }
