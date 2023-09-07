@@ -9,6 +9,7 @@
   let modalUpdate = $("#myModal-Update");
   let body = $("body");
   let btnSearch = $("#myBtn-search");
+  let btnReset = $("#myBtn-reset");
   let filterSort = $("#filterDropdownSort");
   let filterDropdownCreated = $("#filterDropdownCreated")
   let filterDropdownFollow = $('#filterDropdownFollow');
@@ -67,7 +68,6 @@
   //change value filterSort
   filterSort.on('change', function () {
     orderBy = ($(this).find(":selected").val());
-    console.log("===", orderBy);
   });
 
   //Check value filter drop-down
@@ -76,8 +76,6 @@
     field.pop();
     field.push(valueDropdown);
     index = field.indexOf(valueDropdown);
-    console.log("===index", index);
-    console.log("===", valueDropdown);
   });
 
   //btn search
@@ -89,33 +87,33 @@
   //check disable btn search
   (filterSort, filterDropdownCreated).change(checkButtonStatus1);
 
-  $("#filterDropdownFollow, #inputFilterValue").on("input", checkButtonStatus2);
+  (filterDropdownFollow, inputFilterValue).on("input", checkButtonStatus2);
 
   function checkButtonStatus1() {
     var sortValue = (filterSort).val();
     var createdValue = (filterDropdownCreated).val();
 
     if (sortValue !== "" && createdValue !== "") {
-      $("#myBtn-search").prop("disabled", false);
+      btnSearch.prop("disabled", false);
     } else {
-      $("#myBtn-search").prop("disabled", true);
+      btnSearch.prop("disabled", true);
     }
   }
 
   function checkButtonStatus2() {
-    var selectValue = $("#filterDropdownFollow").val();
-    var inputValue = $("#inputFilterValue").val();
+    var selectValue = filterDropdownFollow.val();
+    var inputValue = inputFilterValue.val();
 
     if (selectValue.trim() !== "" && inputValue.trim() !== "") {
-      $("#myBtn-search").prop("disabled", false);
+      btnSearch.prop("disabled", false);
     } else {
-      $("#myBtn-search").prop("disabled", true);
+      btnSearch.prop("disabled", true);
     }
   }
 
   //btn reset
-  $("#myBtn-reset").on('click', function () {
-    listQrCode(page, limit, orderBy);
+  btnReset.on('click', function () {
+    location.reload();
   });
 
   // logout
@@ -398,7 +396,7 @@
           <td style="font-size: 12px; font-weight: 400; text-align: left">
             <img id="qrCodeCardVisit" src=${genQrCodeCardVisit(result?._id)} />
           </td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">
+          <td style="font-size: 12px; font-weight: 400; text-align: end">
             <img id="qrCodeCardEmployee" src=${genQrCodeCardEmployee(result?._id)} />
           </td>
           <td  style="text-align: left">
@@ -460,7 +458,7 @@
       success: function (response) {
         if (response.code === 200) {
           modalDelete.css("display", "none");
-          listQrCode(page, limit, field, value, orderBy);
+          listQrCode(page, limit, field = [], value = [], orderBy);
           body.css("overflow", "auto");
           customToastify("Xoá mã QR thành công!", { background: BG_TOAST[0] });
         }
@@ -490,7 +488,7 @@
 
     $("#btn-update-accept").off("click").on("click", function () {
       updateQrCode(userId_);
-      $("#btn-update-accept").off("click"); // Tắt sự kiện click sau khi gọi API
+      $("#btn-update-accept").off("click");
     });
   });
 
@@ -585,14 +583,16 @@
         if (+response.code === 200) {
           modalUpdate.css("display", "none");
           body.css("overflow", "auto");
-          listQrCode(page, limit, field, value, orderBy);
+          listQrCode(page, limit, field = [], value = [], orderBy);
           customToastify("Cập nhật mã QR thành công!", { background: BG_TOAST[0] });
         }
       },
       error: function (xhr, status, error) {
         customToastify(xhr.responseJSON.message, { background: BG_TOAST[2] });
       },
-      complete: function (xhr) { },
+      complete: function (xhr) {
+
+      },
     });
   }
 
@@ -616,7 +616,7 @@
         method: "POST",
         headers: {
           token: token,
-          "Content-Type": "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
         },
         data: JSON.stringify({
           page: page,
@@ -670,6 +670,8 @@
             loading.css("display", "none");
             tableEl.css("display", "table-row-group");
             paginate.css("display", "flex");
+            filterDropdownFollow.val("");
+            inputFilterValue.val("");
           } else {
             paginate.css("display", "none");
           }

@@ -4,6 +4,7 @@ const User = db.user;
 const Role = db.role;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const unidecode = require("unidecode");
 
 exports.updateQrCode = async (req, res) => {
   const id = req.params.id;
@@ -161,18 +162,20 @@ exports.listQrCode = (req, res) => {
 
     const query = User.find();
 
-    if (field && value && field.length === value.length) {
-      for (let i = 0; i < field.length; i++) {
-        const currentField = field[i];
-        const currentValue = value[i];
+    for (let i = 0; i < field.length; i++) {
+      const currentField = field[i];
+      const currentValue = value[i];
 
-        if (currentField === "fullName") {
-          query.where({ fullName: { $regex: currentValue, $options: "i" } })
-            .collation({ locale: "vi", strength: 1 });
-        }
-        else if (currentField === "userId") {
-          query.where({ userId: { $regex: currentValue, $options: "i" } });
-        }
+      if (currentField === "fullName") {
+        const normalizedValue = unidecode(currentValue);
+        const regexValue = new RegExp(normalizedValue, "i");
+
+        query.or([
+          { fullName: { $regex: currentValue, $options: "i" } },
+          { fullName: regexValue }
+        ]).collation({ locale: "vi", strength: 2, alternate: "shifted" });
+      } else if (currentField === "userId") {
+        query.where({ userId: { $regex: currentValue, $options: "i" } });
       }
     }
 
