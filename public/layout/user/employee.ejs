@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
+
+    <meta
+      name="viewport"
+      content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+    />
+    <title>Cholimex Food</title>
+    <link
+      rel="stylesheet"
+      href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+    />
+    <link href="https://fonts.cdnfonts.com/css/nunito" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container-employee">
+      <div class="img-the-nhan-vien">
+        <div class="img-employee">
+          <div class="content-employee">
+            <img id="logo" class="img__employee"
+            srcset=<%=`/static/images/${image}` %> alt="img-employee" />
+            <div class="content-name"><%= fullName %></div>
+            <div class="content-deparment"><%= department %></div>
+            <div id="qrCode" class="content-qr-code"></div>
+            <div class="content-userId"><%= userId %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const host = "<%= host %>";
+      const id = "<%= id %>";
+    </script>
+
+    <script src="/static/js/employee.js"></script>
+  </body>
+</html>

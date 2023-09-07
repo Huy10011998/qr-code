@@ -150,7 +150,7 @@ exports.listQrCode = (req, res) => {
   try {
     const { page, limit, field, value, orderBy } = req.body;
 
-    let perPage = limit || 15;
+    let perPage = limit || 10;
     let sortOption = {};
 
     if (orderBy === "ASC") {

@@ -148,3 +148,66 @@ a {
   align-items: center;
   gap: 10px;
 }
+
+/* ===============Employee=============== */
+.container-employee {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-the-nhan-vien {
+  position: relative;
+  height: 758px;
+  width: 480px;
+  background-image: url("/static/images/the-nhan-vien.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.content-employee {
+  position: absolute;
+  top: 27%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.img-employee .img__employee {
+  width: 180px;
+  height: 190px;
+  object-fit: contain;
+}
+
+.content-name {
+  padding-top: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: red;
+  max-width: 350px;
+  text-align: center;
+}
+
+.content-deparment {
+  padding-top: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  max-width: 350px;
+  text-align: center;
+}
+
+.content-qr-code {
+  padding-top: 20px;
+}
+
+.content-userId {
+  padding-top: 10px;
+  font-size: 18px;
+  font-weight: 400;
+}

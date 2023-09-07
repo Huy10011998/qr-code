@@ -15,7 +15,7 @@
   let inputFilterValue = $("#inputFilterValue");
   let orderBy = 'DESC';
   let valueDropdown = '';
-  let limit = 15;
+  let limit = 10;
   let page = 1;
   let field = [];
   let value = [];
@@ -87,13 +87,13 @@
   });
 
   //check disable btn search
-  $("#filterSort, #filterDropdownCreated").change(checkButtonStatus1);
+  (filterSort, filterDropdownCreated).change(checkButtonStatus1);
 
   $("#filterDropdownFollow, #inputFilterValue").on("input", checkButtonStatus2);
 
   function checkButtonStatus1() {
-    var sortValue = $("#filterSort").val();
-    var createdValue = $("#filterDropdownCreated").val();
+    var sortValue = (filterSort).val();
+    var createdValue = (filterDropdownCreated).val();
 
     if (sortValue !== "" && createdValue !== "") {
       $("#myBtn-search").prop("disabled", false);
@@ -345,9 +345,23 @@
     checkInputsUpdate();
   });
 
-  // gen qr code
-  function genQrCode(id) {
+  // gen qr code card visit
+  function genQrCodeCardVisit(id) {
     const baseURL = `${host}/profile/${id}`;
+
+    const qrcode = new QRCode(document.createElement("div"), {
+      text: baseURL,
+      width: 80,
+      height: 80,
+    });
+
+    const qrCodeImageSrc = qrcode._el.firstChild.toDataURL();
+    return qrCodeImageSrc;
+  }
+
+  // gen qr code card employee
+  function genQrCodeCardEmployee(id) {
+    const baseURL = `${host}/employee/${id}`;
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
@@ -383,7 +397,10 @@
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
           <td style="font-size: 12px; font-weight: 400; text-align: left">
-            <img id="qrCode" src=${genQrCode(result?._id)} />
+            <img id="qrCodeCardVisit" src=${genQrCodeCardVisit(result?._id)} />
+          </td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">
+            <img id="qrCodeCardEmployee" src=${genQrCodeCardEmployee(result?._id)} />
           </td>
           <td  style="text-align: left">
             <img class="img-update-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/fix.png" />
@@ -700,14 +717,25 @@
         key: "department",
       },
       {
-        header: "Qr code",
-        key: "qrCode",
+        header: "CardVisit",
+        key: "qrCodeCardVisit",
+      },
+      {
+        header: "CardEmployee",
+        key: "qrCodeCardEmployee",
       },
     ];
 
     let exportAll = false;
     let checkedCount = 0;
     let exportedRowCount = 0;
+    let imageRowIndex = 1;
+    const imagePadding = 10;
+
+    sheet.columns.forEach((column) => {
+      column.alignment = { vertical: 'middle', horizontal: 'center' };
+      column.width = 10; // Đặt độ rộng cố định cho các cột chứa hình ảnh
+    });
 
     Array.from(rows).forEach((row, rowIndex) => {
       if (rowIndex > 0) {
@@ -766,16 +794,41 @@
               department: cells[8].innerHTML,
             }).commit();
 
-            const imgElement = cells[13].querySelector('img');
-            const src = imgElement.getAttribute('src');
-            const qrCode = workbook.addImage({
-              base64: src,
-              extension: `${cells[2].innerHTML}.png`,
+            const imgElementCardVisit = cells[13].querySelector('img');
+            const imgElementCardEmployee = cells[14].querySelector('img');
+
+            const srcVisit = imgElementCardVisit.getAttribute('src');
+            const srcEmployee = imgElementCardEmployee.getAttribute('src');
+
+            const qrCodeVisit = workbook.addImage({
+              base64: srcVisit,
+              extension: `${cells[2].innerHTML}_visit.png`,
             });
-            sheet.addImage(qrCode, {
-              tl: { col: 6, row: rowIndex },
+
+            const qrCodeEmployee = workbook.addImage({
+              base64: srcEmployee,
+              extension: `${cells[2].innerHTML}_employee.png`,
+            });
+
+            sheet.addImage(qrCodeVisit, {
+              tl: { col: 6, row: imageRowIndex },
               ext: { width: 80, height: 80 },
             });
+
+            sheet.addImage(qrCodeEmployee, {
+              tl: { col: 7, row: imageRowIndex },
+              ext: { width: 80, height: 80 },
+            });
+
+            const imageTopLeftVisit = { col: 6, row: imageRowIndex };
+            const imageTopLeftEmployee = { col: 7, row: imageRowIndex };
+
+            imageTopLeftVisit.row += (imageRowIndex - 1) * imagePadding;
+            imageTopLeftEmployee.row += (imageRowIndex - 1) * imagePadding;
+
+            imageRowIndex++;
+
+            sheet.getRow(imageRowIndex).alignment = { vertical: 'middle', horizontal: 'center' };
           }
         }
       });
@@ -800,6 +853,7 @@
     sheet.columns.forEach((column) => {
       column.alignment = { vertical: 'middle', horizontal: 'center' };
       column.font = { name: 'Calibri', size: 12 };
+      column.width = 15;
       column.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
     });
 
@@ -829,10 +883,6 @@
 
   $("#myBtn-download").on("click", function () {
     exportToExcel();
-
-    setTimeout(() => {
-      location.reload();
-    }, 3000)
   });
 
   // event click checkbox
