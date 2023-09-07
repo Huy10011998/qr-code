@@ -734,7 +734,7 @@
       if (rowIndex > 0) {
         const cells = row.getElementsByTagName('td');
         if (cells.length > 0) {
-          const checkbox = cells[17].querySelector('input[type="checkbox"]');
+          const checkbox = cells[16].querySelector('input[type="checkbox"]');
           if (!checkbox) {
             return;
           }
@@ -744,15 +744,15 @@
 
             sheet.addRow({
               stt: cells[0].innerHTML,
-              userId: cells[2].innerHTML,
-              fullName_vi: cells[4].innerHTML,
-              numberPhone: cells[6].innerHTML,
-              email: cells[7].innerHTML,
-              department: cells[8].innerHTML,
+              userId: cells[1].innerHTML,
+              fullName_vi: cells[3].innerHTML,
+              numberPhone: cells[5].innerHTML,
+              email: cells[6].innerHTML,
+              department: cells[7].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[13].querySelector('img');
-            const imgElementCardEmployee = cells[14].querySelector('img');
+            const imgElementCardVisit = cells[12].querySelector('img');
+            const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
             const srcEmployee = imgElementCardEmployee.getAttribute('src');
@@ -802,15 +802,15 @@
           if (cells.length > 0) {
             sheet.addRow({
               stt: cells[0].innerHTML,
-              userId: cells[2].innerHTML,
-              fullName_vi: cells[4].innerHTML,
-              numberPhone: cells[6].innerHTML,
-              email: cells[7].innerHTML,
-              department: cells[8].innerHTML,
+              userId: cells[1].innerHTML,
+              fullName_vi: cells[3].innerHTML,
+              numberPhone: cells[5].innerHTML,
+              email: cells[6].innerHTML,
+              department: cells[7].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[13].querySelector('img');
-            const imgElementCardEmployee = cells[14].querySelector('img');
+            const imgElementCardVisit = cells[12].querySelector('img');
+            const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
             const srcEmployee = imgElementCardEmployee.getAttribute('src');
