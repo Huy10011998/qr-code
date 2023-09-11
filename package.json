@@ -1,5 +1,6 @@
 {
   "name": "client",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -7,7 +8,7 @@
     "dev": "nodemon app.js --exec babel-node --presets @babel/preset-env",
     "build_dev": "echo 'BUILD APPLICATION VERSION' $npm_package_version && webpack --env=development && cp -r public/ build/ && cp -r package.json build/ && cp -r node_modules build/",
     "build_live": "echo 'BUILD APPLICATION VERSION' $npm_package_version && webpack --env=production && cp -r public/ build/ && cp -r package.json build/ && cp -r node_modules build/",
-    "start": "node app.js"
+    "start": "NODE_ENV=production node server.min.js"
   },
   "keywords": [
     "React",
