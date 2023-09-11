@@ -11,18 +11,21 @@
   let btnSearch = $("#myBtn-search");
   let btnReset = $("#myBtn-reset");
   let filterSort = $("#filterDropdownSort");
-  let filterDropdownCreated = $("#filterDropdownCreated")
   let filterDropdownFollow = $('#filterDropdownFollow');
   let inputFilterValue = $("#inputFilterValue");
+  let closeInputSearch = $("#close-inputSearch");
+  let inputDateRanger = $("#inputDateRanger");
   let orderBy = 'DESC';
   let valueDropdown = '';
   let limit = 10;
   let page = 1;
   let field = [];
   let value = [];
+  var fromDate = null;
+  var toDate = null;
   let index;
 
-  listQrCode(page, limit, field, value, orderBy);
+  listQrCode(page, limit, field, value, fromDate, toDate, orderBy);
 
   const validateEmail = (email) => {
     if (typeof email === 'string' && email.endsWith("@cholimexfood.com.vn")) {
@@ -34,7 +37,7 @@
   };
 
   const getFullTime = (date) => {
-    return moment(date).format('HH:mm:ss - DD/MM/YYYY');
+    return moment(date).format('hh:mm:ss - DD/MM/YYYY');
   }
 
   const formatTotalPage = (number) => {
@@ -81,19 +84,23 @@
   //btn search
   btnSearch.on("click", function () {
     value[index] = inputFilterValue.val()
-    listQrCode(page, limit, field, value, orderBy);
+    listQrCode(page, limit, field, value, fromDate, toDate, orderBy);
+  });
+
+  //btn reset
+  btnReset.on("click", function () {
+    location.reload();
   });
 
   //check disable btn search
-  (filterSort, filterDropdownCreated).change(checkButtonStatus1);
+  $(filterSort).on("change", checkButtonStatus1);
 
   (filterDropdownFollow, inputFilterValue).on("input", checkButtonStatus2);
 
   function checkButtonStatus1() {
-    var sortValue = (filterSort).val();
-    var createdValue = (filterDropdownCreated).val();
+    let sortValue = (filterSort).val();
 
-    if (sortValue !== "" && createdValue !== "") {
+    if (sortValue !== "") {
       btnSearch.prop("disabled", false);
     } else {
       btnSearch.prop("disabled", true);
@@ -101,19 +108,23 @@
   }
 
   function checkButtonStatus2() {
-    var selectValue = filterDropdownFollow.val();
-    var inputValue = inputFilterValue.val();
+    let selectValue = filterDropdownFollow.val();
+    let inputValue = inputFilterValue.val();
 
     if (selectValue.trim() !== "" && inputValue.trim() !== "") {
       btnSearch.prop("disabled", false);
+      closeInputSearch.css('display', 'flex');
     } else {
       btnSearch.prop("disabled", true);
+      closeInputSearch.css('display', 'none');
     }
   }
 
-  //btn reset
-  btnReset.on('click', function () {
-    location.reload();
+  //btn closeInputSearch
+  closeInputSearch.on("click", function () {
+    inputFilterValue.val('');
+    filterDropdownFollow.val('');
+    $(this).css('display', 'none');
   });
 
   // logout
@@ -249,7 +260,7 @@
           $("#myModal-Create").css("display", "none");
           $("body").css("overflow", "auto");
           customToastify("Tạo mã QR thành công!", { background: BG_TOAST[0] });
-          listQrCode(page, limit, field, value, orderBy);
+          listQrCode(page, limit, field, value, fromDate = null, toDate = null, orderBy);
         }
       },
       error: function (xhr, status, error) {
@@ -277,7 +288,7 @@
 
   // check disabled btn create
   function checkInputsCreate() {
-    var inputs = [
+    let inputs = [
       $('#username__'),
       $('#fullName'),
       $('#password'),
@@ -291,7 +302,7 @@
       $('#department_en')
     ];
 
-    var allInputsFilled = inputs.every(function (input) {
+    let allInputsFilled = inputs.every(function (input) {
       return input.val().length > 0;
     });
 
@@ -318,7 +329,7 @@
 
   // check disabled btn update
   function checkInputsUpdate() {
-    var inputs = [
+    let inputs = [
       $('#username__update'),
       $('#password-update'),
       $('#fullName-update'),
@@ -332,7 +343,7 @@
       $('#userId-update')
     ];
 
-    var allInputsFilled = inputs.every(function (input) {
+    let allInputsFilled = inputs.every(function (input) {
       return input.val().length > 0;
     });
 
@@ -381,25 +392,25 @@
       $.each(data, function (i, result) {
         html += `      
         <tr id="${result.userId}">
-          <td style="font-size: 12px; font-weight: 400; text-align: center;">${i + 1}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.userId}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.username}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.fullName}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.fullName_en}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.phoneNumber}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.email}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department_en}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.image}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
-          <td style="font-size: 12px; font-weight: 400; text-align: left">
+          <td style="font-size: 13px; font-weight: 400; text-align: center;">${i + 1}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.userId}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.username}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName_en}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.phoneNumber}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.email}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department_en}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.image}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
+          <td style="text-align: left">
             <img id="qrCodeCardVisit" src=${genQrCodeCardVisit(result?._id)} />
           </td>
-          <td style="font-size: 12px; font-weight: 400; text-align: end">
+          <td style="text-align: end">
             <img id="qrCodeCardEmployee" src=${genQrCodeCardEmployee(result?._id)} />
           </td>
-          <td  style="text-align: left">
+          <td style="text-align: left">
             <img class="img-update-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/fix.png" />
           </td>
           <td style="text-align: left">
@@ -458,7 +469,7 @@
       success: function (response) {
         if (response.code === 200) {
           modalDelete.css("display", "none");
-          listQrCode(page, limit, field = [], value = [], orderBy);
+          listQrCode(page, limit, field = [], value = [], fromDate = null, toDate = null, orderBy);
           body.css("overflow", "auto");
           customToastify("Xoá mã QR thành công!", { background: BG_TOAST[0] });
         }
@@ -583,16 +594,14 @@
         if (+response.code === 200) {
           modalUpdate.css("display", "none");
           body.css("overflow", "auto");
-          listQrCode(page, limit, field = [], value = [], orderBy);
+          listQrCode(page, limit, field = [], value = [], fromDate = null, toDate = null, orderBy);
           customToastify("Cập nhật mã QR thành công!", { background: BG_TOAST[0] });
         }
       },
       error: function (xhr, status, error) {
         customToastify(xhr.responseJSON.message, { background: BG_TOAST[2] });
       },
-      complete: function (xhr) {
-
-      },
+      complete: function (xhr) { },
     });
   }
 
@@ -607,10 +616,10 @@
   }
 
   // get list qr code
-  function listQrCode(page, limit, field, value, orderBy) {
+  function listQrCode(page, limit, field, value, fromDate, toDate, orderBy) {
     const token = getCookie("token");
 
-    function fetchQrCodes(page, limit, field, value, orderBy) {
+    function fetchQrCodes(page, limit, field, value, fromDate, toDate, orderBy) {
       $.ajax({
         url: `${host}/api/auth/listQrCode`,
         method: "POST",
@@ -623,6 +632,8 @@
           limit: limit,
           field: field,
           value: value,
+          fromDate: fromDate,
+          toDate: toDate,
           orderBy: orderBy,
         }),
         beforeSend: function () {
@@ -656,7 +667,7 @@
               </svg>`,
               onPageClick: function (_, newPage) {
                 if (newPage !== page) {
-                  fetchQrCodes(newPage, limit, field, value, orderBy);
+                  fetchQrCodes(newPage, limit, field, value, fromDate, toDate, orderBy);
                 }
               },
             });
@@ -670,8 +681,6 @@
             loading.css("display", "none");
             tableEl.css("display", "table-row-group");
             paginate.css("display", "flex");
-            filterDropdownFollow.val("");
-            inputFilterValue.val("");
           } else {
             paginate.css("display", "none");
           }
@@ -679,7 +688,7 @@
       });
     }
 
-    fetchQrCodes(page, limit, field, value, orderBy);
+    fetchQrCodes(page, limit, field, value, fromDate, toDate, orderBy);
   }
 
   // donwload file excel
@@ -915,5 +924,49 @@
   tableEl.on("click", "#checkBox", function () {
     toggleRow(this);
   });
+
+  // get value daterangepicker
+  $(function () {
+    var daterangePicker = $('input[name="daterange"]').daterangepicker({
+      opens: 'left',
+      timePicker: true,
+      startDate: moment().format('DD/MM/YYYY 00:00'),
+      endDate: moment().format('DD/MM/YYYY 23:59'),
+      locale: {
+        format: 'DD/MM/YYYY',
+      },
+      ranges: {
+        'Hôm nay': [moment(), moment()],
+        '7 ngày qua': [moment().subtract(6, 'days'), moment()],
+        '30 ngày qua': [moment().subtract(29, 'days'), moment()],
+      }
+    }, function (start, end, label) {
+      fromDate = start.format('YYYY-MM-DD 00:00');
+      toDate = end.format('YYYY-MM-DD 23:59');
+    });
+
+    var defaultStartDate = daterangePicker.data('daterangepicker').startDate.format('YYYY-MM-DD 00:00');
+    var defaultEndDate = daterangePicker.data('daterangepicker').endDate.format('YYYY-MM-DD 23:59');
+    fromDate = defaultStartDate;
+    toDate = defaultEndDate;
+  });
+
+  // check dateranger
+  let defaultValue = inputDateRanger.val();
+
+  checkDefaultValue(defaultValue);
+
+  inputDateRanger.on("input", function () {
+    let inputValue = $(this).val();
+    checkDefaultValue(inputValue);
+  });
+
+  function checkDefaultValue(value) {
+    if (value === defaultValue) {
+      btnSearch.prop("disabled", false);
+    } else {
+      btnSearch.prop("disabled", true);
+    }
+  }
 
 })(jQuery);

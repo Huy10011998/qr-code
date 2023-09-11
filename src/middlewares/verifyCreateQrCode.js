@@ -1,8 +1,8 @@
-const db = require("../models/auth.model.js/index.js");
-const ROLES = db.ROLES;
+import db from "../models/auth.model.js";
 const User = db.user;
+const ROLES = db.ROLES;
 
-checkDuplicateUserIdOrUserId = (req, res, next) => {
+const checkDuplicateUserIdOrUserId = (req, res, next) => {
   // userId
   User.findOne({ userId: req.body.userId }).exec((err, user) => {
     if (err) {
@@ -31,7 +31,7 @@ checkDuplicateUserIdOrUserId = (req, res, next) => {
   });
 };
 
-checkRolesExisted = (req, res, next) => {
+const checkRolesExisted = (req, res, next) => {
   if (req.body.roles) {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
@@ -51,4 +51,4 @@ const verifyCreateQrCode = {
   checkRolesExisted
 };
 
-module.exports = verifyCreateQrCode;
+export default verifyCreateQrCode;

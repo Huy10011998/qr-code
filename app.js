@@ -1,34 +1,43 @@
-const express = require("express");
-const cors = require("cors");
-const cookieSession = require("cookie-session");
-const bodyParser = require('body-parser');
-const path = require('path');
-const multer = require('multer');
-const excelJs = require('exceljs');
-const fs = require('fs');
-const bcrypt = require("bcryptjs");
-const moment = require('moment-timezone');
-const host = require('./config/app.conf.json');
-
-const { authJwt } = require("./src/middlewares");
-
-const mongoose = require('mongoose');
-
+import express from "express";
+import cors from "cors";
+import cookieSession from "cookie-session";
+import bodyParser from "body-parser";
+import path from "path";
+import multer from "multer";
+import excelJs from "exceljs";
+import fs from "fs";
+import bcrypt from "bcryptjs";
+import moment from "moment-timezone";
+import host from "./config/app.conf.json";
+import rateLimit from "express-rate-limit";
+import authJwt from "./src/middlewares/authJwt";
+import mongoose from "mongoose";
+import db from "./src/models/auth.model.js";
+import dbConfig from "./config/db.config";
+//api
+import authRoutes from "./src/routes/api/auth.routes";
+//page
+import userRoutes from "./src/routes/page/user.routes";
+import adminRoutes from "./src/routes/page/admin.routes";
 
 (async () => {
     try {
+        const apiLimiter = rateLimit({
+            windowMs: 15 * 60 * 1000,
+            max: 1000,
+        });
 
         mongoose.set('strictQuery', false);
 
         moment.tz.setDefault('Asia/Ho_Chi_Minh');
-
-        const dbConfig = require("./config/db.config");
 
         const app = express();
 
         let corsOptions = {
             origin: `${host}`
         };
+
+        app.use(apiLimiter);
 
         app.use(cors(corsOptions));
 
@@ -53,13 +62,12 @@ const mongoose = require('mongoose');
         );
 
         app.use(bodyParser.json());
-
         app.set('view engine', 'ejs');
         app.use('/static', express.static(__dirname + '/public/static'));
         app.set('views', path.join(__dirname, 'public/layout'));
         app.use(express.static(path.join(__dirname, 'public')));
 
-        const db = require("./src/models/auth.model.js");
+        //connect mongodb
         const User = db.user
         const Role = db.role;
 
@@ -77,6 +85,7 @@ const mongoose = require('mongoose');
                 process.exit();
             });
 
+        //import file excel
         const storage = multer.diskStorage({
             destination: (req, file, cb) => {
                 cb(null, './public/uploads');
@@ -165,13 +174,15 @@ const mongoose = require('mongoose');
             });
 
             // Delete the uploaded file once done
-            await fs.unlinkSync(filePath);
+            fs.unlinkSync(filePath);
         }
 
-        // routes
-        require("./src/routes/api/auth.routes")(app);
-        require("./src/routes/page/user.routes")(app);
-        require("./src/routes/page/admin.routes")(app);
+        // routes api
+        authRoutes(app);
+
+        // routes page
+        userRoutes(app);
+        adminRoutes(app);
 
         // set port, listen for requests
         const PORT = process.env.PORT || 8888;

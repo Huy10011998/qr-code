@@ -1,9 +1,10 @@
-const db = require("../models/auth.model.js");
-const { formatPhoneNumber } = require("../services/helper/helper.service");
-const User = db.user;
-const Config = require('../../config/app.conf.json');
+import db from "../models/auth.model.js";
+import { formatPhoneNumber } from "../services/helper/helper.service";
+import Config from '../../config/app.conf.json';
 
-exports.getUser = (req, res) => {
+const User = db.user;
+
+const getUser = (req, res) => {
   const id = req.params.id;
   try {
     User.findOne({ _id: id })
@@ -30,7 +31,7 @@ exports.getUser = (req, res) => {
   }
 }
 
-exports.getEmployee = (req, res) => {
+const getEmployee = (req, res) => {
   try {
     const id = req.params.id;
     try {
@@ -62,3 +63,10 @@ exports.getEmployee = (req, res) => {
     res.status(500).send('Server error');
   }
 }
+
+const userController = {
+  getUser,
+  getEmployee
+}
+
+export default userController;

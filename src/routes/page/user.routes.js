@@ -1,6 +1,6 @@
-const userController = require("../../controllers/user.controller");
+import PageUserController from "../../controllers/user.controller";
 
-module.exports = function (app) {
+export default function (app) {
   app.use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -9,7 +9,7 @@ module.exports = function (app) {
     next();
   });
 
-  app.get('/profile/:id', userController.getUser);
+  app.get('/profile/:id', PageUserController.getUser);
 
-  app.get('/employee/:id', userController.getEmployee)
+  app.get('/employee/:id', PageUserController.getEmployee)
 };

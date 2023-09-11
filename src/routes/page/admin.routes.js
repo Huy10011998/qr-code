@@ -1,7 +1,7 @@
-const adminController = require("../../controllers/admin.controller");
-const authJwt = require("../../middlewares/authJwt");
+import PageAdminController from "../../controllers/admin.controller";
+import authJwt from "../../middlewares/authJwt";
 
-module.exports = function (app) {
+export default function (app) {
   app.use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -10,7 +10,7 @@ module.exports = function (app) {
     next();
   });
 
-  app.get('/login', adminController.login)
+  app.get('/login', PageAdminController.login);
 
-  app.get('/dashboard', authJwt.verifyToken, authJwt.isAdmin, adminController.dashboard)
-};
+  app.get('/dashboard', authJwt.verifyToken, authJwt.isAdmin, PageAdminController.dashboard);
+}

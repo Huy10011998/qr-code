@@ -26,6 +26,12 @@
     <link
       rel="stylesheet"
       type="text/css"
+      href="/static/css/daterangepicker.css "
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
       href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -610,33 +616,35 @@
                         <option value="DESC">Giảm dần</option>
                       </select>
                     </div>
-                    <div class="container-select">
+                    <!--  -->
+                    <div class="container-filter-search" id="daterangepicker">
                       <svg
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv"
                         style="
+                          margin-left: 10px;
+                          position: absolute;
                           width: 24px;
-                          height: 24px;
                           color: rgba(0, 0, 0, 0.54);
                           fill: currentcolor;
-                          margin-left: 10px;
                         "
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv"
                         focusable="false"
                         aria-hidden="true"
                         viewBox="0 0 24 24"
-                        data-testid="FilterAltIcon"
+                        data-testid="SearchIcon"
                       >
                         <path
-                          d="M4.25 5.61C6.27 8.2 10 13 10 13v6c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-6s3.72-4.8 5.74-7.39c.51-.66.04-1.61-.79-1.61H5.04c-.83 0-1.3.95-.79 1.61z"
-                        ></path>
+                          id="MdiCalendarBlankOutline"
+                          d="M16.6,3.7h-.85V2h-1.7V3.7H7.25V2H5.55V3.7H4.7A1.7,1.7,0,0,0,3,5.4V17.3A1.7,1.7,0,0,0,4.7,19H16.6a1.7,1.7,0,0,0,1.7-1.7V5.4a1.7,1.7,0,0,0-1.7-1.7m0,13.6H4.7V8.8H16.6v8.5m0-10.2H4.7V5.4H16.6Z"
+                        />
                       </svg>
-                      <select
-                        id="filterDropdownCreated"
-                        class="selectCustom -primary"
-                        style="margin-right: 10px; height: 100%"
-                      >
-                        <option value="">Lọc theo ngày</option>
-                        <option value="createdAt">Ngày tạo</option>
-                      </select>
+                      <input
+                        class="filter-search"
+                        style="width: 250px"
+                        id="inputDateRanger"
+                        type="text"
+                        name="daterange"
+                        value="01/01/2023 - 01/12/2023"
+                      />
                     </div>
                     <div class="container-select">
                       <svg
@@ -738,22 +746,26 @@
                         Tìm kiếm
                       </button>
                     </div>
-                    <div class="btn-search">
-                      <button
-                        id="myBtn-reset"
-                        class="button -primary"
-                        style="
-                          height: 44.85px;
-                          width: 124px;
-                          padding: 0px;
-                          border-radius: 8px;
-                          font-weight: 500;
-                        "
-                      >
-                        Đặt lại
-                      </button>
-                    </div>
                   </div>
+                  <div class="btn-search">
+                    <button
+                      id="myBtn-reset"
+                      class="button -primary"
+                      style="
+                        height: 44.85px;
+                        width: 124px;
+                        padding: 0px;
+                        border-radius: 8px;
+                        font-weight: 500;
+                        background: #f50002;
+                        border: 1px solid #f50002;
+                      "
+                    >
+                      Đặt lại
+                    </button>
+                  </div>
+                </div>
+                <div class="container__left">
                   <div class="container-filter-search">
                     <img
                       src="/static/images/icons/upload-file.png"
@@ -793,38 +805,38 @@
                       </div>
                     </form>
                   </div>
-                </div>
-                <div class="right__filter">
-                  <div class="right___filter">
-                    <div class="btn-create">
-                      <button
-                        id="myBtn-download"
-                        class="button -primary"
-                        style="
-                          height: 44.85px;
-                          min-width: 100px;
-                          border-radius: 8px;
-                          font-weight: 500;
-                          background: #005dd0;
-                          border: 1px solid #005dd0;
-                        "
-                      >
-                        Tải về file excel
-                      </button>
-                    </div>
-                    <div class="btn-create">
-                      <button
-                        id="myBtn-create"
-                        class="button -primary"
-                        style="
-                          height: 44.85px;
-                          min-width: 100px;
-                          border-radius: 8px;
-                          font-weight: 500;
-                        "
-                      >
-                        Tạo mã Qr Code
-                      </button>
+                  <div class="right__filter">
+                    <div class="right___filter">
+                      <div class="btn-create">
+                        <button
+                          id="myBtn-download"
+                          class="button -primary"
+                          style="
+                            height: 44.85px;
+                            min-width: 100px;
+                            border-radius: 8px;
+                            font-weight: 500;
+                            background: #005dd0;
+                            border: 1px solid #005dd0;
+                          "
+                        >
+                          Tải về file excel
+                        </button>
+                      </div>
+                      <div class="btn-create">
+                        <button
+                          id="myBtn-create"
+                          class="button -primary"
+                          style="
+                            height: 44.85px;
+                            min-width: 100px;
+                            border-radius: 8px;
+                            font-weight: 500;
+                          "
+                        >
+                          Tạo mã Qr Code
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -838,7 +850,7 @@
                       <tr>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: start;
                           "
@@ -848,7 +860,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: start;
                           "
@@ -858,7 +870,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: start;
                           "
@@ -868,7 +880,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: start;
                           "
@@ -878,7 +890,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: start;
                           "
@@ -888,7 +900,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: start;
                           "
@@ -898,7 +910,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: start;
                           "
@@ -908,7 +920,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: left;
                           "
@@ -918,7 +930,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: left;
                           "
@@ -928,7 +940,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: left;
                           "
@@ -938,7 +950,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: left;
                           "
@@ -948,7 +960,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: left;
                           "
@@ -958,7 +970,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: center;
                           "
@@ -968,7 +980,7 @@
                         </th>
                         <th
                           style="
-                            font-size: 14px;
+                            font-size: 15px;
                             font-weight: 500;
                             text-align: left;
                           "
@@ -1071,7 +1083,7 @@
                       cursor: pointer;
                     "
                   >
-                    <option value="15">15</option>
+                    <option value="10">10</option>
                   </select>
                   <nav aria-label="Page navigation">
                     <ul id="pagination" class="pagination-sm"></ul>
@@ -1096,6 +1108,11 @@
     <script>
       const host = "<%= host %>";
     </script>
+
+    <script
+      type="text/javascript"
+      src="/static/js/daterangepicker.min.js "
+    ></script>
 
     <script src="/static/js/dashboard.js"></script>
   </body>

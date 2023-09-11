@@ -1,6 +1,6 @@
-const Config = require('../../config/app.conf.json');
+import Config from '../../config/app.conf.json';
 
-exports.login = (req, res) => {
+const login = (req, res) => {
   try {
     if (req.session.token) {
       res.redirect("/dashboard");
@@ -9,15 +9,13 @@ exports.login = (req, res) => {
         host: Config.host
       });
     }
-
-
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
   }
-}
+};
 
-exports.dashboard = (req, res) => {
+const dashboard = (req, res) => {
   try {
     res.render('./admin/dashboard', {
       host: Config.host
@@ -26,5 +24,10 @@ exports.dashboard = (req, res) => {
     console.error(err);
     res.status(500).send('Server error');
   }
-}
+};
+const adminController = {
+  login,
+  dashboard,
+};
 
+export default adminController;

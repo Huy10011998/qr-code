@@ -1,10 +1,10 @@
-const jwt = require("jsonwebtoken");
-const config = require("../../config/auth.config");
-const db = require("../models/auth.model.js");
-const User = db.user;
-const Role = db.role;
+import jwt from "jsonwebtoken";
+import config from "../../config/auth.config.js";
+import db from "../models/auth.model.js";
 
-verifyToken = (req, res, next) => {
+const { user: User, role: Role } = db;
+
+const verifyToken = (req, res, next) => {
   let token = req.session.token;
   if (!token) {
     return res.status(403).send({ message: "Chưa có token!" });
@@ -13,75 +13,59 @@ verifyToken = (req, res, next) => {
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
       return res.status(401).send({ message: "Không được phép truy cập" });
-    };
+    }
     req.userId = decoded.userId;
     next();
   });
 };
 
-isAdmin = (req, res, next) => {
-  User.findOne({ userId: req.userId }).then((user) => {
-    Role.find(
-      {
-        _id: { $in: user.roles },
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
-          return;
-        }
+const isAdmin = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ userId: req.userId });
+    const roles = await Role.find({ _id: { $in: user.roles } });
 
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "admin") {
-            next();
-            return;
-          }
-        }
-
-        res.status(403).send({ message: "Yêu cầu vai trò người điều hành!" });
-        return;
-      }
-    );
-  }).catch((err) => {
-    console.error(err)
-  });
+    const isAdmin = roles.some(role => role.name === 'admin');
+    if (isAdmin) {
+      next();
+    } else {
+      res.status(403).send({ message: 'Yêu cầu vai trò người điều hành!' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Hệ thống đang bận. Thử lại sau!' });
+  }
 };
 
-isModerator = (req, res, next) => {
-  User.findById(req.userId).exec().then((err, user) => {
-    if (err) {
-      res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
+const isModerator = (req, res, next) => {
+  User.findById(req.userId).exec().then((user) => {
+    if (!user) {
+      res.status(404).send({ message: "Người dùng không tồn tại!" });
       return;
     }
-    Role.find(
-      {
-        _id: { $in: user.roles },
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
-          return;
-        }
 
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name == "moderator") {
-            next();
-            return;
-          }
-        }
-
-        res.status(403).send({ message: "Yêu cầu vai trò người điều hành!" });
+    Role.find({ _id: { $in: user.roles } }, (err, roles) => {
+      if (err) {
+        res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
         return;
       }
-    );
+
+      const isModerator = roles.some(role => role.name === 'moderator');
+      if (isModerator) {
+        next();
+      } else {
+        res.status(403).send({ message: 'Yêu cầu vai trò người điều hành!' });
+      }
+    });
   }).catch((err) => {
-    console.error(err)
+    console.error(err);
+    res.status(500).send({ message: 'Hệ thống đang bận. Thử lại sau!' });
   });
 };
 
 const authJwt = {
   verifyToken,
   isAdmin,
-  isModerator,
+  isModerator
 };
-module.exports = authJwt;
+
+export default authJwt;

@@ -1,12 +1,13 @@
-const config = require("../../config/auth.config");
-const db = require("../models/auth.model.js");
+import config from "../../config/auth.config";
+import db from "../models/auth.model.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import unidecode from "unidecode";
+
 const User = db.user;
 const Role = db.role;
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const unidecode = require("unidecode");
 
-exports.updateQrCode = async (req, res) => {
+const updateQrCode = async (req, res) => {
   const id = req.params.id;
   const { fullName, username, password, department, email, image, phoneNumber, roles, userId, department_en, fullName_en } = req.body;
 
@@ -85,7 +86,7 @@ exports.updateQrCode = async (req, res) => {
   }
 }
 
-exports.getQrCode = async (req, res) => {
+const getQrCode = async (req, res) => {
   const userId = req.body.userId;
   try {
     User.findOne({ userId: userId }).populate("roles", "-__v").exec((err, user) => {
@@ -129,7 +130,7 @@ exports.getQrCode = async (req, res) => {
   }
 }
 
-exports.deleteQrCode = async (req, res) => {
+const deleteQrCode = async (req, res) => {
   try {
     const userId = req.body.userId;
 
@@ -147,9 +148,9 @@ exports.deleteQrCode = async (req, res) => {
   }
 }
 
-exports.listQrCode = (req, res) => {
+const listQrCode = (req, res) => {
   try {
-    const { page, limit, field, value, orderBy } = req.body;
+    const { page, limit, field, value, fromDate, toDate, orderBy } = req.body;
 
     let perPage = limit || 10;
     let sortOption = {};
@@ -179,11 +180,20 @@ exports.listQrCode = (req, res) => {
       }
     }
 
+    if (fromDate && toDate) {
+      query.where({
+        createdAt: {
+          $gte: new Date(fromDate),
+          $lte: new Date(toDate)
+        }
+      });
+    }
+
     query
       .sort(sortOption)
       .skip((perPage * page) - perPage)
       .limit(perPage)
-      .exec((err, user) => {
+      .exec((err, users) => {
         User.countDocuments((err, count) => {
           if (err) return next(err);
           res.status(200).json({
@@ -193,7 +203,7 @@ exports.listQrCode = (req, res) => {
               totalItems: count,
               currentPage: page,
               limit: perPage,
-              data: user,
+              data: users,
             },
             message: "Lấy danh sách Qr Code thành công!",
           });
@@ -273,9 +283,7 @@ const createQrCode = (req, res) => {
   }
 };
 
-exports.createQrCode = createQrCode;
-
-exports.login = (req, res) => {
+const login = (req, res) => {
   try {
     User.findOne({ userId: req.body.userId })
       .populate("roles", "-__v")
@@ -335,7 +343,7 @@ exports.login = (req, res) => {
   }
 };
 
-exports.logout = async (req, res) => {
+const logout = async (req, res) => {
   try {
     req.session = null;
     return res.status(200).json({
@@ -347,3 +355,8 @@ exports.logout = async (req, res) => {
   }
 };
 
+const authController = {
+  updateQrCode, getQrCode, deleteQrCode, listQrCode, createQrCode, login, logout
+}
+
+export default authController;

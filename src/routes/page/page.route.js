@@ -1,7 +1,7 @@
-const pageUser = require("./user.routes");
-const pageAdmin = require("./admin.routes");
+import pageUser from "./user.routes";
+import pageAdmin from "./admin.routes";
 
-module.exports = function (app) {
+export default function (app) {
   app.use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -13,4 +13,4 @@ module.exports = function (app) {
   app.get('/', pageUser);
 
   app.get('/', pageAdmin);
-};
+}

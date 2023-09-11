@@ -158,56 +158,52 @@ a {
   align-items: center;
 }
 
-.img-the-nhan-vien {
-  position: relative;
-  height: 758px;
-  width: 480px;
-  background-image: url("/static/images/the-nhan-vien.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+.img-bg {
+  width: 203.15px;
+  height: 322.83px;
 }
 
 .content-employee {
   position: absolute;
-  top: 27%;
-  width: 100%;
   display: flex;
+  padding-top: 35px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-.img-employee .img__employee {
-  width: 180px;
-  height: 190px;
+.img__employee {
+  padding-top: 10px;
+  height: 100px;
   object-fit: contain;
 }
 
 .content-name {
-  padding-top: 20px;
-  font-size: 20px;
+  padding-top: 10px;
+  font-size: 12px;
   font-weight: 700;
+  font-family: "Times New Roman", Times, serif;
   text-transform: uppercase;
   color: red;
-  max-width: 350px;
+  max-width: 170px;
   text-align: center;
 }
 
 .content-deparment {
-  padding-top: 10px;
-  font-size: 18px;
-  font-weight: 500;
-  max-width: 350px;
+  padding-top: 5px;
+  font-size: 10px;
+  font-family: "Times New Roman", Times, serif;
+  max-width: 170px;
   text-align: center;
 }
 
 .content-qr-code {
-  padding-top: 20px;
+  padding-top: 5px;
 }
 
 .content-userId {
-  padding-top: 10px;
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 8px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  color: red;
 }

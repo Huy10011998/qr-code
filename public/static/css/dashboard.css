@@ -298,6 +298,8 @@ select {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
   gap: 16px;
 }
 
@@ -740,7 +742,6 @@ input[type="checkbox"] {
   box-sizing: border-box;
   display: flex;
   flex-flow: row wrap;
-  width: 100%;
   -webkit-box-align: center;
   align-items: center;
   gap: 16px;
@@ -764,4 +765,14 @@ input[type="checkbox"] {
   font-weight: 400;
   color: #000;
   cursor: pointer;
+}
+
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn:active:focus,
+.btn:focus {
+  outline: none;
+  outline-offset: -2px;
 }
