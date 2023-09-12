@@ -523,6 +523,7 @@ table {
 
 .custom-table tbody tr {
   transition: 0.3s all ease;
+  cursor: pointer;
 }
 
 .table > tbody > tr > td,

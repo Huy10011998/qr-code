@@ -146,8 +146,27 @@
     });
   }
 
+  //all btn
+  $("#btn-img-save").on("click", function () {
+    $("#myModal-Image").css("display", "none");
+  });
+
+  $("#btn-img-save-update").on("click", function () {
+    $("#myModal-Image-Update").css("display", "none");
+  });
+
   $("#btn-logout-back").on("click", function () {
     $("#myModal-Logout").css("display", "none");
+  });
+
+  $("#btn-img-back").on("click", function () {
+    $("#myModal-Image").css("display", "none");
+    $("#inputImportImage").val("");
+  });
+
+  $("#btn-img-update-back").on("click", function () {
+    $("#myModal-Image-Update").css("display", "none");
+    $("#inputImportUpdateImage").val("");
   });
 
   $("#btn-logout").on("click", function () {
@@ -219,7 +238,7 @@
     if (parts.length === 2) return parts.pop().split(';').shift();
   }
 
-  function createQrCode() {
+  function createQrCode(img) {
     const token = getCookie("token");
 
     const username = $("#username__");
@@ -228,7 +247,7 @@
     const department = $("#department");
     const userId = $("#userId");
     const email = $("#email");
-    const image = $("#image");
+    const image = $("#inputImportImage");
     const phoneNumber = $("#phoneNumber");
     const roles = $("#roles");
     const nameEng = $("#fullName_en");
@@ -245,7 +264,7 @@
         department: department.val(),
         userId: userId.val(),
         email: validateEmail(email.val()),
-        image: image.val(),
+        image: img,
         phoneNumber: phoneNumber.val(),
         roles: [roles.val()],
         fullName_en: nameEng.val(),
@@ -283,7 +302,9 @@
   }
 
   $("#btn-create-accept").on("click", function () {
-    createQrCode();
+    if (compressedDataURL) {
+      createQrCode(compressedDataURL);
+    }
   });
 
   // check disabled btn create
@@ -295,7 +316,7 @@
       $('#department'),
       $('#userId'),
       $('#email'),
-      $('#image'),
+      $('#inputImportImage'),
       $('#phoneNumber'),
       $('#roles'),
       $('#fullName_en'),
@@ -309,7 +330,7 @@
     $("#btn-create-accept").prop("disabled", !allInputsFilled);
   }
 
-  $('#username__, #fullName, #fullName_en,#password, #department,#department_en, #userId, #email, #image, #phoneNumber, #roles').on('input', function () {
+  $('#username__, #fullName, #fullName_en,#password, #department,#department_en, #userId, #email, #inputImportImage, #phoneNumber, #roles').on('input', function () {
     checkInputsCreate();
   });
 
@@ -337,7 +358,7 @@
       $('#email-update'),
       $('#department-update'),
       $('#department-update-en'),
-      $('#image-update'),
+      $('#inputImportUpdateImage'),
       $('#phoneNumber-update'),
       $('#roles-update'),
       $('#userId-update')
@@ -350,7 +371,7 @@
     $("#btn-update-accept").prop("disabled", !allInputsFilled);
   }
 
-  $('#username__update, #password-update, #fullName-update,#fullName-update-en, #email-update,#department-update, #department-update-en, #image-update, #phoneNumber-update, #roles-update, #userId-update').on('input', function () {
+  $('#username__update, #password-update, #fullName-update,#fullName-update-en, #email-update,#department-update, #department-update-en, #inputImportUpdateImage, #phoneNumber-update, #roles-update, #userId-update').on('input', function () {
     checkInputsUpdate();
   });
 
@@ -368,19 +389,11 @@
     return qrCodeImageSrc;
   }
 
-  // gen qr code card employee
-  function genQrCodeCardEmployee(id) {
-    const baseURL = `${host}/employee/${id}`;
-
-    const qrcode = new QRCode(document.createElement("div"), {
-      text: baseURL,
-      width: 80,
-      height: 80,
-    });
-
-    const qrCodeImageSrc = qrcode._el.firstChild.toDataURL();
-    return qrCodeImageSrc;
+  //redirect details profile
+  function redirectProfile(id) {
+    location.href = `/profile/${id}`;
   }
+
 
   // gen table data
   function generateTable(data = []) {
@@ -391,7 +404,7 @@
       textData.style.display = "none";
       $.each(data, function (i, result) {
         html += `      
-        <tr id="${result.userId}">
+        <tr id="${result.userId}" onclick="location.assign('/employee/${result?._id}')">
           <td style="font-size: 13px; font-weight: 400; text-align: center;">${i + 1}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.userId}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.username}</td>
@@ -401,14 +414,11 @@
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.email}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department_en}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.image}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left ; white-space: nowrap; overflow: hidden;text-overflow: ellipsis;max-width: 100px">${result?.image}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
           <td style="text-align: left">
             <img id="qrCodeCardVisit" src=${genQrCodeCardVisit(result?._id)} />
-          </td>
-          <td style="text-align: end">
-            <img id="qrCodeCardEmployee" src=${genQrCodeCardEmployee(result?._id)} />
           </td>
           <td style="text-align: left">
             <img class="img-update-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/fix.png" />
@@ -498,7 +508,9 @@
     getQrCode(userId_);
 
     $("#btn-update-accept").off("click").on("click", function () {
-      updateQrCode(userId_);
+      if (compressedDataURLUpdate) {
+        updateQrCode(userId_, compressedDataURLUpdate);
+      }
       $("#btn-update-accept").off("click");
     });
   });
@@ -512,7 +524,6 @@
     const departmentUpdate = $("#department-update");
     const userIdUpdate = $("#userId-update");
     const emailUpdate = $("#email-update");
-    const imageUpdate = $("#image-update");
     const phoneNumberUpdate = $("#phoneNumber-update");
     const rolesUpdate = $("#roles-update");
     const departmentEngUpdate = $("#department-update-en");
@@ -540,7 +551,6 @@
           departmentUpdate.val(data.department);
           userIdUpdate.val(data.userId);
           emailUpdate.val(data.email);
-          imageUpdate.val(data.image);
           phoneNumberUpdate.val(data.phoneNumber);
           rolesUpdate.val(data.roles);
           departmentEngUpdate.val(data.department_en)
@@ -554,7 +564,7 @@
     });
   }
 
-  function updateQrCode(userId_) {
+  function updateQrCode(userId_, img) {
     const token = getCookie("token");
 
     const usernameUpdate = $("#username__update");
@@ -563,7 +573,6 @@
     const departmentUpdate = $("#department-update");
     const userIdUpdate = $("#userId-update");
     const emailUpdate = $("#email-update");
-    const imageUpdate = $("#image-update");
     const phoneNumberUpdate = $("#phoneNumber-update");
     const rolesUpdate = $("#roles-update");
     const departmentEngUpdate = $("#department-update-en");
@@ -580,7 +589,7 @@
         department: departmentUpdate.val(),
         userId: userIdUpdate.val(),
         email: emailUpdate.val(),
-        image: imageUpdate.val(),
+        image: img,
         phoneNumber: phoneNumberUpdate.val(),
         roles: [rolesUpdate.val()],
         fullName_en: nameEngUpdate.val(),
@@ -730,10 +739,10 @@
         header: "CardVisit",
         key: "qrCodeCardVisit",
       },
-      {
-        header: "CardEmployee",
-        key: "qrCodeCardEmployee",
-      },
+      // {
+      //   header: "CardEmployee",
+      //   key: "qrCodeCardEmployee",
+      // },
     ];
 
     let exportAll = false;
@@ -745,7 +754,7 @@
       if (rowIndex > 0) {
         const cells = row.getElementsByTagName('td');
         if (cells.length > 0) {
-          const checkbox = cells[16].querySelector('input[type="checkbox"]');
+          const checkbox = cells[15].querySelector('input[type="checkbox"]');
           if (!checkbox) {
             return;
           }
@@ -763,36 +772,36 @@
             }).commit();
 
             const imgElementCardVisit = cells[12].querySelector('img');
-            const imgElementCardEmployee = cells[13].querySelector('img');
+            // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
-            const srcEmployee = imgElementCardEmployee.getAttribute('src');
+            // const srcEmployee = imgElementCardEmployee.getAttribute('src');
 
             const qrCodeVisit = workbook.addImage({
               base64: srcVisit,
               extension: `${cells[2].innerHTML}_visit.png`,
             });
 
-            const qrCodeEmployee = workbook.addImage({
-              base64: srcEmployee,
-              extension: `${cells[2].innerHTML}_employee.png`,
-            });
+            // const qrCodeEmployee = workbook.addImage({
+            //   base64: srcEmployee,
+            //   extension: `${cells[2].innerHTML}_employee.png`,
+            // });
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 6, row: imageRowIndex },
               ext: { width: 80, height: 80 },
             });
 
-            sheet.addImage(qrCodeEmployee, {
-              tl: { col: 7, row: imageRowIndex },
-              ext: { width: 80, height: 80 },
-            });
+            // sheet.addImage(qrCodeEmployee, {
+            //   tl: { col: 7, row: imageRowIndex },
+            //   ext: { width: 80, height: 80 },
+            // });
 
             const imageTopLeftVisit = { col: 6, row: imageRowIndex };
-            const imageTopLeftEmployee = { col: 7, row: imageRowIndex };
+            // const imageTopLeftEmployee = { col: 7, row: imageRowIndex };
 
             imageTopLeftVisit.row += (imageRowIndex - 1) * imagePadding;
-            imageTopLeftEmployee.row += (imageRowIndex - 1) * imagePadding;
+            // imageTopLeftEmployee.row += (imageRowIndex - 1) * imagePadding;
 
             imageRowIndex++;
 
@@ -821,36 +830,36 @@
             }).commit();
 
             const imgElementCardVisit = cells[12].querySelector('img');
-            const imgElementCardEmployee = cells[13].querySelector('img');
+            // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
-            const srcEmployee = imgElementCardEmployee.getAttribute('src');
+            // const srcEmployee = imgElementCardEmployee.getAttribute('src');
 
             const qrCodeVisit = workbook.addImage({
               base64: srcVisit,
               extension: `${cells[2].innerHTML}_visit.png`,
             });
 
-            const qrCodeEmployee = workbook.addImage({
-              base64: srcEmployee,
-              extension: `${cells[2].innerHTML}_employee.png`,
-            });
+            // const qrCodeEmployee = workbook.addImage({
+            //   base64: srcEmployee,
+            //   extension: `${cells[2].innerHTML}_employee.png`,
+            // });
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 6, row: imageRowIndex },
               ext: { width: 80, height: 80 },
             });
 
-            sheet.addImage(qrCodeEmployee, {
-              tl: { col: 7, row: imageRowIndex },
-              ext: { width: 80, height: 80 },
-            });
+            // sheet.addImage(qrCodeEmployee, {
+            //   tl: { col: 7, row: imageRowIndex },
+            //   ext: { width: 80, height: 80 },
+            // });
 
             const imageTopLeftVisit = { col: 6, row: imageRowIndex };
-            const imageTopLeftEmployee = { col: 7, row: imageRowIndex };
+            // const imageTopLeftEmployee = { col: 7, row: imageRowIndex };
 
             imageTopLeftVisit.row += (imageRowIndex - 1) * imagePadding;
-            imageTopLeftEmployee.row += (imageRowIndex - 1) * imagePadding;
+            // imageTopLeftEmployee.row += (imageRowIndex - 1) * imagePadding;
 
             imageRowIndex++;
 
@@ -968,5 +977,118 @@
       btnSearch.prop("disabled", true);
     }
   }
+
+  //get img
+  var cropper;
+  var compressedDataURL;
+
+  $('#inputImportImage').on('change', function (event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function (loadEvent) {
+        $("#myModal-Image").css("display", "block");
+
+        const imageURL = loadEvent.target.result;
+        const imageElement = $('<img>');
+        imageElement.attr('src', imageURL);
+        imageElement.css('width', '100%');
+        $('#show-image').html(imageElement);
+
+        cropper = new Cropper(imageElement[0], {
+          aspectRatio: 1,
+          viewMode: 1,
+          dragMode: 'move',
+          autoCropArea: 0.8,
+          cropBoxResizable: true,
+        });
+      };
+
+      reader.readAsDataURL(file);
+    }
+  });
+
+  $('#cropButton').on('click', function () {
+    if (cropper) {
+      var cropData = cropper.getData();
+      var canvas = cropper.getCroppedCanvas({
+        width: cropData.width,
+        height: cropData.height,
+        imageSmoothingEnabled: true,
+      });
+
+      $('#show-image').html(canvas);
+
+      canvas.toBlob(function (blob) {
+        var reader = new FileReader();
+
+        reader.readAsDataURL(blob);
+
+        reader.onloadend = function () {
+          compressedDataURL = reader.result;
+        };
+      }, 'image/jpeg', 0.8);
+
+      $(this).css("display", "none");
+    }
+  });
+
+
+  //update img
+  var cropperUpdate;
+  var compressedDataURLUpdate;
+
+  $('#inputImportUpdateImage').on('change', function (event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function (loadEvent) {
+        $("#myModal-Image-Update").css("display", "block");
+
+        const imageURL = loadEvent.target.result;
+        const imageElement = $('<img>');
+        imageElement.attr('src', imageURL);
+        imageElement.css('width', '100%');
+        $('#show-image-update').html(imageElement);
+
+        cropperUpdate = new Cropper(imageElement[0], {
+          aspectRatio: 1,
+          viewMode: 1,
+          dragMode: 'move',
+          autoCropArea: 0.8,
+          cropBoxResizable: true,
+        });
+      };
+
+      reader.readAsDataURL(file);
+    }
+  });
+
+  $('#cropButtonUpdate').on('click', function () {
+    if (cropperUpdate) {
+      var cropData = cropperUpdate.getData();
+      var canvas = cropperUpdate.getCroppedCanvas({
+        width: cropData.width,
+        height: cropData.height,
+        imageSmoothingEnabled: true,
+      });
+
+      $('#show-image-update').html(canvas);
+
+      canvas.toBlob(function (blob) {
+        var reader = new FileReader();
+
+        reader.readAsDataURL(blob);
+
+        reader.onloadend = function () {
+          compressedDataURLUpdate = reader.result;
+        };
+      }, 'image/jpeg', 0.8);
+
+      $(this).css("display", "none");
+    }
+  });
 
 })(jQuery);

@@ -54,6 +54,11 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="https://unpkg.com/exceljs/dist/exceljs.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.js"></script>
   </head>
 
   <body>
@@ -213,6 +218,108 @@
           </div>
         </div>
 
+        <!-- Modal Show Image -->
+        <div
+          id="myModal-Image"
+          class="modal-logout"
+          style="display: none; z-index: 9999"
+        >
+          <div class="container-bg-box-modal-logout">
+            <div class="bg-box-modal-logout">
+              <div class="title-logout">
+                <div>Tải ảnh đại diện</div>
+                <img
+                  id="btn-img-back"
+                  style="width: 32px; height: 32px; cursor: pointer"
+                  src="/static/images/icons/close.png"
+                  alt="img-back"
+                />
+              </div>
+              <div
+                class="content-logout"
+                style="justify-content: center; align-items: center"
+              >
+                <div id="show-image" style="max-height: 550px"></div>
+              </div>
+              <div
+                class="container-btn-logout"
+                style="
+                  display: flex;
+                  justify-content: end;
+                  align-items: center;
+                  gap: 10px;
+                "
+              >
+                <div class="btn-logout-flex">
+                  <button
+                    id="cropButton"
+                    class="btn-logout-accept"
+                    style="background: #005dd0; border: 1px solid #005dd0"
+                  >
+                    Cắt ảnh
+                  </button>
+                </div>
+                <div class="btn-logout-flex">
+                  <button id="btn-img-save" class="btn-logout-accept">
+                    Lưu ảnh
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Update Image -->
+        <div
+          id="myModal-Image-Update"
+          class="modal-logout"
+          style="display: none; z-index: 9999"
+        >
+          <div class="container-bg-box-modal-logout">
+            <div class="bg-box-modal-logout">
+              <div class="title-logout">
+                <div>Tải ảnh đại diện</div>
+                <img
+                  id="btn-img-update-back"
+                  style="width: 32px; height: 32px; cursor: pointer"
+                  src="/static/images/icons/close.png"
+                  alt="img-back"
+                />
+              </div>
+              <div
+                class="content-logout"
+                style="justify-content: center; align-items: center"
+              >
+                <div id="show-image-update" style="max-height: 550px"></div>
+              </div>
+              <div
+                class="container-btn-logout"
+                style="
+                  display: flex;
+                  justify-content: end;
+                  align-items: center;
+                  gap: 10px;
+                "
+              >
+                <div class="btn-logout-flex">
+                  <button
+                    id="cropButtonUpdate"
+                    class="btn-logout-accept"
+                    style="background: #005dd0; border: 1px solid #005dd0"
+                  >
+                    Cắt ảnh
+                  </button>
+                </div>
+                <div class="btn-logout-flex">
+                  <button id="btn-img-save-update" class="btn-logout-accept">
+                    Lưu ảnh
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Modal Create Qr Code -->
         <div id="myModal-Create" class="modal-create" style="display: none">
           <div class="container-bg-box-modal-create">
@@ -300,10 +407,10 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label" for="inputPassword"
-                      >Hình ảnh <span class="required">* </span>
+                      >Mã nhân viên <span class="required">* </span>
                     </label>
                     <div class="input__form">
-                      <input id="image" type="text" class="form-control" />
+                      <input id="userId" type="text" class="form-control" />
                     </div>
                   </div>
                   <div class="form-group">
@@ -330,10 +437,17 @@
               </div>
               <div class="form-group" style="padding: 0px 25px 10px 25px">
                 <label class="form-label" for="inputPassword"
-                  >Mã nhân viên <span class="required">* </span>
+                  >Hình ảnh <span class="required">* </span>
                 </label>
-                <div class="input__form">
-                  <input id="userId" type="text" class="form-control" />
+
+                <div class="input__form" style="width: 100%">
+                  <input
+                    style="width: 100%; height: 100% !important"
+                    id="inputImportImage"
+                    title="Chọn tệp tin hình ảnh"
+                    accept="image/*"
+                    type="file"
+                  />
                 </div>
               </div>
               <div class="container-btn-create">
@@ -481,13 +595,14 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label" for="inputPassword"
-                      >Hình ảnh <span class="required">* </span>
+                      >Mã nhân viên <span class="required">* </span>
                     </label>
                     <div class="input__form">
                       <input
-                        id="image-update"
+                        id="userId-update"
                         type="text"
                         class="form-control"
+                        disabled
                       />
                     </div>
                   </div>
@@ -519,14 +634,15 @@
               </div>
               <div class="form-group" style="padding: 0px 25px 10px 25px">
                 <label class="form-label" for="inputPassword"
-                  >Mã nhân viên <span class="required">* </span>
+                  >Hình ảnh <span class="required">* </span>
                 </label>
-                <div class="input__form">
+                <div class="input__form" style="width: 100%">
                   <input
-                    id="userId-update"
-                    type="text"
-                    class="form-control"
-                    disabled
+                    style="width: 100%; height: 100% !important"
+                    id="inputImportUpdateImage"
+                    title="Chọn tệp tin hình ảnh"
+                    accept="image/*"
+                    type="file"
                   />
                 </div>
               </div>
@@ -977,16 +1093,6 @@
                           scope="col"
                         >
                           CardVisit
-                        </th>
-                        <th
-                          style="
-                            font-size: 15px;
-                            font-weight: 500;
-                            text-align: left;
-                          "
-                          scope="col"
-                        >
-                          CardEmployee
                         </th>
                       </tr>
                     </thead>
