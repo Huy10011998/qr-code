@@ -1129,7 +1129,6 @@
         };
       }, 'image/jpeg', 0.6);
 
-      $(this).css("display", "none");
     }
   });
 
