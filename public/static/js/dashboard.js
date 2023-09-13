@@ -946,7 +946,8 @@
 
   // get value daterangepicker
   $(function () {
-    var daterangePicker = $('input[name="daterange"]').daterangepicker({
+    // var daterangePicker = 
+    $('input[name="daterange"]').daterangepicker({
       opens: 'left',
       timePicker: true,
       startDate: moment().format('DD/MM/YYYY 00:00'),
@@ -964,10 +965,10 @@
       toDate = end.format('YYYY-MM-DD 23:59');
     });
 
-    var defaultStartDate = daterangePicker.data('daterangepicker').startDate.format('YYYY-MM-DD 00:00');
-    var defaultEndDate = daterangePicker.data('daterangepicker').endDate.format('YYYY-MM-DD 23:59');
-    fromDate = defaultStartDate;
-    toDate = defaultEndDate;
+    // var defaultStartDate = daterangePicker.data('daterangepicker').startDate.format('YYYY-MM-DD 00:00');
+    // var defaultEndDate = daterangePicker.data('daterangepicker').endDate.format('YYYY-MM-DD 23:59');
+    // fromDate = defaultStartDate;
+    // toDate = defaultEndDate;
   });
 
   // check dateranger
@@ -1044,7 +1045,6 @@
     }
   });
 
-
   //update img
   var cropperUpdate;
   var compressedDataURLUpdate;
@@ -1093,9 +1093,41 @@
         reader.readAsDataURL(blob);
 
         reader.onloadend = function () {
-          compressedDataURLUpdate = reader.result;
+          var image = new Image();
+
+          image.onload = function () {
+            var compressedCanvas = document.createElement('canvas');
+            var ctx = compressedCanvas.getContext('2d');
+
+            var maxWidth = 600;
+            var maxHeight = 600;
+
+            var width = image.width;
+            var height = image.height;
+
+            if (width > height) {
+              if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+              }
+            } else {
+              if (height > maxHeight) {
+                width *= maxHeight / height;
+                height = maxHeight;
+              }
+            }
+
+            compressedCanvas.width = width;
+            compressedCanvas.height = height;
+
+            ctx.drawImage(image, 0, 0, width, height);
+
+            compressedDataURLUpdate = compressedCanvas.toDataURL('image/jpeg', 0.6);
+          };
+
+          image.src = reader.result;
         };
-      }, 'image/jpeg', 0.8);
+      }, 'image/jpeg', 0.6);
 
       $(this).css("display", "none");
     }
