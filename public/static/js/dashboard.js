@@ -1017,7 +1017,7 @@
         $('#show-image').html(imageElement);
 
         cropper = new Cropper(imageElement[0], {
-          aspectRatio: NaN,
+          aspectRatio: 1,
           viewMode: 1,
           dragMode: 'move',
           autoCropArea: 1,
@@ -1103,7 +1103,7 @@
         $('#show-image-update').html(imageElement);
 
         cropperUpdate = new Cropper(imageElement[0], {
-          aspectRatio: NaN,
+          aspectRatio: 1,
           viewMode: 1,
           dragMode: 'move',
           autoCropArea: 1,
