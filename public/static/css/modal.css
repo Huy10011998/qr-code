@@ -159,10 +159,14 @@
 }
 
 .form-control:focus {
-  border-color: #ff6347;
+  /* border-color: #ff6347;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px #ff6347, 0 0 5px rgba(102, 175, 233, 0.6);
-  box-shadow: inset 0 1px 1px #ff6347, 0 0 8px #ff6347;
+  box-shadow: inset 0 1px 1px #ff6347, 0 0 8px #ff6347; */
+  border: 1px solid #ccc;
+  outline: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 .form-control {

@@ -364,14 +364,18 @@
       $('#userId-update')
     ];
 
-    let allInputsFilled = inputs.every(function (input) {
-      return input.val().length > 0;
+    let anyInputChange = inputs.some(function (input) {
+      return input.data('preValue') !== input.val();
     });
 
-    $("#btn-update-accept").prop("disabled", !allInputsFilled);
+    $("#btn-update-accept").prop("disabled", !anyInputChange);
+
+    inputs.forEach(function (input) {
+      input.data('preValue', input.val());
+    });
   }
 
-  $('#username__update, #password-update, #fullName-update,#fullName-update-en, #email-update,#department-update, #department-update-en, #inputImportUpdateImage, #phoneNumber-update, #roles-update, #userId-update').on('input', function () {
+  $('#username__update, #password-update, #fullName-update, #fullName-update-en, #email-update, #department-update, #department-update-en, #inputImportUpdateImage, #phoneNumber-update, #roles-update, #userId-update').on('input', function () {
     checkInputsUpdate();
   });
 
@@ -396,7 +400,8 @@
 
 
   // gen table data
-  function generateTable(data = []) {
+  function generateTable(data = [], startItem) {
+    const stt = startItem;
     const tableEl = $("#table-data");
     const textData = document.getElementById("text-data");
     let html = '';
@@ -405,7 +410,7 @@
       $.each(data, function (i, result) {
         html += `      
         <tr id="${result.userId}" _id="${result._id}" >
-          <td style="font-size: 13px; font-weight: 400; text-align: center;">${i + 1}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: center;">${i + stt}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.userId}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.username}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName}</td>
@@ -518,9 +523,8 @@
     getQrCode(userId_);
 
     $("#btn-update-accept").off("click").on("click", function () {
-      if (compressedDataURLUpdate) {
-        updateQrCode(userId_, compressedDataURLUpdate);
-      }
+      updateQrCode(userId_, compressedDataURLUpdate);
+      $("#inputImportUpdateImage").val("");
       $("#btn-update-accept").off("click");
     });
   });
@@ -538,6 +542,7 @@
     const rolesUpdate = $("#roles-update");
     const departmentEngUpdate = $("#department-update-en");
     const nameEngUpdate = $("#fullName-update-en");
+    const imageUpdate = $("#value-image-fake");
 
     $.ajax({
       url: `${host}/api/auth/getQrCode`,
@@ -563,8 +568,9 @@
           emailUpdate.val(data.email);
           phoneNumberUpdate.val(data.phoneNumber);
           rolesUpdate.val(data.roles);
-          departmentEngUpdate.val(data.department_en)
-          nameEngUpdate.val(data.fullName_en)
+          departmentEngUpdate.val(data.department_en);
+          nameEngUpdate.val(data.fullName_en);
+          imageUpdate.val(data.image);
         }
       },
       error: function (xhr, status, error) {
@@ -587,6 +593,7 @@
     const rolesUpdate = $("#roles-update");
     const departmentEngUpdate = $("#department-update-en");
     const nameEngUpdate = $("#fullName-update-en");
+    const imageUpdate = $("#value-image-fake");
 
     $.ajax({
       url: `${host}/api/auth/updateQrCode/${userId_}`,
@@ -599,7 +606,7 @@
         department: departmentUpdate.val(),
         userId: userIdUpdate.val(),
         email: emailUpdate.val(),
-        image: img,
+        image: !compressedDataURLUpdate ? imageUpdate.val() : img,
         phoneNumber: phoneNumberUpdate.val(),
         roles: [rolesUpdate.val()],
         fullName_en: nameEngUpdate.val(),
@@ -665,8 +672,10 @@
             const data = response.data.data;
             const totalPages = response.data?.totalPages || 0;
             const totalItems = response.data?.totalItems || 0;
-            generateTable(data);
-            generateCountPage(page, data.length, totalItems);
+            const endItem = response.data?.endItem || 0;
+            const startItem = response.data?.startItem || 0;
+            generateTable(data, startItem);
+            generateCountPage(startItem, endItem, totalItems);
             $('#pagination').twbsPagination('destroy');
             $('#pagination').twbsPagination({
               totalPages,
@@ -1008,10 +1017,10 @@
         $('#show-image').html(imageElement);
 
         cropper = new Cropper(imageElement[0], {
-          aspectRatio: 1,
+          aspectRatio: NaN,
           viewMode: 1,
           dragMode: 'move',
-          autoCropArea: 0.8,
+          autoCropArea: 1,
           cropBoxResizable: true,
         });
       };
@@ -1037,11 +1046,41 @@
         reader.readAsDataURL(blob);
 
         reader.onloadend = function () {
-          compressedDataURL = reader.result;
-        };
-      }, 'image/jpeg', 0.8);
+          var image = new Image();
 
-      $(this).css("display", "none");
+          image.onload = function () {
+            var compressedCanvas = document.createElement('canvas');
+            var ctx = compressedCanvas.getContext('2d');
+
+            var maxWidth = 600;
+            var maxHeight = 600;
+
+            var width = image.width;
+            var height = image.height;
+
+            if (width > height) {
+              if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+              }
+            } else {
+              if (height > maxHeight) {
+                width *= maxHeight / height;
+                height = maxHeight;
+              }
+            }
+
+            compressedCanvas.width = width;
+            compressedCanvas.height = height;
+
+            ctx.drawImage(image, 0, 0, width, height);
+
+            compressedDataURL = compressedCanvas.toDataURL('image/jpeg', 0.6);
+          };
+
+          image.src = reader.result;
+        };
+      }, 'image/jpeg', 0.6);
     }
   });
 
@@ -1064,10 +1103,10 @@
         $('#show-image-update').html(imageElement);
 
         cropperUpdate = new Cropper(imageElement[0], {
-          aspectRatio: 1,
+          aspectRatio: NaN,
           viewMode: 1,
           dragMode: 'move',
-          autoCropArea: 0.8,
+          autoCropArea: 1,
           cropBoxResizable: true,
         });
       };
@@ -1128,7 +1167,6 @@
           image.src = reader.result;
         };
       }, 'image/jpeg', 0.6);
-
     }
   });
 

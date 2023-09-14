@@ -151,8 +151,7 @@ const deleteQrCode = async (req, res) => {
 const listQrCode = (req, res) => {
   try {
     const { page, limit, field, value, fromDate, toDate, orderBy } = req.body;
-
-    let perPage = limit || 10;
+    const perPage = limit;
     let sortOption = {};
 
     if (orderBy === "ASC") {
@@ -191,21 +190,41 @@ const listQrCode = (req, res) => {
 
     query
       .sort(sortOption)
-      .skip((perPage * page) - perPage)
-      .limit(perPage)
       .exec((err, users) => {
         User.countDocuments((err, count) => {
           if (err) return next(err);
-          res.status(200).json({
-            code: 200,
-            data: {
-              totalPages: Math.ceil(count / perPage),
-              totalItems: count,
-              currentPage: page,
-              limit: perPage,
-              data: users,
-            },
-            message: "Lấy danh sách Qr Code thành công!",
+
+          Role.find({ name: "admin" }, (err, adminRole) => {
+            if (err) {
+              res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
+              return;
+            }
+
+            const adminRoleIds = adminRole.map(role => role._id);
+            const filteredUsers = users.filter(user => {
+              const hasAdminRole = user.roles.some(role => role.toString() === adminRoleIds[0].toString());
+              return !hasAdminRole;
+            });
+
+            const currentPageUsers = filteredUsers.slice((page - 1) * perPage, page * perPage);
+            const totalItems = filteredUsers.length;
+
+            const startItem = (page - 1) * perPage + 1;
+            const endItem = Math.min(startItem + perPage - 1, totalItems);
+
+            res.status(200).json({
+              code: 200,
+              data: {
+                totalPages: Math.ceil(totalItems / perPage),
+                totalItems: totalItems,
+                currentPage: page,
+                limit: perPage,
+                startItem: startItem,
+                endItem: endItem,
+                data: currentPageUsers,
+              },
+              message: "Lấy danh sách Qr Code thành công!",
+            });
           });
         });
       });
