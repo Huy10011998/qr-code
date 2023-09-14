@@ -1,6 +1,5 @@
 (function ($) {
   "use strict";
-
   const qrCode = $('#qrCode');
   // gen qr code
   function genQrCode(id) {
@@ -8,15 +7,16 @@
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
-      width: 150,
-      height: 150,
+      width: 120,
+      height: 120,
+      correctLevel: QRCode.CorrectLevel.H,
     });
 
     const qrCodeImageSrc = qrcode._el.firstChild.toDataURL();
     return qrCodeImageSrc;
   }
 
-  const html = `<img src=${genQrCode(id)} style="width: 50px; height: 50px;" />`;
+  const html = `<img src=${genQrCode(id)} style="width: 40px; height: 40px;" />`; // Điều chỉnh kích thước hiển thị của mã QR
 
   $(qrCode).html(html);
 
