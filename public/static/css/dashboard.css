@@ -104,6 +104,7 @@ select {
   opacity: 0.5;
   font-weight: 600;
   margin-left: 30px;
+  width: 170px;
 }
 
 .header.-refills .header__info {
