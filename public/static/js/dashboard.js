@@ -147,11 +147,11 @@
   }
 
   //all btn
-  $("#btn-img-save").on("click", function () {
+  $("#btn-img-save-confirm").on("click", function () {
     $("#myModal-Image").css("display", "none");
   });
 
-  $("#btn-img-save-update").on("click", function () {
+  $("#btn-img-confirm-update").on("click", function () {
     $("#myModal-Image-Update").css("display", "none");
   });
 
@@ -1017,13 +1017,17 @@
         $('#show-image').html(imageElement);
 
         cropper = new Cropper(imageElement[0], {
-          aspectRatio: NaN,
+          aspectRatio: 1,
           viewMode: 1,
           dragMode: 'move',
-          autoCropArea: 1,
+          // autoCropArea: 1,
           cropBoxResizable: true,
         });
       };
+
+      $("#btn-img-save-update").show();
+      $("#cropButtonUpdate").show();
+      $("#btn-img-confirm-update").css("display", 'none');
 
       reader.readAsDataURL(file);
     }
@@ -1079,9 +1083,56 @@
           };
 
           image.src = reader.result;
+
+          $("#btn-img-save").hide();
+          $("#cropButton").hide();
+          $("#btn-img-save-confirm").css("display", 'flex');
         };
       }, 'image/jpeg', 0.6);
     }
+  });
+
+  $("#btn-img-save").on('click', function () {
+    var imageElement = $('#show-image img')[0];
+    var image = new Image();
+
+    image.onload = function () {
+      var compressedCanvas = document.createElement('canvas');
+      var ctx = compressedCanvas.getContext('2d');
+
+      var maxWidth = 600;
+      var maxHeight = 600;
+
+      var width = image.width;
+      var height = image.height;
+
+      if (width > height) {
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+      }
+
+      compressedCanvas.width = width;
+      compressedCanvas.height = height;
+
+      ctx.drawImage(image, 0, 0, width, height);
+
+      compressedDataURL = compressedCanvas.toDataURL('image/jpeg', 0.6);
+
+      $('#show-image-update').html('<img src="' + compressedDataURL + '">');
+
+      $("#btn-img-save").hide();
+      $("#cropButton").hide();
+      $("#btn-img-save-confirm").css("display", 'flex');
+    };
+
+    image.src = imageElement.src;
   });
 
   //update img
@@ -1103,13 +1154,17 @@
         $('#show-image-update').html(imageElement);
 
         cropperUpdate = new Cropper(imageElement[0], {
-          aspectRatio: NaN,
+          aspectRatio: 1,
           viewMode: 1,
           dragMode: 'move',
-          autoCropArea: 1,
+          // autoCropArea: 1,
           cropBoxResizable: true,
         });
       };
+
+      $("#btn-img-save-update").show();
+      $("#cropButtonUpdate").show();
+      $("#btn-img-confirm-update").css("display", 'none');
 
       reader.readAsDataURL(file);
     }
@@ -1165,9 +1220,57 @@
           };
 
           image.src = reader.result;
+
+          $("#btn-img-save-update").hide();
+          $("#cropButtonUpdate").hide();
+          $("#btn-img-confirm-update").css("display", 'flex');
         };
       }, 'image/jpeg', 0.6);
     }
+
+  });
+
+  $("#btn-img-save-update").on('click', function () {
+    var imageElement = $('#show-image-update img')[0];
+    var image = new Image();
+
+    image.onload = function () {
+      var compressedCanvas = document.createElement('canvas');
+      var ctx = compressedCanvas.getContext('2d');
+
+      var maxWidth = 600;
+      var maxHeight = 600;
+
+      var width = image.width;
+      var height = image.height;
+
+      if (width > height) {
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+      }
+
+      compressedCanvas.width = width;
+      compressedCanvas.height = height;
+
+      ctx.drawImage(image, 0, 0, width, height);
+
+      compressedDataURLUpdate = compressedCanvas.toDataURL('image/jpeg', 0.6);
+
+      $('#show-image-update').html('<img src="' + compressedDataURLUpdate + '">');
+
+      $("#btn-img-save-update").hide();
+      $("#cropButtonUpdate").hide();
+      $("#btn-img-confirm-update").css("display", 'flex');
+    };
+
+    image.src = imageElement.src;
   });
 
 })(jQuery);

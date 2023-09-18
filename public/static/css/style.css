@@ -166,24 +166,23 @@ a {
 .content-employee {
   position: absolute;
   display: flex;
-  padding-top: 35px;
+  padding-top: 40px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
 .img__employee {
-  padding-top: 10px;
-  height: 110px;
-  width: 100px;
+  height: 125px;
+  width: 85px;
   object-fit: contain;
 }
 
 .content-name {
-  padding-top: 10px;
-  font-size: 12px;
-  font-weight: 700;
-  font-family: "Times New Roman", Times, serif;
+  padding-top: 5px;
+  font-size: 8pt;
+  font-weight: bold;
+  font-family: "Times New Roman";
   text-transform: uppercase;
   color: red;
   max-width: 185px;
@@ -192,10 +191,11 @@ a {
 
 .content-deparment {
   padding-top: 5px;
-  font-size: 10px;
-  font-family: "Times New Roman", Times, serif;
-  max-width: 185px;
+  font-size: 8pt;
+  font-family: "Times New Roman";
+  max-width: 125px;
   text-align: center;
+  color: black;
 }
 
 .content-qr-code {
@@ -203,8 +203,7 @@ a {
 }
 
 .content-userId {
-  font-size: 8px;
-  font-family: "Times New Roman", Times, serif;
-  font-weight: bold;
+  font-size: 5pt;
+  font-family: "Times New Roman";
   color: red;
 }
