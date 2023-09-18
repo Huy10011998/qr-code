@@ -358,7 +358,6 @@
       $('#email-update'),
       $('#department-update'),
       $('#department-update-en'),
-      $('#inputImportUpdateImage'),
       $('#phoneNumber-update'),
       $('#roles-update'),
       $('#userId-update')
@@ -375,7 +374,7 @@
     });
   }
 
-  $('#username__update, #password-update, #fullName-update, #fullName-update-en, #email-update, #department-update, #department-update-en, #inputImportUpdateImage, #phoneNumber-update, #roles-update, #userId-update').on('input', function () {
+  $('#username__update, #password-update, #fullName-update, #fullName-update-en, #email-update, #department-update, #department-update-en, #phoneNumber-update, #roles-update, #userId-update').on('input', function () {
     checkInputsUpdate();
   });
 
