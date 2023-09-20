@@ -24,6 +24,7 @@
   var fromDate = null;
   var toDate = null;
   let index;
+  let pagePublic;
 
   listQrCode(page, limit, field, value, fromDate, toDate, orderBy);
 
@@ -431,7 +432,7 @@
             <img class="img-delete-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/delete.png" />
           </td>
           <td>
-            <input style="width:20px; height:20px;" id="checkBox" type="checkbox" onClick="event.stopPropagation()">
+            <input style="width:20px; height:20px;" id="checkBox" type="checkbox">
           </td>
         </tr>`;
       });
@@ -474,6 +475,7 @@
     window.open("/employee/" + resultId, "_blank");
   });
 
+  // api deleteQrCode
   function deleteQrCode(userId) {
     const token = getCookie("token");
 
@@ -681,21 +683,24 @@
               visiblePages: 5,
               startPage: page,
               first: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="FirstPageIcon">
-                <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
-              </svg>`,
+                        <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path>
+                      </svg>`,
               prev: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateBeforeIcon">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-              </svg>`,
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                      </svg>`,
               next: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateNextIcon">
-                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-              </svg>`,
-              last: `<svg style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LastPageIcon">
-                <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
-              </svg>`,
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                      </svg>`,
+              last: `<svg data-page=${pagePublic} data-api=${totalPages} style="width:18px; height:18px" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-lrb33l" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LastPageIcon">
+                        <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path>
+                      </svg>`,
               onPageClick: function (_, newPage) {
-                if (newPage !== page) {
-                  fetchQrCodes(newPage, limit, field, value, fromDate, toDate, orderBy);
+                pagePublic = newPage;
+                if (pagePublic !== page) {
+                  fetchQrCodes(pagePublic, limit, field, value, fromDate, toDate, orderBy);
                 }
+                console.log("totalPages", totalPages);
+                console.log("pagePublic", pagePublic);
               },
             });
           }
@@ -822,8 +827,6 @@
             // imageTopLeftEmployee.row += (imageRowIndex - 1) * imagePadding;
 
             imageRowIndex++;
-
-            sheet.getRow(imageRowIndex).alignment = { vertical: 'middle', horizontal: 'center' };
           }
         }
       }
@@ -873,15 +876,13 @@
             //   ext: { width: 80, height: 80 },
             // });
 
-            const imageTopLeftVisit = { col: 6, row: imageRowIndex };
+            // const imageTopLeftVisit = { col: 6, row: imageRowIndex };
             // const imageTopLeftEmployee = { col: 7, row: imageRowIndex };
 
-            imageTopLeftVisit.row += (imageRowIndex - 1) * imagePadding;
+            // imageTopLeftVisit.row += (imageRowIndex - 1) * imagePadding;
             // imageTopLeftEmployee.row += (imageRowIndex - 1) * imagePadding;
 
             imageRowIndex++;
-
-            sheet.getRow(imageRowIndex).alignment = { vertical: 'middle', horizontal: 'center' };
           }
         }
       });
@@ -889,11 +890,8 @@
 
     for (let i = 2; i <= totalRows; i++) {
       sheet.getRow(i).height = 50;
+      sheet.getRow(i).alignment = { vertical: 'middle', horizontal: 'left' };
     }
-
-    sheet.getRow(totalRows).alignment = { vertical: 'middle', horizontal: 'center' };
-    sheet.getRow(totalRows).font = { bold: true };
-    sheet.getRow(totalRows - 1).alignment = { vertical: 'middle', horizontal: 'center' };
 
     sheet.columns.forEach((column) => {
       const maxLength = column.values.reduce((acc, value) => {
@@ -902,33 +900,12 @@
       }, column.header.length);
       column.width = maxLength < 10 ? 10 : maxLength + 2;
     });
-
-    sheet.columns.forEach((column) => {
-      column.alignment = { vertical: 'middle', horizontal: 'center' };
-      column.font = { name: 'Calibri', size: 12 };
-      column.width = 15;
-      column.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
-    });
-
-    sheet.getRow(1).font = {
-      name: "Calibri (Body)",
-      family: 4,
-      size: 16,
-      bold: true,
-    };
-
-    sheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
-      row.eachCell({ includeEmpty: true }, function (cell, colNumber) {
-        cell.alignment = { wrapText: true };
-      });
-    });
-
     workbook.xlsx.writeBuffer().then(function (data) {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url = window.URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
-      anchor.download = 'qrCode.xlsx';
+      anchor.download = 'users.xlsx';
       anchor.click();
       window.URL.revokeObjectURL(url);
     });
@@ -948,7 +925,8 @@
     }
   }
 
-  tableEl.on("click", "#checkBox", function () {
+  tableEl.on("click", "#checkBox", function (event) {
+    event.stopPropagation();
     toggleRow(this);
   });
 

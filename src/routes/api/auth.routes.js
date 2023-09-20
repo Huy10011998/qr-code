@@ -11,6 +11,8 @@ export default function (app) {
     next();
   });
 
+  app.get("/api/auth/downloadAllExcel", authJwt.verifyToken, authJwt.isAdmin, PageAuthController.downloadAllExcel)
+
   app.put("/api/auth/updateQrCode/:id", authJwt.verifyToken, authJwt.isAdmin, PageAuthController.updateQrCode);
 
   app.post("/api/auth/createQrCode", authJwt.verifyToken, authJwt.isAdmin, verifyCreateQrCode.checkDuplicateUserIdOrUserId, verifyCreateQrCode.checkRolesExisted, PageAuthController.createQrCode);

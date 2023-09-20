@@ -3,9 +3,68 @@ import db from "../models/auth.model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import unidecode from "unidecode";
+import XLSX from 'xlsx';
+import fs from "fs";
+import path from 'path';
 
 const User = db.user;
 const Role = db.role;
+
+const downloadAllExcel = async (req, res) => {
+  try {
+    Role.findOne({ name: "user" }, async (err, userRole) => {
+      if (err) {
+        res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
+        return;
+      }
+
+      const userRoleId = userRole._id;
+      const total = await User.countDocuments({ roles: userRoleId });
+
+      User.find({ roles: userRoleId })
+        .sort({ createdAt: -1 })
+        .exec((err, users) => {
+          if (err) {
+            res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
+            return;
+          }
+
+          const formattedUsers = users.map(user => {
+            return {
+              fullName: user.fullName,
+              department: user.department,
+              userId: user.userId,
+              email: user.email,
+              phoneNumber: user.phoneNumber,
+            };
+          });
+
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.json_to_sheet(formattedUsers);
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, 'Users');
+
+          const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+          const excelFilePath = path.join(__dirname, 'users.xlsx');
+          fs.writeFileSync(excelFilePath, excelBuffer);
+
+          res.status(200).json({
+            code: 200,
+            data: {
+              total: total,
+              data: formattedUsers,
+              excelFilePath: excelFilePath,
+            },
+            message: "Lấy danh sách Excel thành công!",
+          });
+        });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
 
 const updateQrCode = async (req, res) => {
   const id = req.params.id;
@@ -375,7 +434,7 @@ const logout = async (req, res) => {
 };
 
 const authController = {
-  updateQrCode, getQrCode, deleteQrCode, listQrCode, createQrCode, login, logout
+  downloadAllExcel, updateQrCode, getQrCode, deleteQrCode, listQrCode, createQrCode, login, logout
 }
 
 export default authController;
