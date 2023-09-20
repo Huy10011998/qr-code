@@ -13,7 +13,8 @@ module.exports = env => {
     devtool: 'inline-source-map',
     resolve: {
       extensions: ['.js'],
-      modules: [path.resolve(__dirname, 'src'), 'node_modules']
+      modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+      fallback: { "timers": require.resolve('timers-browserify') }
     },
     module: {
       rules: [{
