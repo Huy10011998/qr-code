@@ -899,7 +899,12 @@
         return Math.max(acc, length);
       }, column.header.length);
       column.width = maxLength < 10 ? 10 : maxLength + 2;
+
+      column.eachCell({ includeEmpty: true }, (cell) => {
+        cell.font = { size: 13, bold: false, name: "Times New Roman" };
+      });
     });
+
     workbook.xlsx.writeBuffer().then(function (data) {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url = window.URL.createObjectURL(blob);
