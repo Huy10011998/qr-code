@@ -890,7 +890,7 @@
 
     for (let i = 2; i <= totalRows; i++) {
       sheet.getRow(i).height = 50;
-      sheet.getRow(i).alignment = { vertical: 'middle', horizontal: 'left' };
+      sheet.getRow(i).alignment = { vertical: 'middle', horizontal: 'center' };
     }
 
     sheet.columns.forEach((column) => {
