@@ -404,7 +404,7 @@
             <img class="img-delete-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/delete.png" />
           </td>
           <td>
-            <input style="width:20px; height:20px;" id="checkBox" type="checkbox">
+            <input style="width:20px; height:20px;" class="checkBox" type="checkbox">
           </td>
         </tr>`;
       });
@@ -903,7 +903,7 @@
     }
   }
 
-  tableEl.on("click", "#checkBox", function (event) {
+  tableEl.on("click", ".checkBox", function (event) {
     event.stopPropagation();
     toggleRow(this);
   });
