@@ -93,34 +93,6 @@
     location.reload();
   });
 
-  //check disable btn search
-  $(filterSort).on("change", checkButtonStatus1);
-
-  (filterDropdownFollow, inputFilterValue).on("input", checkButtonStatus2);
-
-  function checkButtonStatus1() {
-    let sortValue = (filterSort).val();
-
-    if (sortValue !== "") {
-      btnSearch.prop("disabled", false);
-    } else {
-      btnSearch.prop("disabled", true);
-    }
-  }
-
-  function checkButtonStatus2() {
-    let selectValue = filterDropdownFollow.val();
-    let inputValue = inputFilterValue.val();
-
-    if (selectValue.trim() !== "" && inputValue.trim() !== "") {
-      btnSearch.prop("disabled", false);
-      closeInputSearch.css('display', 'flex');
-    } else {
-      btnSearch.prop("disabled", true);
-      closeInputSearch.css('display', 'none');
-    }
-  }
-
   //btn closeInputSearch
   closeInputSearch.on("click", function () {
     inputFilterValue.val('');
