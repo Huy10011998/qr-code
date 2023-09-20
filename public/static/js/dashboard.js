@@ -902,6 +902,7 @@
 
       column.eachCell({ includeEmpty: true }, (cell) => {
         cell.font = { size: 13, bold: false, name: "Times New Roman" };
+        cell.alignment = { wrapText: true };
       });
     });
 
