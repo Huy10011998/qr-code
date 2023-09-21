@@ -784,7 +784,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 6, row: imageRowIndex },
-              ext: { width: 80, height: 80 },
+              ext: { width: 80, height: 85 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -792,10 +792,10 @@
             //   ext: { width: 80, height: 80 },
             // });
 
-            const imageTopLeftVisit = { col: 6, row: imageRowIndex };
+            // const imageTopLeftVisit = { col: 6, row: imageRowIndex };
             // const imageTopLeftEmployee = { col: 7, row: imageRowIndex };
 
-            imageTopLeftVisit.row += (imageRowIndex - 1) * imagePadding;
+            // imageTopLeftVisit.row += (imageRowIndex - 1) * imagePadding;
             // imageTopLeftEmployee.row += (imageRowIndex - 1) * imagePadding;
 
             imageRowIndex++;
@@ -840,7 +840,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 6, row: imageRowIndex },
-              ext: { width: 80, height: 80 },
+              ext: { width: 80, height: 85 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -874,7 +874,7 @@
 
       column.eachCell({ includeEmpty: true }, (cell) => {
         cell.font = { size: 13, bold: false, name: "Times New Roman" };
-        cell.alignment = { wrapText: true };
+        cell.alignment = { wrapText: true, vertical: 'middle', horizontal: 'center' };
       });
     });
 
