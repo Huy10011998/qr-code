@@ -36,7 +36,14 @@ import adminRoutes from "./src/routes/page/admin.routes";
         const app = express();
 
         let corsOptions = {
-            origin: `${host}`
+            // origin: `${host}`
+            origins: '*',
+            // credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            // headers: ['X-Requested-With'],
+            // allowedHeaders: Object.keys(this.requestModel.headers),
+            preflightContinue: false,
+            optionsSuccessStatus: 204
         };
 
         app.use(apiLimiter);
@@ -187,7 +194,7 @@ import adminRoutes from "./src/routes/page/admin.routes";
         adminRoutes(app);
 
         // set port, listen for requests
-        const PORT = process.env.PORT;
+        const PORT = process.env.PORT || 8888;
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}.`);
         });
