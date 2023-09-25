@@ -187,7 +187,7 @@ import adminRoutes from "./src/routes/page/admin.routes";
         adminRoutes(app);
 
         // set port, listen for requests
-        const PORT = process.env.PORT || 8888;
+        const PORT = process.env.PORT;
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}.`);
         });
