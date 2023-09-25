@@ -41,12 +41,6 @@
     return moment(date).format('hh:mm:ss - DD/MM/YYYY');
   }
 
-  const formatTotalPage = (number) => {
-    const config = { maximumFractionDigits: 9 }
-    const formated = new Intl.NumberFormat('number', config).format(number);
-    return formated;
-  }
-
   const BG_TOAST = {
     SUCCESS: 0,
     WARNING: 1,
@@ -365,11 +359,30 @@
     return qrCodeImageSrc;
   }
 
-  //redirect details profile
-  function redirectProfile(id) {
-    location.href = `/profile/${id}`;
-  }
+  // selection item show list
+  $('#pageSizeLimit').on('change', function () {
+    const pageSizeLimit = +$(this).find(":selected").val();
+    listQrCode(page, pageSizeLimit, field, value, fromDate, toDate, orderBy);
+  });
 
+  // gen count page
+  function generateCountPage(from, limit, total) {
+    const fromPage = document.getElementById("fromPage");
+    fromPage.innerHTML = from + "-";
+    const limitPage = document.getElementById("limitPage");
+    limitPage.innerHTML = limit + ' ' + "of";
+    const totalPage = document.getElementById("totalPage");
+    totalPage.innerHTML = total;
+
+    const selectElement = document.getElementById('pageSizeLimit');
+    const existingOption = selectElement.querySelector(`option[value="${total}"]`);
+    if (!existingOption) {
+      const option = document.createElement('option');
+      option.value = total;
+      option.textContent = 'Tất cả';
+      selectElement.appendChild(option);
+    }
+  }
 
   // gen table data
   function generateTable(data = [], startItem) {
@@ -381,7 +394,7 @@
       textData.style.display = "none";
       $.each(data, function (i, result) {
         html += `      
-        <tr id="${result.userId}" _id="${result._id}" >
+        <tr id="${result.userId}" _id="${result._id}">
           <td style="font-size: 13px; font-weight: 400; text-align: center;">${i + stt}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.userId}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.username}</td>
@@ -391,7 +404,7 @@
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.email}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department_en}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left ; white-space: nowrap; overflow: hidden;text-overflow: ellipsis;max-width: 100px">${result?.image}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px">${result?.image}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
           <td style="text-align: left">
@@ -400,11 +413,15 @@
           <td style="text-align: left">
             <img class="img-update-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/fix.png" />
           </td>
-          <td style="text-align: left">
-            <img class="img-delete-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/delete.png" />
-          </td>
+          ${result.roles[0] === "64c8ac29ed7c1ebd4726d28a" ? `
+            <td style="text-align: left">
+              <img class="img-delete-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/delete.png" />
+            </td>
+          ` : `
+            <td></td>
+          `}
           <td>
-            <input style="width:20px; height:20px;" class="checkBox" type="checkbox">
+            <input style="width:20px; height:20px;" class="checkBox" type="checkbox" />
           </td>
         </tr>`;
       });
@@ -604,16 +621,6 @@
     });
   }
 
-  // gen count page
-  function generateCountPage(from, limit, total) {
-    const fromPage = document.getElementById("fromPage");
-    fromPage.innerHTML = from + "-";
-    const limitPage = document.getElementById("limitPage");
-    limitPage.innerHTML = limit + ' ' + "of";
-    const totalPage = document.getElementById("totalPage");
-    totalPage.innerHTML = formatTotalPage(total);
-  }
-
   // get list qr code
   function listQrCode(page, limit, field, value, fromDate, toDate, orderBy) {
     const token = getCookie("token");
@@ -671,8 +678,6 @@
                 if (pagePublic !== page) {
                   fetchQrCodes(pagePublic, limit, field, value, fromDate, toDate, orderBy);
                 }
-                console.log("totalPages", totalPages);
-                console.log("pagePublic", pagePublic);
               },
             });
           }
