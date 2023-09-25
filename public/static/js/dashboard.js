@@ -87,6 +87,15 @@
     location.reload();
   });
 
+  // check input search
+  inputFilterValue.on('input', function (e) {
+    if (inputFilterValue.val()) {
+      closeInputSearch.css('display', 'flex');
+    } else {
+      closeInputSearch.css('display', 'none');
+    }
+  })
+
   //btn closeInputSearch
   closeInputSearch.on("click", function () {
     inputFilterValue.val('');
