@@ -36,7 +36,13 @@ import adminRoutes from "./src/routes/page/admin.routes";
         const app = express();
 
         let corsOptions = {
-            origin: `${host}`
+            origins: '*', // ["http://localhost:8888"]
+            // credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            // headers: ['X-Requested-With'],
+            // allowedHeaders: Object.keys(this.requestModel.headers),
+            preflightContinue: false,
+            optionsSuccessStatus: 204
         };
 
         app.use(apiLimiter);
