@@ -757,7 +757,6 @@
     let exportAll = false;
     let checkedCount = 0;
     let imageRowIndex = 1;
-    const imagePadding = 10;
 
     Array.from(rows).forEach((row, rowIndex) => {
       if (rowIndex > 0) {
@@ -798,7 +797,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 6, row: imageRowIndex },
-              ext: { width: 80, height: 85 },
+              ext: { width: 80, height: 80 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -854,7 +853,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 6, row: imageRowIndex },
-              ext: { width: 80, height: 85 },
+              ext: { width: 80, height: 80 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
