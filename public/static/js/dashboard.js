@@ -891,6 +891,25 @@
       });
     });
 
+    const borderStyle = {
+      style: 'thin',
+      color: {
+        argb: 'FF000000', // Mã màu đen
+      },
+    };
+
+    sheet.eachRow((row) => {
+      row.eachCell((cell) => {
+        const cellStyle = cell.style;
+        cellStyle.border = {
+          top: borderStyle,
+          left: borderStyle,
+          bottom: borderStyle,
+          right: borderStyle,
+        };
+      });
+    });
+
     workbook.xlsx.writeBuffer().then(function (data) {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url = window.URL.createObjectURL(blob);
