@@ -733,6 +733,10 @@
         key: "fullName_vi",
       },
       {
+        header: "Họ tên(Eng)",
+        key: "fullName_en",
+      },
+      {
         header: "Số điện thoại",
         key: "numberPhone",
       },
@@ -743,6 +747,10 @@
       {
         header: "Phòng ban",
         key: "department",
+      },
+      {
+        header: "Phòng ban(Eng)",
+        key: "department_en",
       },
       {
         header: "CardVisit",
@@ -774,9 +782,11 @@
               stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
               fullName_vi: cells[3].innerHTML,
+              fullName_en: cells[4].innerHTML,
               numberPhone: cells[5].innerHTML,
               email: cells[6].innerHTML,
               department: cells[7].innerHTML,
+              department_en: cells[8].innerHTML,
             }).commit();
 
             const imgElementCardVisit = cells[12].querySelector('img');
@@ -796,7 +806,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 6, row: imageRowIndex },
+              tl: { col: 8, row: imageRowIndex },
               ext: { width: 80, height: 80 },
             });
 
@@ -830,9 +840,11 @@
               stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
               fullName_vi: cells[3].innerHTML,
+              fullName_en: cells[4].innerHTML,
               numberPhone: cells[5].innerHTML,
               email: cells[6].innerHTML,
               department: cells[7].innerHTML,
+              department_en: cells[8].innerHTML,
             }).commit();
 
             const imgElementCardVisit = cells[12].querySelector('img');
@@ -852,7 +864,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 6, row: imageRowIndex },
+              tl: { col: 8, row: imageRowIndex },
               ext: { width: 80, height: 80 },
             });
 
