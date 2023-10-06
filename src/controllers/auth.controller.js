@@ -249,26 +249,33 @@ const listQrCode = (req, res) => {
 
     query
       .sort(sortOption)
-      .skip((perPage * page) - perPage)
-      .limit(perPage)
       .exec((err, users) => {
-        if (err) return next(err);
+        if (err) {
+          res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
+          return;
+        }
 
         User.countDocuments((err, count) => {
-          const startItem = (page - 1) * perPage + 1;
-          const endItem = Math.min(startItem + perPage - 1, count);
+          if (err) {
+            res.status(500).json({ message: "Hệ thống đang bận. Thử lại sau!" });
+            return;
+          }
 
-          if (err) return next(err);
+          const totalItems = users.length;
+          const startItem = (page - 1) * perPage + 1;
+          const endItem = Math.min(startItem + perPage - 1, totalItems);
+          const currentPageUsers = users.slice((page - 1) * perPage, page * perPage);
+
           res.status(200).json({
             code: 200,
             data: {
-              totalPages: Math.ceil(count / perPage),
-              totalItems: count,
+              totalPages: Math.ceil(totalItems / perPage),
+              totalItems: totalItems,
               currentPage: page,
               limit: perPage,
               startItem: startItem,
               endItem: endItem,
-              data: users,
+              data: currentPageUsers,
             },
             message: "Lấy danh sách Qr Code thành công!",
           });

@@ -453,7 +453,7 @@
   });
 
   tableEl.on("click", ".img-delete-qrcode", function (event) {
-    event.stopPropagation();
+    // event.stopPropagation();
 
     const userId = $(this).closest("tr").attr("id");
     titleDelete.html("Xoá mã Qr Code");
@@ -468,10 +468,10 @@
   });
 
   // redirect page employee
-  tableEl.on("click", "tr", function () {
-    var resultId = $(this).attr("_id");
-    window.open("/employee/" + resultId, "_blank");
-  });
+  // tableEl.on("click", "tr", function () {
+  //   var resultId = $(this).attr("_id");
+  //   window.open("/employee/" + resultId, "_blank");
+  // });
 
   // api deleteQrCode
   function deleteQrCode(userId) {
@@ -516,7 +516,7 @@
   });
 
   tableEl.on("click", ".img-update-qrcode", function (event) {
-    event.stopPropagation();
+    // event.stopPropagation();
 
     const userId_ = $(this).closest("tr").attr("id");
     getQrCode(userId_);
@@ -948,7 +948,7 @@
   }
 
   tableEl.on("click", ".checkBox", function (event) {
-    event.stopPropagation();
+    // event.stopPropagation();
     toggleRow(this);
   });
 
