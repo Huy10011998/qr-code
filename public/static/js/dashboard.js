@@ -383,14 +383,7 @@
     const totalPage = document.getElementById("totalPage");
     totalPage.innerHTML = total;
 
-    const selectElement = document.getElementById('pageSizeLimit');
-    const existingOption = selectElement.querySelector(`option[value="${total}"]`);
-    if (!existingOption) {
-      const option = document.createElement('option');
-      option.value = total;
-      option.textContent = 'Tất cả';
-      selectElement.appendChild(option);
-    }
+    $('#pageSizeLimit option[value=""]').val(total);
   }
 
   // gen table data
