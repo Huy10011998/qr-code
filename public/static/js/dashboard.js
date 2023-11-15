@@ -706,11 +706,10 @@
   function exportToExcel() {
     const table = document.getElementById('table');
     const rows = table.getElementsByTagName('tr');
-    const totalRows = rows.length;
+    let totalRows = rows.length;
 
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet("My Sheet");
-    sheet.properties.defaultRowHeight = 80;
 
     sheet.columns = [
       {
@@ -770,6 +769,7 @@
 
           if (checkbox.checked) {
             checkedCount++;
+            totalRows = checkedCount;
 
             sheet.addRow({
               stt: cells[0].innerHTML,
@@ -800,7 +800,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 8, row: imageRowIndex },
-              ext: { width: 80, height: 80 },
+              ext: { width: 150, height: 150 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -858,7 +858,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 8, row: imageRowIndex },
-              ext: { width: 80, height: 80 },
+              ext: { width: 150, height: 150 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -878,8 +878,8 @@
       });
     }
 
-    for (let i = 2; i <= totalRows; i++) {
-      sheet.getRow(i).height = 50;
+    for (let i = 2; i <= totalRows + 1; i++) {
+      sheet.getRow(i).height = 85;
       sheet.getRow(i).alignment = { vertical: 'middle', horizontal: 'center' };
     }
 
@@ -888,7 +888,7 @@
         const length = value ? value.toString().length : 0;
         return Math.max(acc, length);
       }, column.header.length);
-      column.width = maxLength < 10 ? 10 : maxLength + 2;
+      column.width = maxLength < 19 ? 19 : maxLength + 2;
 
       column.eachCell({ includeEmpty: true }, (cell) => {
         cell.font = { size: 13, bold: false, name: "Times New Roman" };

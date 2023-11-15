@@ -10,7 +10,6 @@ import excelJs from "exceljs";
 import fs from "fs";
 import bcrypt from "bcryptjs";
 import moment from "moment-timezone";
-import host from "./config/app.conf.json";
 import rateLimit from "express-rate-limit";
 import authJwt from "./src/middlewares/authJwt";
 import mongoose from "mongoose";
