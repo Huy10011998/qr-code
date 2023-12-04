@@ -94,6 +94,8 @@ a {
   color: #333;
   font-size: 16px;
   font-weight: 500;
+  padding-left: 8px;
+  line-height: 1.2;
 }
 
 .contract__container span:not(:last-child) {
@@ -147,6 +149,17 @@ a {
   justify-content: center;
   align-items: center;
   gap: 10px;
+}
+
+.contai {
+  display: flex;
+  align-items: center;
+  padding-top: 5px;
+}
+
+.contai img {
+  width: 16px;
+  height: 16px;
 }
 
 /* ===============Employee=============== */

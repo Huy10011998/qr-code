@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
-
     <meta
       name="viewport"
       content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
@@ -42,33 +41,62 @@
               <span class="info"> <%= fullName %> </span>
             </div>
             <div class="contract__container">
-              <span class="title"> <%= department %> </span>
-              <span class="phone"> <%= phoneNumber %> </span>
-              <span class="email"> <%= email %> </span>
+              <div class="contai">
+                <img
+                  src="/static/images/icons/department.png"
+                  alt="icon-department"
+                />
+                <span class="title"> <%= department %> </span>
+              </div>
+              <div class="contai">
+                <img src="/static/images/icons/call.png" alt="icon-phone" />
+                <span class="phone"> <%= phoneNumber %> </span>
+              </div>
+              <div class="contai">
+                <img src="/static/images/icons/gmail.png" alt="icon-mail" />
+                <span class="email"> <%= email %> </span>
+              </div>
             </div>
             <div class="hr"></div>
             <div class="contract__container">
-              <span class="title-company org"
-                >Công ty cổ phần thực phẩm Cholimex</span
-              >
-              <span class="headquarters">Trụ sở chính</span>
-              <span class="address"
-                >Đường số 7, KCN Vĩnh Lộc, Huyện Bình Chánh, TP.HCM, Việt
-                Nam</span
-              >
-              <div class="flex-content">
-                <span class="tax">MST:</span>
+              <div class="title-company org">
+                Công ty cổ phần thực phẩm Cholimex
+              </div>
+              <div class="headquarters">Trụ sở chính</div>
+              <div class="contai">
+                <img src="/static/images/icons/map.png" alt="icon-location" />
+                <span class="address"
+                  >Đường số 7, KCN Vĩnh Lộc, Huyện Bình Chánh, TP.HCM, Việt
+                  Nam</span
+                >
+              </div>
+              <div class="contai">
+                <img src="/static/images/icons/taxes.png" alt="icon-tax" />
                 <span class="pd-left code">0304475742</span>
               </div>
-              <div class="flex-content">
-                <span>Tel:</span>
+              <div class="contai">
+                <img
+                  src="/static/images/icons/telephone.png"
+                  alt="icon-telephone"
+                />
                 <span class="pd-left">(084-8) 3765 3389 /-90 /-91</span>
               </div>
-              <div class="flex-content">
-                <span>Fax:</span>
+              <div class="contai">
+                <img
+                  src="/static/images/icons/printer.png"
+                  alt="icon-printer"
+                />
                 <span class="pd-left">(084-8) 3765 3025</span>
               </div>
-              <a href="https://cholimexfood.com.vn/">www.cholimexfood.com.vn</a>
+              <div class="contai">
+                <img
+                  src="/static/images/icons/link-web.png"
+                  alt="icon-link-web"
+                />
+                <a href="https://cholimexfood.com.vn/"
+                  >https://www.cholimexfood.com.vn/</a
+                >
+              </div>
             </div>
           </div>
         </div>
