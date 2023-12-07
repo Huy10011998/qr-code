@@ -23,6 +23,7 @@ const getUser = (req, res) => {
           email: user.email,
           image: user.image,
           phoneNumber: formatPhoneNumber(user.phoneNumber),
+          host: Config.host
         });
       });
   } catch (err) {
