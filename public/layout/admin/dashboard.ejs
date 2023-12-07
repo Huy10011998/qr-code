@@ -8,7 +8,11 @@
       name="viewport"
       content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
     />
-    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
+    <link
+      rel="icon"
+      href="<%= host %>/static/images/favicon.ico"
+      type="image/x-icon"
+    />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap"
@@ -21,12 +25,20 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
     />
-    <link rel="stylesheet" type="text/css" href="/static/css/dashboard.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/modal.css" />
     <link
       rel="stylesheet"
       type="text/css"
-      href="/static/css/daterangepicker.css "
+      href="<%= host %>/static/css/dashboard.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="<%= host %>/static/css/modal.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="<%= host %>/static/css/daterangepicker.css "
     />
 
     <link
@@ -69,12 +81,12 @@
           <div class="sidebar__title">
             <img
               style="width: 111.11px; max-height: 90px; z-index: 9999"
-              src="/static/images/logo.png"
+              src="<%= host %>/static/images/logo.png"
               alt="img-logo"
             />
             <button class="btn-menu" tabindex="0" type="button">
               <img
-                src="/static/images/icons/menu.png"
+                src="<%= host %>/static/images/icons/menu.png"
                 style="width: 32px; height: 32px; cursor: pointer"
                 alt="img-menu"
               />
@@ -87,7 +99,7 @@
               <img
                 ng-if="!state.ui.cookiesInfo.avatar"
                 class="header__accountIcon"
-                src="/static/images/icons/man.png"
+                src="<%= host %>/static/images/icons/man.png"
                 alt="img-profile"
               />
               <div class="header__accountUser"></div>
@@ -177,7 +189,7 @@
                 <img
                   id="btn-logout-back"
                   style="width: 32px; height: 32px; cursor: pointer"
-                  src="/static/images/icons/close.png"
+                  src="<%= host %>/static/images/icons/close.png"
                   alt="img-back"
                 />
               </div>
@@ -231,7 +243,7 @@
                 <img
                   id="btn-img-back"
                   style="width: 32px; height: 32px; cursor: pointer"
-                  src="/static/images/icons/close.png"
+                  src="<%= host %>/static/images/icons/close.png"
                   alt="img-back"
                 />
               </div>
@@ -291,7 +303,7 @@
                 <img
                   id="btn-img-update-back"
                   style="width: 32px; height: 32px; cursor: pointer"
-                  src="/static/images/icons/close.png"
+                  src="<%= host %>/static/images/icons/close.png"
                   alt="img-back"
                 />
               </div>
@@ -347,7 +359,7 @@
                 <img
                   id="btn-create-back"
                   style="width: 32px; height: 32px; cursor: pointer"
-                  src="/static/images/icons/close.png"
+                  src="<%= host %>/static/images/icons/close.png"
                   alt="img-close"
                 />
               </div>
@@ -492,7 +504,7 @@
                 <img
                   id="img-delete-qrcode"
                   style="width: 32px; height: 32px; cursor: pointer"
-                  src="/static/images/icons/close.png"
+                  src="<%= host %>/static/images/icons/close.png"
                   alt="img-close"
                 />
               </div>
@@ -519,7 +531,7 @@
                 <img
                   id="btn-update-back"
                   style="width: 32px; height: 32px; cursor: pointer"
-                  src="/static/images/icons/close.png"
+                  src="<%= host %>/static/images/icons/close.png"
                   alt="img-close"
                 />
               </div>
@@ -704,7 +716,7 @@
                       height: 32px;
                       margin-left: 10px;
                     "
-                    src="/static/images/icons/list.png"
+                    src="<%= host %>/static/images/icons/list.png"
                     alt="img-list"
                   />
                   <div
@@ -909,7 +921,7 @@
                 <div class="container__left">
                   <div class="container-filter-search">
                     <img
-                      src="/static/images/icons/upload-file.png"
+                      src="<%= host %>/static/images/icons/upload-file.png"
                       style="width: 24px; height: 24px"
                       alt="img-upload"
                     />
@@ -1143,7 +1155,10 @@
               ></div>
 
               <div id="loading" style="display: none">
-                <img src="/static/images/icons/loading.svg" alt="img-loading" />
+                <img
+                  src="<%= host %>/static/images/icons/loading.svg"
+                  alt="img-loading"
+                />
               </div>
 
               <div
@@ -1243,9 +1258,9 @@
 
     <script
       type="text/javascript"
-      src="/static/js/daterangepicker.min.js "
+      src="<%= host %>/static/js/daterangepicker.min.js "
     ></script>
 
-    <script src="/static/js/dashboard.js"></script>
+    <script src="<%= host %>/static/js/dashboard.js"></script>
   </body>
 </html>

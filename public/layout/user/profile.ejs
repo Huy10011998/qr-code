@@ -2,7 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
+    <link
+      rel="icon"
+      href="<%= host %>/static/images/favicon.ico"
+      type="image/x-icon"
+    />
     <meta
       name="viewport"
       content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
@@ -13,7 +17,7 @@
       href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
     />
     <link href="https://fonts.cdnfonts.com/css/nunito" rel="stylesheet" />
-    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="<%= host %>/static/css/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
   </head>
@@ -25,12 +29,16 @@
           <img
             id="en"
             class="image-vn-eng"
-            src="/static/images/icons/united-states.png"
+            src="<%= host %>/static/images/icons/united-states.png"
             style="padding-right: 5%"
           />
         </div>
         <div class="logo">
-          <img id="logo" src="/static/images/logo_vn.png" alt="img-logo" />
+          <img
+            id="logo"
+            src="<%= host %>/static/images/logo_vn.png"
+            alt="img-logo"
+          />
         </div>
         <div class="header">
           <div class="avatar">
@@ -43,17 +51,23 @@
             <div class="contract__container">
               <div class="contai">
                 <img
-                  src="/static/images/icons/department.png"
+                  src="<%= host %>/static/images/icons/department.png"
                   alt="icon-department"
                 />
                 <span class="title"> <%= department %> </span>
               </div>
               <div class="contai">
-                <img src="/static/images/icons/call.png" alt="icon-phone" />
+                <img
+                  src="<%= host %>/static/images/icons/call.png"
+                  alt="icon-phone"
+                />
                 <span class="phone"> <%= phoneNumber %> </span>
               </div>
               <div class="contai">
-                <img src="/static/images/icons/gmail.png" alt="icon-mail" />
+                <img
+                  src="<%= host %>/static/images/icons/gmail.png"
+                  alt="icon-mail"
+                />
                 <span class="email"> <%= email %> </span>
               </div>
             </div>
@@ -64,33 +78,39 @@
               </div>
               <div class="headquarters">Trụ sở chính</div>
               <div class="contai">
-                <img src="/static/images/icons/map.png" alt="icon-location" />
+                <img
+                  src="<%= host %>/static/images/icons/map.png"
+                  alt="icon-location"
+                />
                 <span class="address"
                   >Đường số 7, KCN Vĩnh Lộc, Huyện Bình Chánh, TP.HCM, Việt
                   Nam</span
                 >
               </div>
               <div class="contai">
-                <img src="/static/images/icons/taxes.png" alt="icon-tax" />
+                <img
+                  src="<%= host %>/static/images/icons/taxes.png"
+                  alt="icon-tax"
+                />
                 <span class="pd-left code">0304475742</span>
               </div>
               <div class="contai">
                 <img
-                  src="/static/images/icons/telephone.png"
+                  src="<%= host %>/static/images/icons/telephone.png"
                   alt="icon-telephone"
                 />
                 <span class="pd-left">(084-8) 3765 3389 /-90 /-91</span>
               </div>
               <div class="contai">
                 <img
-                  src="/static/images/icons/printer.png"
+                  src="<%= host %>/static/images/icons/printer.png"
                   alt="icon-printer"
                 />
                 <span class="pd-left">(084-8) 3765 3025</span>
               </div>
               <div class="contai">
                 <img
-                  src="/static/images/icons/link-web.png"
+                  src="<%= host %>/static/images/icons/link-web.png"
                   alt="icon-link-web"
                 />
                 <a href="https://cholimexfood.com.vn/"
@@ -115,8 +135,8 @@
       const departmentEng = "<%= department_en %>";
     </script>
 
-    <script src="/static/js/vcard.js"></script>
-    <script src="/static/js/capture.js"></script>
-    <script src="/static/js/profile.js"></script>
+    <script src="<%= host %>/static/js/vcard.js"></script>
+    <script src="<%= host %>/static/js/capture.js"></script>
+    <script src="<%= host %>/static/js/profile.js"></script>
   </body>
 </html>

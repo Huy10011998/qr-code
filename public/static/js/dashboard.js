@@ -413,11 +413,11 @@
             <img id="qrCodeCardVisit" src=${genQrCodeCardVisit(result?._id)} />
           </td>
           <td style="text-align: left">
-            <img class="img-update-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/fix.png" />
+            <img class="img-update-qrcode" style="width:24px; height:24px; cursor: pointer" src="${host}/static/images/icons/fix.png" />
           </td>
           ${result.roles[0] === "64c8ac29ed7c1ebd4726d28a" ? `
             <td style="text-align: left">
-              <img class="img-delete-qrcode" style="width:24px; height:24px; cursor: pointer" src="/static/images/icons/delete.png" />
+              <img class="img-delete-qrcode" style="width:24px; height:24px; cursor: pointer" src="${host}/static/images/icons/delete.png" />
             </td>
           ` : `
             <td></td>
