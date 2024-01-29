@@ -360,8 +360,11 @@
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
-      width: 80,
-      height: 80,
+      width: 128,
+      height: 128,
+      colorDark: '#000',
+      colorLight: '#fff',
+      correctLevel: QRCode.CorrectLevel.H
     });
 
     const qrCodeImageSrc = qrcode._el.firstChild.toDataURL();
@@ -712,10 +715,10 @@
     const sheet = workbook.addWorksheet("My Sheet");
 
     sheet.columns = [
-      {
-        header: "STT",
-        key: "stt",
-      },
+      // {
+      //   header: "STT",
+      //   key: "stt",
+      // },
       {
         header: "Mã nhân viên",
         key: "userId",
@@ -772,7 +775,7 @@
             totalRows = checkedCount;
 
             sheet.addRow({
-              stt: cells[0].innerHTML,
+              // stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
               fullName_vi: cells[3].innerHTML,
               fullName_en: cells[4].innerHTML,
@@ -799,7 +802,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 8, row: imageRowIndex },
+              tl: { col: 7, row: imageRowIndex },
               ext: { width: 150, height: 150 },
             });
 
@@ -830,7 +833,7 @@
           const cells = row.getElementsByTagName('td');
           if (cells.length > 0) {
             sheet.addRow({
-              stt: cells[0].innerHTML,
+              // stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
               fullName_vi: cells[3].innerHTML,
               fullName_en: cells[4].innerHTML,
@@ -857,7 +860,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 8, row: imageRowIndex },
+              tl: { col: 7, row: imageRowIndex },
               ext: { width: 150, height: 150 },
             });
 
@@ -878,7 +881,7 @@
       });
     }
 
-    for (let i = 2; i <= totalRows + 1; i++) {
+    for (let i = 2; i <= totalRows; i++) {
       sheet.getRow(i).height = 85;
       sheet.getRow(i).alignment = { vertical: 'middle', horizontal: 'center' };
     }
@@ -973,22 +976,22 @@
   });
 
   // check dateranger
-  let defaultValue = inputDateRanger.val();
+  // let defaultValue = inputDateRanger.val();
 
-  checkDefaultValue(defaultValue);
+  // checkDefaultValue(defaultValue);
 
-  inputDateRanger.on("input", function () {
-    let inputValue = $(this).val();
-    checkDefaultValue(inputValue);
-  });
+  // inputDateRanger.on("input", function () {
+  //   let inputValue = $(this).val();
+  //   checkDefaultValue(inputValue);
+  // });
 
-  function checkDefaultValue(value) {
-    if (value === defaultValue) {
-      btnSearch.prop("disabled", false);
-    } else {
-      btnSearch.prop("disabled", true);
-    }
-  }
+  // function checkDefaultValue(value) {
+  //   if (value === defaultValue) {
+  //     btnSearch.prop("disabled", false);
+  //   } else {
+  //     btnSearch.prop("disabled", true);
+  //   }
+  // }
 
   //get img
   var cropper;
