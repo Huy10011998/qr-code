@@ -325,33 +325,53 @@
   });
 
   // check disabled btn update
-  function checkInputsUpdate() {
+  // Khởi tạo state
+  let inputValues = {};
+
+  function initializeInputValues() {
     let inputs = [
-      $('#username__update'),
-      $('#password-update'),
-      $('#fullName-update'),
-      $('#fullName-update-en'),
-      $('#email-update'),
-      $('#department-update'),
-      $('#department-update-en'),
-      $('#phoneNumber-update'),
-      $('#roles-update'),
-      $('#userId-update')
+      'username__update',
+      'password-update',
+      'fullName-update',
+      'fullName-update-en',
+      'email-update',
+      'department-update',
+      'department-update-en',
+      'phoneNumber-update',
+      'roles-update',
+      'userId-update'
     ];
 
-    let anyInputChange = inputs.some(function (input) {
-      return input.data('preValue') !== input.val();
-    });
-
-    $("#btn-update-accept").prop("disabled", !anyInputChange);
-
     inputs.forEach(function (input) {
-      input.data('preValue', input.val());
+      inputValues[input] = $('#' + input).val().trim(); // Lưu giá trị ban đầu vào state
     });
   }
 
-  $('#username__update, #password-update, #fullName-update, #fullName-update-en, #email-update, #department-update, #department-update-en, #phoneNumber-update, #roles-update, #userId-update').on('input', function () {
-    checkInputsUpdate();
+  function checkInputsUpdate() {
+    let anyInputChange = false; // Biến đánh dấu sự thay đổi
+
+    for (let input in inputValues) {
+      let currentValue = $('#' + input).val().trim();
+      if (inputValues[input] !== currentValue) {
+        anyInputChange = true; // Đánh dấu sự thay đổi khi tìm thấy một trường đã thay đổi
+        break;
+      }
+    }
+
+    // Vô hiệu hóa nút nếu không có sự thay đổi hoặc tất cả các trường đều rỗng hoặc các thay đổi giống như ban đầu
+    $("#btn-update-accept").prop("disabled", !anyInputChange || Object.values(inputValues).every(value => value === ''));
+
+  }
+
+  // Khởi tạo giá trị ban đầu và xử lý sự kiện thay đổi
+  $(document).ready(function () {
+    initializeInputValues();
+
+    $('input').on('input', function () {
+      let inputId = $(this).attr('id');
+      inputValues[inputId] = $(this).val().trim(); // Cập nhật giá trị trong state
+      checkInputsUpdate();
+    });
   });
 
   // gen qr code card visit
@@ -511,9 +531,10 @@
     $("#btn-update-accept").prop("disabled", "true");
   });
 
+  // click show popup update info
   tableEl.on("click", ".img-update-qrcode", function (event) {
     // event.stopPropagation();
-
+    $("#btn-update-accept").prop("disabled", "true");
     const userId_ = $(this).closest("tr").attr("id");
     getQrCode(userId_);
 
