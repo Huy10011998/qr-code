@@ -29,11 +29,16 @@
   listQrCode(page, limit, field, value, fromDate, toDate, orderBy);
 
   const validateEmail = (email) => {
-    if (typeof email === 'string' && email.endsWith("@cholimexfood.com.vn")) {
-      return email;
-    } else {
-      const validate = email + "@cholimexfood.com.vn";
-      return validate;
+    switch (true) {
+      case email.endsWith("@cholimexfood.com.vn"):
+        return email;
+      case email.endsWith("@gmail.com.vn"):
+        return email;
+      case email.endsWith("@gmail.com"):
+        return email;
+      default:
+        const validate = email + "@cholimexfood.com.vn";
+        return validate;
     }
   };
 
@@ -380,8 +385,8 @@
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
-      width: 128,
-      height: 128,
+      width: 80,
+      height: 80,
       colorDark: '#000',
       colorLight: '#fff',
       correctLevel: QRCode.CorrectLevel.H
@@ -422,14 +427,12 @@
         <tr id="${result.userId}" _id="${result._id}">
           <td style="font-size: 13px; font-weight: 400; text-align: center;">${i + stt}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.userId}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.username}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName_en}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.phoneNumber}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.email}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department_en}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px">${result?.image}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
           <td style="text-align: left">
@@ -469,7 +472,7 @@
   });
 
   tableEl.on("click", ".img-delete-qrcode", function (event) {
-    // event.stopPropagation();
+    event.stopPropagation();
 
     const userId = $(this).closest("tr").attr("id");
     titleDelete.html("Xoá mã Qr Code");
@@ -484,10 +487,10 @@
   });
 
   // redirect page employee
-  // tableEl.on("click", "tr", function () {
-  //   var resultId = $(this).attr("_id");
-  //   window.open("/employee/" + resultId, "_blank");
-  // });
+  tableEl.on("click", "tr", function () {
+    var resultId = $(this).attr("_id");
+    window.open("/profile/" + resultId, "_blank");
+  });
 
   // api deleteQrCode
   function deleteQrCode(userId) {
@@ -533,7 +536,7 @@
 
   // click show popup update info
   tableEl.on("click", ".img-update-qrcode", function (event) {
-    // event.stopPropagation();
+    event.stopPropagation();
     $("#btn-update-accept").prop("disabled", "true");
     const userId_ = $(this).closest("tr").attr("id");
     getQrCode(userId_);
@@ -965,7 +968,7 @@
   }
 
   tableEl.on("click", ".checkBox", function (event) {
-    // event.stopPropagation();
+    event.stopPropagation();
     toggleRow(this);
   });
 
@@ -1049,6 +1052,7 @@
     }
   });
 
+  // drop img
   $('#cropButton').on('click', function () {
     if (cropper) {
       var cropData = cropper.getData();
@@ -1108,6 +1112,7 @@
     }
   });
 
+  // save img
   $("#btn-img-save").on('click', function () {
     var imageElement = $('#show-image img')[0];
     var image = new Image();
