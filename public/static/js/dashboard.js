@@ -908,7 +908,7 @@
     }
 
     for (let i = 2; i <= totalRows + 1; i++) {
-      sheet.getRow(i).height = 50;
+      sheet.getRow(i).height = 65;
       sheet.getRow(i).alignment = { vertical: 'middle', horizontal: 'center' };
     }
 
