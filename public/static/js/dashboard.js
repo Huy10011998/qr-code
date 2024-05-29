@@ -385,8 +385,8 @@
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
-      width: 128,
-      height: 128,
+      width: 80,
+      height: 80,
       colorDark: '#000',
       colorLight: '#fff',
       correctLevel: QRCode.CorrectLevel.H
@@ -427,12 +427,14 @@
         <tr id="${result.userId}" _id="${result._id}">
           <td style="font-size: 13px; font-weight: 400; text-align: center;">${i + stt}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.userId}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.username}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName_en}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.phoneNumber}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.email}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department_en}</td>
+          <td style="font-size: 13px; font-weight: 400; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px">${result?.image}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
           <td style="text-align: left">
@@ -739,10 +741,10 @@
     const sheet = workbook.addWorksheet("My Sheet");
 
     sheet.columns = [
-      // {
-      //   header: "STT",
-      //   key: "stt",
-      // },
+      {
+        header: "STT",
+        key: "stt",
+      },
       {
         header: "Mã nhân viên",
         key: "userId",
@@ -799,17 +801,17 @@
             totalRows = checkedCount;
 
             sheet.addRow({
-              // stt: cells[0].innerHTML,
+              stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
-              fullName_vi: cells[2].innerHTML,
-              fullName_en: cells[3].innerHTML,
-              numberPhone: cells[4].innerHTML,
-              email: cells[5].innerHTML,
-              department: cells[6].innerHTML,
-              department_en: cells[7].innerHTML,
+              fullName_vi: cells[3].innerHTML,
+              fullName_en: cells[4].innerHTML,
+              numberPhone: cells[5].innerHTML,
+              email: cells[6].innerHTML,
+              department: cells[7].innerHTML,
+              department_en: cells[8].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[10].querySelector('img');
+            const imgElementCardVisit = cells[12].querySelector('img');
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
@@ -857,17 +859,17 @@
           const cells = row.getElementsByTagName('td');
           if (cells.length > 0) {
             sheet.addRow({
-              // stt: cells[0].innerHTML,
+              stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
-              fullName_vi: cells[2].innerHTML,
-              fullName_en: cells[3].innerHTML,
-              numberPhone: cells[4].innerHTML,
-              email: cells[5].innerHTML,
-              department: cells[6].innerHTML,
-              department_en: cells[7].innerHTML,
+              fullName_vi: cells[3].innerHTML,
+              fullName_en: cells[4].innerHTML,
+              numberPhone: cells[5].innerHTML,
+              email: cells[6].innerHTML,
+              department: cells[7].innerHTML,
+              department_en: cells[8].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[10].querySelector('img');
+            const imgElementCardVisit = cells[12].querySelector('img');
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
