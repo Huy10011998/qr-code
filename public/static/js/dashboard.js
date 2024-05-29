@@ -385,8 +385,8 @@
 
     const qrcode = new QRCode(document.createElement("div"), {
       text: baseURL,
-      width: 80,
-      height: 80,
+      width: 128,
+      height: 128,
       colorDark: '#000',
       colorLight: '#fff',
       correctLevel: QRCode.CorrectLevel.H
@@ -772,7 +772,7 @@
         key: "department_en",
       },
       {
-        header: "QRCODE",
+        header: "CardVisit",
         key: "qrCodeCardVisit",
       },
       // {
@@ -826,7 +826,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 8, row: imageRowIndex },
+              tl: { col: 7, row: imageRowIndex },
               ext: { width: 150, height: 150 },
             });
 
@@ -884,7 +884,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 8, row: imageRowIndex },
+              tl: { col: 7, row: imageRowIndex },
               ext: { width: 150, height: 150 },
             });
 
