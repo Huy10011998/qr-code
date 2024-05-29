@@ -802,12 +802,12 @@
             sheet.addRow({
               stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
-              fullName_vi: cells[3].innerHTML,
-              fullName_en: cells[4].innerHTML,
-              numberPhone: cells[5].innerHTML,
-              email: cells[6].innerHTML,
-              department: cells[7].innerHTML,
-              department_en: cells[8].innerHTML,
+              fullName_vi: cells[2].innerHTML,
+              fullName_en: cells[3].innerHTML,
+              numberPhone: cells[4].innerHTML,
+              email: cells[5].innerHTML,
+              department: cells[6].innerHTML,
+              department_en: cells[7].innerHTML,
             }).commit();
 
             const imgElementCardVisit = cells[11].querySelector('img');
@@ -860,12 +860,12 @@
             sheet.addRow({
               stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
-              fullName_vi: cells[3].innerHTML,
-              fullName_en: cells[4].innerHTML,
-              numberPhone: cells[5].innerHTML,
-              email: cells[6].innerHTML,
-              department: cells[7].innerHTML,
-              department_en: cells[8].innerHTML,
+              fullName_vi: cells[2].innerHTML,
+              fullName_en: cells[3].innerHTML,
+              numberPhone: cells[4].innerHTML,
+              email: cells[5].innerHTML,
+              department: cells[6].innerHTML,
+              department_en: cells[7].innerHTML,
             }).commit();
 
             const imgElementCardVisit = cells[11].querySelector('img');
