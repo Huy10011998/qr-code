@@ -472,7 +472,7 @@
   });
 
   tableEl.on("click", ".img-delete-qrcode", function (event) {
-    // event.stopPropagation();
+    event.stopPropagation();
 
     const userId = $(this).closest("tr").attr("id");
     titleDelete.html("Xoá mã Qr Code");
@@ -487,10 +487,10 @@
   });
 
   // redirect page employee
-  // tableEl.on("click", "tr", function () {
-  //   var resultId = $(this).attr("_id");
-  //   window.open("/profile/" + resultId, "_blank");
-  // });
+  tableEl.on("click", "tr", function () {
+    var resultId = $(this).attr("_id");
+    window.open("/profile/" + resultId, "_blank");
+  });
 
   // api deleteQrCode
   function deleteQrCode(userId) {
@@ -536,7 +536,7 @@
 
   // click show popup update info
   tableEl.on("click", ".img-update-qrcode", function (event) {
-    // event.stopPropagation();
+    event.stopPropagation();
     $("#btn-update-accept").prop("disabled", "true");
     const userId_ = $(this).closest("tr").attr("id");
     getQrCode(userId_);
@@ -789,7 +789,7 @@
       if (rowIndex > 0) {
         const cells = row.getElementsByTagName('td');
         if (cells.length > 0) {
-          const checkbox = cells[15].querySelector('input[type="checkbox"]');
+          const checkbox = cells[13].querySelector('input[type="checkbox"]');
           if (!checkbox) {
             return;
           }
@@ -801,12 +801,12 @@
             sheet.addRow({
               // stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
-              fullName_vi: cells[3].innerHTML,
-              fullName_en: cells[4].innerHTML,
-              numberPhone: cells[5].innerHTML,
-              email: cells[6].innerHTML,
-              department: cells[7].innerHTML,
-              department_en: cells[8].innerHTML,
+              fullName_vi: cells[2].innerHTML,
+              fullName_en: cells[3].innerHTML,
+              numberPhone: cells[4].innerHTML,
+              email: cells[5].innerHTML,
+              department: cells[6].innerHTML,
+              department_en: cells[7].innerHTML,
             }).commit();
 
             const imgElementCardVisit = cells[12].querySelector('img');
@@ -859,12 +859,12 @@
             sheet.addRow({
               // stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
-              fullName_vi: cells[3].innerHTML,
-              fullName_en: cells[4].innerHTML,
-              numberPhone: cells[5].innerHTML,
-              email: cells[6].innerHTML,
-              department: cells[7].innerHTML,
-              department_en: cells[8].innerHTML,
+              fullName_vi: cells[2].innerHTML,
+              fullName_en: cells[3].innerHTML,
+              numberPhone: cells[4].innerHTML,
+              email: cells[5].innerHTML,
+              department: cells[6].innerHTML,
+              department_en: cells[7].innerHTML,
             }).commit();
 
             const imgElementCardVisit = cells[12].querySelector('img');
@@ -968,7 +968,7 @@
   }
 
   tableEl.on("click", ".checkBox", function (event) {
-    // event.stopPropagation();
+    event.stopPropagation();
     toggleRow(this);
   });
 
