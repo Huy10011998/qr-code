@@ -472,7 +472,7 @@
   });
 
   tableEl.on("click", ".img-delete-qrcode", function (event) {
-    event.stopPropagation();
+    // event.stopPropagation();
 
     const userId = $(this).closest("tr").attr("id");
     titleDelete.html("Xoá mã Qr Code");
@@ -487,10 +487,10 @@
   });
 
   // redirect page employee
-  tableEl.on("click", "tr", function () {
-    var resultId = $(this).attr("_id");
-    window.open("/profile/" + resultId, "_blank");
-  });
+  // tableEl.on("click", "tr", function () {
+  //   var resultId = $(this).attr("_id");
+  //   window.open("/profile/" + resultId, "_blank");
+  // });
 
   // api deleteQrCode
   function deleteQrCode(userId) {
@@ -536,7 +536,7 @@
 
   // click show popup update info
   tableEl.on("click", ".img-update-qrcode", function (event) {
-    event.stopPropagation();
+    // event.stopPropagation();
     $("#btn-update-accept").prop("disabled", "true");
     const userId_ = $(this).closest("tr").attr("id");
     getQrCode(userId_);
@@ -809,7 +809,7 @@
               department_en: cells[7].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[11].querySelector('img');
+            const imgElementCardVisit = cells[10].querySelector('img');
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
@@ -867,7 +867,7 @@
               department_en: cells[7].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[11].querySelector('img');
+            const imgElementCardVisit = cells[10].querySelector('img');
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
@@ -968,7 +968,7 @@
   }
 
   tableEl.on("click", ".checkBox", function (event) {
-    event.stopPropagation();
+    // event.stopPropagation();
     toggleRow(this);
   });
 
