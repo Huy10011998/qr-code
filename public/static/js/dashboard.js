@@ -829,7 +829,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 8, row: imageRowIndex },
-              ext: { width: 150, height: 150 },
+              ext: { width: 100, height: 100 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -887,7 +887,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 8, row: imageRowIndex },
-              ext: { width: 150, height: 150 },
+              ext: { width: 100, height: 100 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -907,7 +907,7 @@
       });
     }
 
-    for (let i = 2; i <= totalRows; i++) {
+    for (let i = 2; i <= totalRows + 1; i++) {
       sheet.getRow(i).height = 85;
       sheet.getRow(i).alignment = { vertical: 'middle', horizontal: 'center' };
     }
