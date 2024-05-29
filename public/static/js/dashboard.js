@@ -791,7 +791,7 @@
       if (rowIndex > 0) {
         const cells = row.getElementsByTagName('td');
         if (cells.length > 0) {
-          const checkbox = cells[13].querySelector('input[type="checkbox"]');
+          const checkbox = cells[15].querySelector('input[type="checkbox"]');
           if (!checkbox) {
             return;
           }
