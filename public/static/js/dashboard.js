@@ -427,7 +427,6 @@
         <tr id="${result.userId}" _id="${result._id}">
           <td style="font-size: 13px; font-weight: 400; text-align: center;">${i + stt}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.userId}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.username}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName_en}</td>
           <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.phoneNumber}</td>
@@ -474,7 +473,7 @@
   });
 
   tableEl.on("click", ".img-delete-qrcode", function (event) {
-    // event.stopPropagation();
+    event.stopPropagation();
 
     const userId = $(this).closest("tr").attr("id");
     titleDelete.html("Xoá mã Qr Code");
@@ -489,10 +488,10 @@
   });
 
   // redirect page employee
-  // tableEl.on("click", "tr", function () {
-  //   var resultId = $(this).attr("_id");
-  //   window.open("/profile/" + resultId, "_blank");
-  // });
+  tableEl.on("click", "tr", function () {
+    var resultId = $(this).attr("_id");
+    window.open("/profile/" + resultId, "_blank");
+  });
 
   // api deleteQrCode
   function deleteQrCode(userId) {
@@ -538,7 +537,7 @@
 
   // click show popup update info
   tableEl.on("click", ".img-update-qrcode", function (event) {
-    // event.stopPropagation();
+    event.stopPropagation();
     $("#btn-update-accept").prop("disabled", "true");
     const userId_ = $(this).closest("tr").attr("id");
     getQrCode(userId_);
@@ -741,10 +740,10 @@
     const sheet = workbook.addWorksheet("My Sheet");
 
     sheet.columns = [
-      {
-        header: "STT",
-        key: "stt",
-      },
+      // {
+      //   header: "STT",
+      //   key: "stt",
+      // },
       {
         header: "Mã nhân viên",
         key: "userId",
@@ -774,7 +773,7 @@
         key: "department_en",
       },
       {
-        header: "CardVisit",
+        header: "QRCODE",
         key: "qrCodeCardVisit",
       },
       // {
@@ -791,7 +790,7 @@
       if (rowIndex > 0) {
         const cells = row.getElementsByTagName('td');
         if (cells.length > 0) {
-          const checkbox = cells[15].querySelector('input[type="checkbox"]');
+          const checkbox = cells[14].querySelector('input[type="checkbox"]');
           if (!checkbox) {
             return;
           }
@@ -801,25 +800,28 @@
             totalRows = checkedCount;
 
             sheet.addRow({
-              stt: cells[0].innerHTML,
+              // stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
-              fullName_vi: cells[3].innerHTML,
-              fullName_en: cells[4].innerHTML,
-              numberPhone: cells[5].innerHTML,
-              email: cells[6].innerHTML,
-              department: cells[7].innerHTML,
-              department_en: cells[8].innerHTML,
+              fullName_vi: cells[2].innerHTML,
+              fullName_en: cells[3].innerHTML,
+              numberPhone: cells[4].innerHTML,
+              email: cells[5].innerHTML,
+              department: cells[6].innerHTML,
+              department_en: cells[7].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[12].querySelector('img');
+            const imgElementCardVisit = cells[11].querySelector('img');
+            console.log("===", imgElementCardVisit);
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
+            console.log("+++", srcVisit);
+
             // const srcEmployee = imgElementCardEmployee.getAttribute('src');
 
             const qrCodeVisit = workbook.addImage({
               base64: srcVisit,
-              extension: `${cells[2].innerHTML}_visit.png`,
+              extension: `${cells[1].innerHTML}_visit.png`,
             });
 
             // const qrCodeEmployee = workbook.addImage({
@@ -828,8 +830,8 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 8, row: imageRowIndex },
-              ext: { width: 100, height: 100 },
+              tl: { col: 7, row: imageRowIndex },
+              ext: { width: 120, height: 120 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -859,17 +861,17 @@
           const cells = row.getElementsByTagName('td');
           if (cells.length > 0) {
             sheet.addRow({
-              stt: cells[0].innerHTML,
+              // stt: cells[0].innerHTML,
               userId: cells[1].innerHTML,
-              fullName_vi: cells[3].innerHTML,
-              fullName_en: cells[4].innerHTML,
-              numberPhone: cells[5].innerHTML,
-              email: cells[6].innerHTML,
-              department: cells[7].innerHTML,
-              department_en: cells[8].innerHTML,
+              fullName_vi: cells[2].innerHTML,
+              fullName_en: cells[3].innerHTML,
+              numberPhone: cells[4].innerHTML,
+              email: cells[5].innerHTML,
+              department: cells[6].innerHTML,
+              department_en: cells[7].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[12].querySelector('img');
+            const imgElementCardVisit = cells[11].querySelector('img');
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
@@ -877,7 +879,7 @@
 
             const qrCodeVisit = workbook.addImage({
               base64: srcVisit,
-              extension: `${cells[2].innerHTML}_visit.png`,
+              extension: `${cells[1].innerHTML}_visit.png`,
             });
 
             // const qrCodeEmployee = workbook.addImage({
@@ -886,8 +888,8 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 8, row: imageRowIndex },
-              ext: { width: 100, height: 100 },
+              tl: { col: 7, row: imageRowIndex },
+              ext: { width: 120, height: 120 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -908,7 +910,7 @@
     }
 
     for (let i = 2; i <= totalRows + 1; i++) {
-      sheet.getRow(i).height = 65;
+      sheet.getRow(i).height = 70;
       sheet.getRow(i).alignment = { vertical: 'middle', horizontal: 'center' };
     }
 
@@ -917,7 +919,7 @@
         const length = value ? value.toString().length : 0;
         return Math.max(acc, length);
       }, column.header.length);
-      column.width = maxLength < 19 ? 19 : maxLength + 2;
+      column.width = maxLength < 15 ? 15 : maxLength + 2;
 
       column.eachCell({ includeEmpty: true }, (cell) => {
         cell.font = { size: 13, bold: false, name: "Times New Roman" };
@@ -970,7 +972,7 @@
   }
 
   tableEl.on("click", ".checkBox", function (event) {
-    // event.stopPropagation();
+    event.stopPropagation();
     toggleRow(this);
   });
 
