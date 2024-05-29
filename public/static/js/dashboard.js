@@ -809,7 +809,7 @@
               department_en: cells[7].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[10].querySelector('img');
+            const imgElementCardVisit = cells[11].querySelector('img');
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
@@ -867,7 +867,7 @@
               department_en: cells[7].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[10].querySelector('img');
+            const imgElementCardVisit = cells[11].querySelector('img');
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
