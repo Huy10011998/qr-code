@@ -828,7 +828,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 7, row: imageRowIndex },
+              tl: { col: 8, row: imageRowIndex },
               ext: { width: 150, height: 150 },
             });
 
@@ -886,7 +886,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 7, row: imageRowIndex },
+              tl: { col: 8, row: imageRowIndex },
               ext: { width: 150, height: 150 },
             });
 
