@@ -827,7 +827,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 7, row: imageRowIndex },
-              ext: { width: 80, height: 80 },
+              ext: { width: 150, height: 150 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
@@ -885,7 +885,7 @@
 
             sheet.addImage(qrCodeVisit, {
               tl: { col: 7, row: imageRowIndex },
-              ext: { width: 80, height: 80 },
+              ext: { width: 150, height: 150 },
             });
 
             // sheet.addImage(qrCodeEmployee, {
