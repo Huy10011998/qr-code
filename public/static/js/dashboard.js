@@ -42,10 +42,9 @@
     }
   };
 
-  const getFullTime = (date) => {
-    const localTime = moment(date).local();
-
-    return localTime.format('HH:mm:ss - DD/MM/YYYY');
+  const getFullTime = (dateTime) => {
+    const localTime = moment.utc(dateTime).local();
+    return localTime.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
   }
 
   const BG_TOAST = {
