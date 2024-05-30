@@ -5,7 +5,7 @@ const login = (req, res) => {
     if (req.session.token) {
       res.redirect("/dashboard");
     } else {
-      res.redirect('./admin/login', {
+      res.render('./admin/login', {
         host: Config.host
       });
     }
@@ -17,9 +17,13 @@ const login = (req, res) => {
 
 const dashboard = (req, res) => {
   try {
-    res.render('./admin/dashboard', {
-      host: Config.host
-    });
+    if (!req.session.token) {
+      res.redirect("/login");
+    } else {
+      res.render('./admin/dashboard', {
+        host: Config.host
+      });
+    }
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
