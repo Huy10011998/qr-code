@@ -43,7 +43,10 @@
   };
 
   const getFullTime = (date) => {
-    return moment(date).format('hh:mm:ss - DD/MM/YYYY');
+    // Chuyển đổi sang múi giờ địa phương của trình duyệt
+    const localTime = moment.utc(date).local();
+
+    return localTime.format('HH:mm:ss - DD/MM/YYYY');
   }
 
   const BG_TOAST = {
