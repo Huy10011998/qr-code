@@ -5,7 +5,7 @@ const login = (req, res) => {
     if (req.session.token) {
       res.redirect("/dashboard");
     } else {
-      res.render('./admin/login', {
+      res.redirect('./admin/login', {
         host: Config.host
       });
     }
