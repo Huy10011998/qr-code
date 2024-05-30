@@ -42,9 +42,8 @@
     }
   };
 
-  const getFullTime = (dateTime) => {
-    const vietnamTime = moment.utc(dateTime).utcOffset(7);
-    return vietnamTime.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+  const getFullTime = (date) => {
+    return moment(date).format('hh:mm:ss - DD/MM/YYYY');
   }
 
   const BG_TOAST = {
