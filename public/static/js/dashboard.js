@@ -43,8 +43,8 @@
   };
 
   const getFullTime = (dateTime) => {
-    const localTime = moment.utc(dateTime).local();
-    return localTime.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+    const vietnamTime = moment.utc(dateTime).utcOffset(7);
+    return vietnamTime.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
   }
 
   const BG_TOAST = {
