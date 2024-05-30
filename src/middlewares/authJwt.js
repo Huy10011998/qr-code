@@ -7,7 +7,7 @@ const { user: User, role: Role } = db;
 const verifyToken = (req, res, next) => {
   let token = req.session.token;
   if (!token) {
-    return res.status(403).send({ message: "Chưa có token!" });
+    res.render('./admin/login', {});
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
