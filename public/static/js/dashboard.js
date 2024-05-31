@@ -17,7 +17,7 @@
   let inputDateRanger = $("#inputDateRanger");
   let orderBy = 'DESC';
   let valueDropdown = '';
-  let limit = 10;
+  let limit = 15;
   let page = 1;
   let field = [];
   let value = [];
