@@ -625,7 +625,7 @@
         password: passwordUpdate.val(),
         department: departmentUpdate.val(),
         userId: userIdUpdate.val(),
-        email: emailUpdate.val(),
+        email: validateEmail(emailUpdate.val()),
         image: !compressedDataURLUpdate ? imageUpdate.val() : img,
         phoneNumber: phoneNumberUpdate.val(),
         roles: [rolesUpdate.val()],
