@@ -357,48 +357,53 @@ const createQrCode = (req, res) => {
 
 const login = (req, res) => {
   try {
-    User.findOne({ userId: req.body.userId })
+    // Kiểm tra userId và password không rỗng
+    const { userId, password } = req.body;
+    if (!userId || !password) {
+      return res.status(400).send({ message: "Tài khoản và mật khẩu không được để trống!" });
+    }
+
+    User.findOne({ userId })
       .populate("roles", "-__v")
       .exec((err, user) => {
         if (err) {
-          res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
-          return;
+          return res.status(500).send({ message: "Hệ thống đang bận. Thử lại sau!" });
         }
 
         if (!user) {
           return res.status(404).send({ message: "Sai tài khoản hoặc mật khẩu!" });
         }
 
-        let passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+        let passwordIsValid = bcrypt.compareSync(password, user.password);
 
         if (!passwordIsValid) {
           return res.status(401).send({ message: "Sai tài khoản hoặc mật khẩu!" });
         }
 
-        let authorities = [];
-
-        for (let i = 0; i < user.roles.length; i++) {
-          authorities.push(user.roles[i].name.toUpperCase());
-        }
+        let authorities = user.roles.map(role => role.name.toUpperCase());
 
         if (!authorities.includes("ADMIN")) {
           return res.status(403).send({ message: "Quyền truy cập bị từ chối!" });
         }
 
-        let token = jwt.sign({ userId: user.userId }, config.secret, {
-          expiresIn: 2592000 // 30 days
+        let token = jwt.sign({ userId: user.userId }, config.secret, { expiresIn: 2592000 });
+
+        // Thiết lập cookie
+        res.cookie('token', token, {
+          maxAge: 2592000000, // 30 days in milliseconds
+          httpOnly: true, // Cookie chỉ có thể được truy cập bởi server
+          secure: process.env.NODE_ENV === 'production', // Sử dụng HTTPS trong môi trường production
+          sameSite: 'Strict' // Ngăn gửi cookie trong các yêu cầu cross-site
         });
 
-        req.session.token = token;
-
-        res.status(200).json({
+        // Gửi phản hồi
+        return res.status(200).json({
           code: 200,
-          token: token,
           data: {
             id: user._id,
             username: user.username,
             fullName: user.fullName,
-            userId: req.body.userId,
+            userId: user.userId,
             department: user.department,
             email: user.email,
             phoneNumber: user.phoneNumber,
@@ -411,7 +416,7 @@ const login = (req, res) => {
         });
       });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
