@@ -20,6 +20,7 @@ import authRoutes from "./src/routes/api/auth.routes";
 //page
 import userRoutes from "./src/routes/page/user.routes";
 import adminRoutes from "./src/routes/page/admin.routes";
+import cookieParser from "cookie-parser";
 
 (async () => {
     try {
@@ -54,13 +55,15 @@ import adminRoutes from "./src/routes/page/admin.routes";
         // parse requests of content-type - application/x-www-form-urlencoded
         app.use(express.urlencoded({ extended: true }));
 
-        app.use(
-            cookieSession({
-                name: "token",
-                secret: "COOKIE_SECRET", // should use as secret environment variable
-                httpOnly: false
-            })
-        );
+        // app.use(
+        //     cookieSession({
+        //         name: "token",
+        //         secret: "COOKIE_SECRET", // should use as secret environment variable
+        //         httpOnly: false
+        //     })
+        // );
+
+        app.use(cookieParser());
 
         app.use(
             bodyParser.urlencoded({

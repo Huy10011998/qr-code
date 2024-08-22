@@ -422,10 +422,17 @@ const login = (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    req.session = null;
+    // Set the token cookie to expire in the past, effectively removing it
+    res.cookie('token', '', {
+      maxAge: 0, // Set maxAge to 0 to expire the cookie immediately
+      httpOnly: true, // Keep other options the same
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict'
+    });
+
     return res.status(200).json({
       code: 200,
-      message: "Bạn đã đăng xuất!"
+      message: "Bạn đã đăng xuất thành công!"
     });
   } catch (err) {
     res.status(500).json({ message: err.message });

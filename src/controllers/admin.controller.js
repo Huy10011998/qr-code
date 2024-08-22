@@ -2,7 +2,7 @@ import Config from '../../config/app.conf.json';
 
 const login = (req, res) => {
   try {
-    if (req.cookie.token) {
+    if (req.cookies.token) {
       res.redirect("/dashboard");
     } else {
       res.render('./admin/login', {

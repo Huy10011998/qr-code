@@ -5,7 +5,7 @@ import db from "../models/auth.model.js";
 const { user: User, role: Role } = db;
 
 const verifyToken = (req, res, next) => {
-  let token = req.session.token;
+  let token = req.cookies.token;
   if (!token) {
     return res.redirect("/login");
   }
