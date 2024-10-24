@@ -27,6 +27,10 @@
     departmentEng: $(".title").text(),
     title: $(".title-company").text(),
     phone: $(".phone").text(),
+    zalo: $(".zalo").text(),
+    viber: $(".viber").text(),
+    whatsapp: $(".whatsapp").text(),
+    wechat: $(".wechat").text(),
     headquarters: $(".headquarters").text(),
     address: $(".address").text(),
     taxCodeLabel: $(".tax").text(),
@@ -39,6 +43,10 @@
     $(".info").text(originalCompanyData.fullNameEng);
     $(".title").text(originalCompanyData.departmentEng);
     $(".phone").text(originalCompanyData.phone);
+    $(".zalo").text(originalCompanyData.zalo);
+    $(".viber").text(originalCompanyData.viber);
+    $(".whatsapp").text(originalCompanyData.whatsapp);
+    $(".wechat").text(originalCompanyData.wechat);
     $(".title-company").text(originalCompanyData.title);
     $(".headquarters").text(originalCompanyData.headquarters);
     $(".address").text(originalCompanyData.address);
@@ -56,6 +64,10 @@
       departmentEng: departmentEng,
       title: "CHOLIMEX FOODS JOINT STOCK COMPANY",
       phone: convertPhoneNumber(originalCompanyData.phone),
+      zalo: convertPhoneNumber(originalCompanyData.zalo),
+      viber: convertPhoneNumber(originalCompanyData.viber),
+      whatsapp: convertPhoneNumber(originalCompanyData.whatsapp),
+      wechat: convertPhoneNumber(originalCompanyData.wechat),
       headquarters: "Head Office",
       address: "7th St. Vinh Loc Industrial Park Binh Chanh Dist., HCMC, VietNam",
       taxCodeLabel: "Tax Code:",
@@ -69,6 +81,10 @@
     $(".info").text(companyData.fullNameEng);
     $(".title").text(companyData.departmentEng);
     $(".phone").text(companyData.phone);
+    $(".zalo").text(companyData.zalo);
+    $(".viber").text(companyData.viber);
+    $(".whatsapp").text(companyData.whatsapp);
+    $(".wechat").text(companyData.wechat);
     $(".title-company").text(companyData.title);
     $(".headquarters").text(companyData.headquarters);
     $(".address").text(companyData.address);
