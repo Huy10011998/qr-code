@@ -13,6 +13,10 @@ const UserSchema = new Schema({
   email: { type: String, required: true },
   image: { type: String, required: true },
   phoneNumber: { type: String, required: true },
+  zaloNumber: { type: String, required: false },
+  viberNumber: { type: String, required: false },
+  whatsappNumber: { type: String, required: false },
+  wechatNumber: { type: String, required: false },
   roles: [
     {
       type: mongoose.Schema.Types.ObjectId,

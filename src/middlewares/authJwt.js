@@ -6,6 +6,7 @@ const { user: User, role: Role } = db;
 
 const verifyToken = (req, res, next) => {
   let token = req.cookies.token;
+
   if (!token) {
     return res.redirect("/login");
   }

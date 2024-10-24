@@ -68,7 +68,7 @@ const downloadAllExcel = async (req, res) => {
 
 const updateQrCode = async (req, res) => {
   const id = req.params.id;
-  const { fullName, username, password, department, email, image, phoneNumber, roles, userId, department_en, fullName_en } = req.body;
+  const { fullName, username, password, department, email, image, phoneNumber, roles, userId, department_en, fullName_en, zaloNumber, viberNumber, whatsappNumber, wechatNumber } = req.body;
 
   try {
     const user = await User.findOne({ userId: id });
@@ -84,9 +84,13 @@ const updateQrCode = async (req, res) => {
     user.image = image;
     user.phoneNumber = phoneNumber;
     user.userId = userId;
-    user.fullName_en = fullName_en,
-      user.department_en = department_en,
-      user.modifiedAt = new Date();
+    user.fullName_en = fullName_en;
+    user.department_en = department_en;
+    user.modifiedAt = new Date();
+    user.zaloNumber = zaloNumber;
+    user.viberNumber = viberNumber;
+    user.whatsappNumber = whatsappNumber;
+    user.wechatNumber = wechatNumber;
 
     user.save((err, user) => {
       if (password != user.password) {
@@ -180,6 +184,10 @@ const getQrCode = async (req, res) => {
           image: user.image,
           roles: authorities,
           phoneNumber: user.phoneNumber,
+          zaloNumber: user.zaloNumber,
+          viberNumber: user.viberNumber,
+          whatsappNumber: user.whatsappNumber,
+          wechatNumber: user.wechatNumber
         }
       });
     });
@@ -297,6 +305,10 @@ const createQrCode = (req, res) => {
       email: req.body.email,
       image: req.body.image,
       phoneNumber: req.body.phoneNumber,
+      zaloNumber: req.body.zaloNumber,
+      viberNumber: req.body.viberNumber,
+      whatsappNumber: req.body.whatsappNumber,
+      wechatNumber: req.body.wechatNumber,
       createdAt: new Date(),
       modifiedAt: new Date(),
       fullName_en: req.body.fullName_en,
@@ -399,6 +411,7 @@ const login = (req, res) => {
         // Gửi phản hồi
         return res.status(200).json({
           code: 200,
+          token: token,
           data: {
             id: user._id,
             username: user.username,

@@ -23,6 +23,10 @@ const getUser = (req, res) => {
           email: user.email,
           image: user.image,
           phoneNumber: formatPhoneNumber(user.phoneNumber),
+          zaloNumber: user.zaloNumber,
+          viberNumber: user.viberNumber,
+          whatsappNumber: user.whatsappNumber,
+          wechatNumber: user.wechatNumber,
           host: Config.host
         });
       });

@@ -25,6 +25,21 @@
   var toDate = null;
   let index;
   let pagePublic;
+  let username = $("#username__");
+  let name = $("#fullName");
+  let password = $("#password");
+  let department = $("#department");
+  let userId = $("#userId");
+  let email = $("#email");
+  let image = $("#inputImportImage");
+  let phoneNumber = $("#phoneNumber");
+  let roles = $("#roles");
+  let nameEng = $("#fullName_en");
+  let departmentEng = $("#department_en");
+  let zalo = $("#zalo");
+  let viber = $("#viber");
+  let whatsapp = $("#whatsapp");
+  let wechat = $("#wechat");
 
   listQrCode(page, limit, field, value, fromDate, toDate, orderBy);
 
@@ -211,6 +226,22 @@
   $("#btn-create-back").on("click", function () {
     $("body").css("overflow", "auto");
     $("#myModal-Create").css("display", "none");
+    $("#btn-create-accept").prop("disabled", "true");
+    username.val("");
+    name.val("");
+    password.val("");
+    department.val("");
+    userId.val("");
+    email.val("");
+    image.val("");
+    phoneNumber.val("");
+    roles.val("");
+    nameEng.val("");
+    departmentEng.val("");
+    zalo.val("");
+    viber.val("");
+    whatsapp.val("");
+    wechat.val("");
   });
 
   function getCookie(name) {
@@ -221,18 +252,6 @@
 
   function createQrCode(img) {
     const token = getCookie("token");
-
-    const username = $("#username__");
-    const name = $("#fullName");
-    const password = $("#password");
-    const department = $("#department");
-    const userId = $("#userId");
-    const email = $("#email");
-    const image = $("#inputImportImage");
-    const phoneNumber = $("#phoneNumber");
-    const roles = $("#roles");
-    const nameEng = $("#fullName_en");
-    const departmentEng = $("#department_en");
 
     $.ajax({
       url: `${host}/api/auth/createQrCode`,
@@ -249,7 +268,11 @@
         phoneNumber: phoneNumber.val(),
         roles: [roles.val()],
         fullName_en: nameEng.val(),
-        department_en: departmentEng.val()
+        department_en: departmentEng.val(),
+        zaloNumber: zalo.val(),
+        viberNumber: viber.val(),
+        whatsappNumber: whatsapp.val(),
+        wechatNumber: wechat.val()
       }),
       dataType: 'json',
       beforeSend: function (xhr, settings) {
@@ -278,6 +301,10 @@
         roles.val("");
         nameEng.val("");
         departmentEng.val("");
+        zalo.val("");
+        viber.val("");
+        whatsapp.val("");
+        wechat.val("");
       },
     });
   }
@@ -425,17 +452,21 @@
       $.each(data, function (i, result) {
         html += `      
         <tr id="${result.userId}" _id="${result._id}">
-          <td style="font-size: 13px; font-weight: 400; text-align: center;">${i + stt}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.userId}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.fullName_en}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.phoneNumber}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.email}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${result?.department_en}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px">${result?.image}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
-          <td style="font-size: 13px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: center;">${i + stt}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.userId}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.fullName}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.fullName_en}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.phoneNumber}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result.zaloNumber ? result.zaloNumber : ""}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result.viberNumber ? result.viberNumber : ""}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result.whatsappNumber ? result.whatsappNumber : ""}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result.wechatNumber ? result.wechatNumber : ""}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.email}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${result?.department_en}</td>
+           <td style="font-size: 13px; font-weight: 400; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px">${result?.image}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.createdAt)}</td>
+          <td style="font-size: 12px; font-weight: 400; text-align: left">${getFullTime(result?.modifiedAt)}</td>
           <td style="text-align: left">
             <img id="qrCodeCardVisit" src=${genQrCodeCardVisit(result?._id)} />
           </td>
@@ -563,6 +594,10 @@
     const departmentEngUpdate = $("#department-update-en");
     const nameEngUpdate = $("#fullName-update-en");
     const imageUpdate = $("#value-image-fake");
+    const zaloUpdate = $("#zalo-update");
+    const viberUpdate = $("#viber-update");
+    const whatsappUpdate = $("#whatsapp-update");
+    const wechatUpdate = $("#wechat-update");
 
     $.ajax({
       url: `${host}/api/auth/getQrCode`,
@@ -591,6 +626,10 @@
           departmentEngUpdate.val(data.department_en);
           nameEngUpdate.val(data.fullName_en);
           imageUpdate.val(data.image);
+          zaloUpdate.val(data.zaloNumber);
+          viberUpdate.val(data.viberNumber);
+          whatsappUpdate.val(data.whatsappNumber);
+          wechatUpdate.val(data.wechatNumber);
         }
       },
       error: function (xhr, status, error) {
@@ -614,6 +653,10 @@
     const departmentEngUpdate = $("#department-update-en");
     const nameEngUpdate = $("#fullName-update-en");
     const imageUpdate = $("#value-image-fake");
+    const zaloUpdate = $("#zalo-update");
+    const viberUpdate = $("#viber-update");
+    const whatsappUpdate = $("#whatsapp-update");
+    const wechatUpdate = $("#wechat-update");
 
     $.ajax({
       url: `${host}/api/auth/updateQrCode/${userId_}`,
@@ -628,6 +671,10 @@
         email: validateEmail(emailUpdate.val()),
         image: !compressedDataURLUpdate ? imageUpdate.val() : img,
         phoneNumber: phoneNumberUpdate.val(),
+        zaloNumber: zaloUpdate.val(),
+        viberNumber: viberUpdate.val(),
+        whatsappNumber: whatsappUpdate.val(),
+        wechatNumber: wechatUpdate.val(),
         roles: [rolesUpdate.val()],
         fullName_en: nameEngUpdate.val(),
         department_en: departmentEngUpdate.val()
@@ -761,6 +808,22 @@
         key: "numberPhone",
       },
       {
+        header: "Zalo",
+        key: "zaloNumber",
+      },
+      {
+        header: "Viber",
+        key: "viberNumber",
+      },
+      {
+        header: "WhatsApp",
+        key: "whatsappNumber",
+      },
+      {
+        header: "Wechat",
+        key: "wechatNumber",
+      },
+      {
         header: "Email",
         key: "email",
       },
@@ -805,17 +868,19 @@
               fullName_vi: cells[2].innerHTML,
               fullName_en: cells[3].innerHTML,
               numberPhone: cells[4].innerHTML,
-              email: cells[5].innerHTML,
-              department: cells[6].innerHTML,
-              department_en: cells[7].innerHTML,
+              zaloNumber: cells[5].innerHTML,
+              viberNumber: cells[6].innerHTML,
+              whatsappNumber: cells[7].innerHTML,
+              wechatNumber: cells[8].innerHTML,
+              email: cells[9].innerHTML,
+              department: cells[10].innerHTML,
+              department_en: cells[11].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[11].querySelector('img');
-            console.log("===", imgElementCardVisit);
+            const imgElementCardVisit = cells[15].querySelector('img');
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
-            console.log("+++", srcVisit);
 
             // const srcEmployee = imgElementCardEmployee.getAttribute('src');
 
@@ -830,7 +895,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 7, row: imageRowIndex },
+              tl: { col: 11, row: imageRowIndex },
               ext: { width: 120, height: 120 },
             });
 
@@ -866,12 +931,16 @@
               fullName_vi: cells[2].innerHTML,
               fullName_en: cells[3].innerHTML,
               numberPhone: cells[4].innerHTML,
-              email: cells[5].innerHTML,
-              department: cells[6].innerHTML,
-              department_en: cells[7].innerHTML,
+              zaloNumber: cells[5].innerHTML,
+              viberNumber: cells[6].innerHTML,
+              whatsappNumber: cells[7].innerHTML,
+              wechatNumber: cells[8].innerHTML,
+              email: cells[9].innerHTML,
+              department: cells[10].innerHTML,
+              department_en: cells[11].innerHTML,
             }).commit();
 
-            const imgElementCardVisit = cells[11].querySelector('img');
+            const imgElementCardVisit = cells[15].querySelector('img');
             // const imgElementCardEmployee = cells[13].querySelector('img');
 
             const srcVisit = imgElementCardVisit.getAttribute('src');
@@ -888,7 +957,7 @@
             // });
 
             sheet.addImage(qrCodeVisit, {
-              tl: { col: 7, row: imageRowIndex },
+              tl: { col: 11, row: imageRowIndex },
               ext: { width: 120, height: 120 },
             });
 
@@ -951,7 +1020,7 @@
       const url = window.URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
-      anchor.download = 'users.xlsx';
+      anchor.download = 'ds-users-qrcode.xlsx';
       anchor.click();
       window.URL.revokeObjectURL(url);
     });

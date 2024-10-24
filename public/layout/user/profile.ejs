@@ -58,20 +58,30 @@
                   <%= department %>
                 </span>
               </div>
-              <div class="contai">
-                <img
-                  src="<%= host %>/static/images/icons/call.png"
-                  alt="icon-phone"
-                />
-                <span class="phone"> <%= phoneNumber %> </span>
-              </div>
-              <div class="contai">
-                <img
-                  src="<%= host %>/static/images/icons/gmail.png"
-                  alt="icon-mail"
-                />
-                <span class="email"> <%= email %> </span>
-              </div>
+
+              <% const apps = [ 
+              { name: 'phone', icon: 'call.png', data: phoneNumber }, 
+              { name: 'zalo', icon: 'zalo.png', data: zaloNumber }, 
+              { name: 'viber', icon: 'viber.png', data: viberNumber },
+              { name: 'whatsapp', icon: 'whatsapp.png', data: whatsappNumber }, 
+              { name: 'wechat', icon: 'wechat.png', data: wechatNumber },
+              { name: 'mail', icon: 'gmail.png', data: email }
+          ]; %> 
+          
+          <% if (phoneNumber || email) { %> 
+              <% apps.forEach(app => { %>
+                  <% if (app.data) { %> 
+                      <div class="contai">
+                          <img
+                              src="<%= host %>/static/images/icons/<%= app.icon %>"
+                              alt="icon-<%= app.name %>"
+                          />
+                          <span class="<%= app.name %>"> <%= app.data %> </span>
+                      </div>
+                  <% } %>
+              <% }); %> 
+          <% } %>          
+
             </div>
             <div class="hr"></div>
             <div class="contract__container">
