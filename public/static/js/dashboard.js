@@ -44,18 +44,18 @@
   listQrCode(page, limit, field, value, fromDate, toDate, orderBy);
 
   const validateEmail = (email) => {
-    switch (true) {
-      case email.endsWith("@cholimexfood.com.vn"):
-        return email;
-      case email.endsWith("@gmail.com.vn"):
-        return email;
-      case email.endsWith("@gmail.com"):
-        return email;
-      default:
-        const validate = email + "@cholimexfood.com.vn";
-        return validate;
+    const trimmedEmail = email.trim();
+  
+    // Nếu đã có dấu @ → coi như là email hợp lệ, giữ nguyên
+    if (trimmedEmail.includes("@")) {
+      return trimmedEmail;
     }
+  
+    // Nếu không có @ → thêm domain mặc định
+    return trimmedEmail + "@cholimexfood.com.vn";
   };
+  
+  
 
   const getFullTime = (date) => {
     return moment(date).format('hh:mm:ss - DD/MM/YYYY');
@@ -221,6 +221,7 @@
   $("#myBtn-create").on("click", function () {
     $("body").css("overflow", "hidden");
     $("#myModal-Create").css("display", "block");
+    $("#btn-img-save").css("display", 'flex');
   });
 
   $("#btn-create-back").on("click", function () {
