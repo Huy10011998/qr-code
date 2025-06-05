@@ -1204,6 +1204,8 @@
       $("#btn-img-save-update").show();
       $("#cropButtonUpdate").show();
       $("#btn-img-save").show();
+      $("#cropButton").show();
+      $("#btn-img-save-confirm").hide();
       $("#btn-img-confirm-update").css("display", "none");
 
       reader.readAsDataURL(file);
